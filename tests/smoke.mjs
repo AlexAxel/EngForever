@@ -12,7 +12,7 @@ try{
   await page.goto(url);
   await page.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 40"));
   await page.locator("#start").click();
-  await page.locator("#card:not(.hidden)").waitFor();
+  await page.locator("#card:not(.hidden)").waitFor({timeout:6000}).catch(async e=>{console.log("INITIAL CARD",await page.evaluate(()=>({card:document.querySelector("#card").outerHTML.slice(0,300),empty:document.querySelector("#empty").textContent,start:document.querySelector("#start").outerHTML,progress:document.querySelector("#progress-label").textContent,storage:JSON.parse(localStorage.getItem("eng-forever-v1"))})),errors);throw e;});
   const first=await page.locator("#card-id").textContent();
   assert.match(first,/№ \d+/);
   assert.equal(await page.locator("#wrong").isDisabled(),true,"Answer must be opened before responding");
