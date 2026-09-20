@@ -59,3 +59,9 @@
  .status-sub{font-size:11px}
 }
 @media(prefers-reduced-motion:reduce){.answer-sheet{transition:none}}
+
+/* Settings v3: one scroll container for the whole modal; the phrase list must never conceal final IDs. */
+.modal-body{min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.phrase-list{max-height:none;overflow:visible;min-height:0}
+.phrase-option{min-height:52px;align-items:center}
+.phrase-option input{flex-shrink:0}
