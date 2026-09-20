@@ -55,6 +55,11 @@ try{
   assert.ok(overflow<=1,"Mobile layout must not overflow horizontally: "+overflow);
   await page.locator("#settings-open").click();
   assert.equal(await page.locator("#settings-dialog").evaluate(el=>el.open),true,"Settings must open");
+  assert.equal(await page.locator("#phrase-list .phrase-option").count(),40,"All 40 numbered phrases must appear in settings");
+  assert.deepEqual(await page.locator("#phrase-list .phrase-option").evaluateAll(items=>items.map(x=>Number(x.textContent.match(/^#(\\d+)/)?.[1]))),Array.from({length:40},(_,i)=>i+1),"Settings IDs must match original notebook numbers 1–40");
+  assert.equal(await page.locator("#phrase-list").evaluate(el=>getComputedStyle(el).overflowY),"visible","Phrase list should not have a hidden nested scrollbar");
+  await page.locator("#phrase-list .phrase-option").last().scrollIntoViewIfNeeded();
+  assert.equal(await page.locator("#phrase-list .phrase-option").last().isVisible(),true,"ID 40 must be reachable at bottom of settings");
   await page.locator("#settings-done").click();
   assert.equal(await page.locator("#settings-dialog").evaluate(el=>el.open),false,"Settings must close");
   assert.deepEqual(errors,[],"No uncaught runtime exceptions");
