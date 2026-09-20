@@ -4,7 +4,17 @@ import {chromium} from "playwright";
 const browser=await chromium.launch({headless:true});
 const ctx=await browser.newContext({viewport:{width:390,height:760},deviceScaleFactor:1,isMobile:true,hasTouch:true});
 const page=await ctx.newPage();
-const errors=[];
+const errors=[],trace=[];
+page.on("console",msg=>trace.push(msg.text()));
+await page.route("**/app.js*",async route=>{
+  const response=await route.fetch();let body=await response.text();
+  body=body.replace("function start(){",'function start(){console.log("DBG start",allActive().length,queue.length,started);');
+  body=body.replace("function next(){",'function next(){console.log("DBG next",busy,queue.length,current?.id,allActive().length);');
+  body=body.replace("function showCard(){",'function showCard(){console.log("DBG showCard",current?.id);');
+  body=body.replace("function showEmpty(title,copy,button){",'function showEmpty(title,copy,button){console.log("DBG empty",title);');
+  body=body.replace("function freshQueue(){",'function freshQueue(){console.log("DBG freshQueue",allActive().length,current?.id);');
+  await route.fulfill({response,body});
+});
 page.on("pageerror",e=>errors.push(String(e)));
 const url="http://127.0.0.1:8000/";
 const wait=()=>page.waitForTimeout(320);
@@ -12,7 +22,7 @@ try{
   await page.goto(url);
   await page.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 40"));
   await page.locator("#start").click();
-  await page.locator("#card:not(.hidden)").waitFor({timeout:6000}).catch(async e=>{console.log("INITIAL CARD",await page.evaluate(()=>({card:document.querySelector("#card").outerHTML.slice(0,300),empty:document.querySelector("#empty").textContent,start:document.querySelector("#start").outerHTML,progress:document.querySelector("#progress-label").textContent,storage:JSON.parse(localStorage.getItem("eng-forever-v1"))})),errors);throw e;});
+  await page.locator("#card:not(.hidden)").waitFor({timeout:6000}).catch(async e=>{console.log("INITIAL CARD",await page.evaluate(()=>({card:document.querySelector("#card").outerHTML.slice(0,300),empty:document.querySelector("#empty").textContent,start:document.querySelector("#start").outerHTML,progress:document.querySelector("#progress-label").textContent,storage:JSON.parse(localStorage.getItem("eng-forever-v1"))})),errors,trace);throw e;});
   const first=await page.locator("#card-id").textContent();
   assert.match(first,/№ \d+/);
   assert.equal(await page.locator("#wrong").isDisabled(),true,"Answer must be opened before responding");
@@ -25,7 +35,7 @@ try{
   assert.equal(await page.locator("#wrong").isEnabled(),true,"Tap fallback must open the answer");
   assert.notEqual(await page.locator(".answer-content").evaluate(el=>getComputedStyle(el).display),"none");
   await page.locator("#right").click();
-  await page.waitForFunction(old=>document.querySelector("#card-id").textContent!==old,first,{timeout:6000}).catch(async error=>{console.log("AFTER RIGHT",await page.evaluate(()=>({progress:document.querySelector("#progress-label").textContent,card:document.querySelector("#card").className,stored:JSON.parse(localStorage.getItem("eng-forever-v1"))?.current,queue:JSON.parse(localStorage.getItem("eng-forever-v1"))?.queue?.length})),errors);throw error;});
+  await page.waitForFunction(old=>document.querySelector("#card-id").textContent!==old,first,{timeout:6000}).catch(async error=>{console.log("AFTER RIGHT",await page.evaluate(()=>({progress:document.querySelector("#progress-label").textContent,card:document.querySelector("#card").className,stored:JSON.parse(localStorage.getItem("eng-forever-v1"))?.current,queue:JSON.parse(localStorage.getItem("eng-forever-v1"))?.queue?.length})),errors,trace);throw error;});
   assert.notEqual(await page.locator("#card-id").textContent(),first,"Next phrase must appear after marking correct");
   assert.match(await page.locator("#progress-label").textContent(),/^1 \/ 40 изучено$/);
   const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem("eng-forever-v1")));
