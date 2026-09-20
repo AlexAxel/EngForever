@@ -1,0 +1,63 @@
+import assert from "node:assert/strict";
+import {chromium} from "playwright";
+
+const browser=await chromium.launch({headless:true});
+const ctx=await browser.newContext({viewport:{width:390,height:760},deviceScaleFactor:1,isMobile:true,hasTouch:true});
+const page=await ctx.newPage();
+const errors=[];
+page.on("pageerror",e=>errors.push(String(e)));
+const url="http://127.0.0.1:8000/";
+const wait=()=>page.waitForTimeout(320);
+try{
+  await page.goto(url);
+  await page.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 40"));
+  await page.locator("#start").click();
+  await page.locator("#card:not(.hidden)").waitFor();
+  const first=await page.locator("#card-id").textContent();
+  assert.match(first,/№ \d+/);
+  assert.equal(await page.locator("#wrong").isDisabled(),true,"Answer must be opened before responding");
+  const hiddenAnswer=await page.locator(".answer-content").evaluate(el=>getComputedStyle(el).display);
+  assert.equal(hiddenAnswer,"none","English answer leaks out of closed curtain");
+  const sheetY=await page.locator("#sheet-handle").boundingBox();
+  const promptY=await page.locator("#question-text").boundingBox();
+  assert.ok(sheetY.y<promptY.y,"Curtain must be at the TOP of the card, above the prompt");
+  await page.locator("#sheet-handle").click();
+  assert.equal(await page.locator("#wrong").isEnabled(),true,"Tap fallback must open the answer");
+  assert.notEqual(await page.locator(".answer-content").evaluate(el=>getComputedStyle(el).display),"none");
+  await page.locator("#right").click();
+  await wait();
+  assert.notEqual(await page.locator("#card-id").textContent(),first,"Next phrase must appear after marking correct");
+  assert.match(await page.locator("#progress-label").textContent(),/^1 \/ 40 изучено$/);
+  const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem("eng-forever-v1")));
+  assert.ok(saved.cards[first.replace("№ ","")].learned,"Progress must persist to storage");
+  // Verify downward dragging the handle, rather than accidental card swipe.
+  const h=await page.locator("#sheet-handle").boundingBox();
+  await page.mouse.move(h.x+h.width/2,h.y+h.height/2);
+  await page.mouse.down();
+  await page.mouse.move(h.x+h.width/2,h.y+h.height/2+65,{steps:7});
+  await page.mouse.up();
+  assert.equal(await page.locator("#right").isEnabled(),true,"Downward drag must open the curtain");
+  const second=await page.locator("#card-id").textContent();
+  // Swipe left on the exposed card: records an error and moves to a new phrase.
+  const card=await page.locator("#card").boundingBox();
+  await page.mouse.move(card.x+card.width*.7,card.y+card.height*.72);
+  await page.mouse.down();
+  await page.mouse.move(card.x+card.width*.2,card.y+card.height*.72,{steps:9});
+  await page.mouse.up();
+  await wait();
+  const afterWrong=await page.evaluate(()=>JSON.parse(localStorage.getItem("eng-forever-v1")));
+  assert.equal(afterWrong.cards[second.replace("№ ","")].attempts,1,"Swipe left must count as one attempt");
+  assert.equal(afterWrong.cards[second.replace("№ ","")].correct,0,"Swipe left must count as error");
+  assert.ok(afterWrong.queue.includes(Number(second.replace("№ ",""))),"Wrong phrase must return to queue");
+  await page.reload();
+  await page.locator("#card:not(.hidden)").waitFor();
+  assert.equal(await page.locator("#right").isDisabled(),true,"Revealed answer must not survive reload");
+  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
+  assert.ok(overflow<=1,"Mobile layout must not overflow horizontally: "+overflow);
+  await page.locator("#settings-open").click();
+  assert.equal(await page.locator("#settings-dialog").evaluate(el=>el.open),true,"Settings must open");
+  await page.locator("#settings-done").click();
+  assert.equal(await page.locator("#settings-dialog").evaluate(el=>el.open),false,"Settings must close");
+  assert.deepEqual(errors,[],"No uncaught runtime exceptions");
+  console.log("PASS: 390px mobile layout, hidden answer, top curtain, tap and down-drag reveal, swipe error, next card, persistence and settings");
+}finally{await browser.close();}
