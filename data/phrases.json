@@ -1,0 +1,202 @@
+[
+  {
+    "id": 1,
+    "ru": "Как ты относишься к тому, чтобы сходить сегодня в кино?",
+    "eng": "How do you feel about going to the movies today?"
+  },
+  {
+    "id": 2,
+    "ru": "Сто лет не был в кино. С удовольствием схожу.",
+    "eng": "I have not visited cinema for ages. I'll go with pleasure."
+  },
+  {
+    "id": 3,
+    "ru": "Лично мне нравится «Стелс» (кинотеатр).",
+    "eng": "As for me, I really like \"The Stealth\"."
+  },
+  {
+    "id": 4,
+    "ru": "Они хотят большего.",
+    "eng": "They want more."
+  },
+  {
+    "id": 5,
+    "ru": "Мы поддерживаем тебя.",
+    "eng": "We support you."
+  },
+  {
+    "id": 6,
+    "ru": "Ты делаешь это очень хорошо.",
+    "eng": "You do it very well."
+  },
+  {
+    "id": 7,
+    "ru": "Они работают в этом месте.",
+    "eng": "They work in this place."
+  },
+  {
+    "id": 8,
+    "ru": "Я хочу пойти на прогулку.",
+    "eng": "I want to go for a walk."
+  },
+  {
+    "id": 9,
+    "ru": "Я хочу купить это.",
+    "eng": "I want to buy it."
+  },
+  {
+    "id": 10,
+    "ru": "Я часто хожу гулять.",
+    "eng": "I often go for a walk."
+  },
+  {
+    "id": 11,
+    "ru": "Я хочу заказать это онлайн.",
+    "eng": "I want to order it online."
+  },
+  {
+    "id": 12,
+    "ru": "Я бы хотел посетить эту страну.",
+    "eng": "I'd like to visit this country."
+  },
+  {
+    "id": 13,
+    "ru": "Я бы хотел примерить это платье.",
+    "eng": "I'd like to try on this dress."
+  },
+  {
+    "id": 14,
+    "ru": "Я бы хотел примерить эту обувь.",
+    "eng": "I'd like to try on these shoes."
+  },
+  {
+    "id": 15,
+    "ru": "Я хочу пойти в этот магазин.",
+    "eng": "I want to go to this shop."
+  },
+  {
+    "id": 16,
+    "ru": "Я хочу пойти туда с тобой.",
+    "eng": "I want to go there with you."
+  },
+  {
+    "id": 17,
+    "ru": "Я хочу поговорить об этом.",
+    "eng": "I want to talk about it."
+  },
+  {
+    "id": 18,
+    "ru": "Я бы хотел поговорить об этом сейчас.",
+    "eng": "I'd like to talk about it now."
+  },
+  {
+    "id": 19,
+    "ru": "Я хочу сказать одну вещь.",
+    "eng": "I want to say one thing."
+  },
+  {
+    "id": 20,
+    "ru": "Я хочу сказать тебе одну вещь.",
+    "eng": "I want to tell you one thing."
+  },
+  {
+    "id": 21,
+    "ru": "Мне нужно быть там скоро.",
+    "eng": "I need to be there soon."
+  },
+  {
+    "id": 22,
+    "ru": "Я часто хожу туда.",
+    "eng": "I often go there."
+  },
+  {
+    "id": 23,
+    "ru": "Я бы хотел пойти в то место.",
+    "eng": "I'd like to go to that place."
+  },
+  {
+    "id": 24,
+    "ru": "Я бы хотел пойти на прогулку сейчас.",
+    "eng": "I'd like to go for a walk now."
+  },
+  {
+    "id": 25,
+    "ru": "Это помогает мне так сильно.",
+    "eng": "It helps me so much."
+  },
+  {
+    "id": 26,
+    "ru": "Это стоит так много денег.",
+    "eng": "It costs so much money."
+  },
+  {
+    "id": 27,
+    "ru": "У него слишком мало свободного времени.",
+    "eng": "He has too little free time."
+  },
+  {
+    "id": 28,
+    "ru": "У неё так много вопросов.",
+    "eng": "She has so many questions."
+  },
+  {
+    "id": 29,
+    "ru": "Ей нужен ваш совет.",
+    "eng": "She needs your advice."
+  },
+  {
+    "id": 30,
+    "ru": "Это выглядит очень красиво.",
+    "eng": "It looks very beautiful."
+  },
+  {
+    "id": 31,
+    "ru": "Это кажется действительно странным.",
+    "eng": "It seems really strange."
+  },
+  {
+    "id": 32,
+    "ru": "Она часто говорит мне об этом.",
+    "eng": "She often tells me about it."
+  },
+  {
+    "id": 33,
+    "ru": "Она иногда говорит это.",
+    "eng": "She sometimes says it."
+  },
+  {
+    "id": 34,
+    "ru": "Я не хочу идти туда сейчас.",
+    "eng": "I don't want to go there now."
+  },
+  {
+    "id": 35,
+    "ru": "Мы не видим каких-либо изменений.",
+    "eng": "We don't see any changes."
+  },
+  {
+    "id": 36,
+    "ru": "Я вижу, ты не хочешь этого.",
+    "eng": "I see you don't want it."
+  },
+  {
+    "id": 37,
+    "ru": "Он не хочет говорить об этом.",
+    "eng": "He doesn't want to talk about it."
+  },
+  {
+    "id": 38,
+    "ru": "Я вижу, что это не работает.",
+    "eng": "I see that it doesn't work."
+  },
+  {
+    "id": 39,
+    "ru": "Я не знаю ответа.",
+    "eng": "I don't know the answer."
+  },
+  {
+    "id": 40,
+    "ru": "Это не стоит этих денег.",
+    "eng": "It doesn't cost this money."
+  }
+]
