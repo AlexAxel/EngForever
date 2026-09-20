@@ -1,0 +1,30 @@
+name: Validate Eng Forever
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: node --check app.js
+      - name: Validate phrase catalogue
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const cards=JSON.parse(fs.readFileSync('data/phrases.json','utf8'));
+          assert.equal(cards.length,40);
+          assert.equal(new Set(cards.map(p=>p.id)).size,cards.length);
+          for(let id=1;id<=40;id++){
+            const p=cards.find(p=>p.id===id);
+            assert.ok(p&&typeof p.ru==='string'&&p.ru.trim()&&typeof p.eng==='string'&&p.eng.trim(),'Invalid phrase #'+id);
+          }
+          console.log('Validated 40 unique, complete pairs');
+          NODE
