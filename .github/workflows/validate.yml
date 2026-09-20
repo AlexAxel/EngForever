@@ -28,3 +28,18 @@ jobs:
           }
           console.log('Validated 40 unique, complete pairs');
           NODE
+  mobile-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install headless browser test runtime
+        run: |
+          npm install --no-save playwright@1.57.0
+          npx playwright install --with-deps chromium
+      - name: Serve app and verify mobile interactions
+        run: |
+          python3 -m http.server 8000 --bind 127.0.0.1 >/tmp/eng-forever-server.log 2>&1 &
+          node tests/smoke.mjs
