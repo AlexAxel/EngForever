@@ -25,7 +25,7 @@ try{
   assert.equal(await page.locator("#wrong").isEnabled(),true,"Tap fallback must open the answer");
   assert.notEqual(await page.locator(".answer-content").evaluate(el=>getComputedStyle(el).display),"none");
   await page.locator("#right").click();
-  await wait();
+  await page.waitForFunction(old=>document.querySelector("#card-id").textContent!==old,first,{timeout:6000}).catch(async error=>{console.log("AFTER RIGHT",await page.evaluate(()=>({progress:document.querySelector("#progress-label").textContent,card:document.querySelector("#card").className,stored:JSON.parse(localStorage.getItem("eng-forever-v1"))?.current,queue:JSON.parse(localStorage.getItem("eng-forever-v1"))?.queue?.length})),errors);throw error;});
   assert.notEqual(await page.locator("#card-id").textContent(),first,"Next phrase must appear after marking correct");
   assert.match(await page.locator("#progress-label").textContent(),/^1 \/ 40 изучено$/);
   const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem("eng-forever-v1")));
@@ -44,7 +44,7 @@ try{
   await page.mouse.down();
   await page.mouse.move(card.x+card.width*.2,card.y+card.height*.72,{steps:9});
   await page.mouse.up();
-  await wait();
+  await page.waitForFunction(old=>document.querySelector("#card-id").textContent!==old,second,{timeout:6000});
   const afterWrong=await page.evaluate(()=>JSON.parse(localStorage.getItem("eng-forever-v1")));
   assert.equal(afterWrong.cards[second.replace("№ ","")].attempts,1,"Swipe left must count as one attempt");
   assert.equal(afterWrong.cards[second.replace("№ ","")].correct,0,"Swipe left must count as error");
