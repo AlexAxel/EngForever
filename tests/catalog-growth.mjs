@@ -11,6 +11,11 @@ try{
   const context=await browser.newContext({viewport:{width:390,height:760},isMobile:true,hasTouch:true});
   const page=await context.newPage();
   page.on("pageerror",error=>failures.push(String(error)));
+  // Model the real 80-card catalogue before a later JSON release adds #81.
+  await page.route("**/data/phrases.json*",async route=>{
+    const response=await route.fetch();
+    await route.fulfill({response,contentType:"application/json",body:JSON.stringify((await response.json()).slice(0,80))});
+  });
   await page.goto(origin);
   await page.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 80"));
   await page.locator("#start").click();
@@ -32,7 +37,7 @@ try{
   await page.route("**/data/phrases.json*",async route=>{
     const response=await route.fetch();
     const cards=await response.json();
-    await route.fulfill({response,contentType:"application/json",body:JSON.stringify([...cards,newCard])});
+    await route.fulfill({response,contentType:"application/json",body:JSON.stringify([...cards.slice(0,80),newCard])});
   });
   await page.reload();
   await page.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 80"));
@@ -79,7 +84,7 @@ try{
   const freshPage=await fresh.newPage();
   await freshPage.route("**/data/phrases.json*",async route=>{
     const response=await route.fetch();
-    await route.fulfill({response,contentType:"application/json",body:JSON.stringify([...(await response.json()),newCard])});
+    await route.fulfill({response,contentType:"application/json",body:JSON.stringify([...(await response.json()).slice(0,80),newCard])});
   });
   await freshPage.goto(origin);
   await freshPage.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 81"));
@@ -99,7 +104,7 @@ try{
   },storageKey);
   await legacyPage.route("**/data/phrases.json*",async route=>{
     const response=await route.fetch();
-    await route.fulfill({response,contentType:"application/json",body:JSON.stringify([...(await response.json()),newCard])});
+    await route.fulfill({response,contentType:"application/json",body:JSON.stringify([...(await response.json()).slice(0,80),newCard])});
   });
   await legacyPage.goto(origin);
   await legacyPage.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 80"));
