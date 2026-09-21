@@ -398,5 +398,205 @@
     "id": 80,
     "ru": "Этот билет не дорогой. Он очень дешёвый.",
     "eng": "This ticket isn't expensive. It's very cheap."
+  },
+  {
+    "id": 81,
+    "ru": "Он не прав. Этот урок очень полезный.",
+    "eng": "He isn't right. This lesson is very useful."
+  },
+  {
+    "id": 82,
+    "ru": "Это слишком сложно для меня.",
+    "eng": "It's too difficult for me."
+  },
+  {
+    "id": 83,
+    "ru": "Мы в правильном месте?",
+    "eng": "Are we in the right place?"
+  },
+  {
+    "id": 84,
+    "ru": "Ты сейчас на работе? Мы правы?",
+    "eng": "Are you at work now? Are we right?"
+  },
+  {
+    "id": 85,
+    "ru": "Он в отъезде? Ты рядом?",
+    "eng": "Is he away? Are you near?"
+  },
+  {
+    "id": 86,
+    "ru": "Это интересно тебе?",
+    "eng": "Is it interesting for you?"
+  },
+  {
+    "id": 87,
+    "ru": "Он из России?",
+    "eng": "Is he from Russia?"
+  },
+  {
+    "id": 88,
+    "ru": "Это важно или нет?",
+    "eng": "Is it important or not?"
+  },
+  {
+    "id": 89,
+    "ru": "Ты в комнате? Ты один?",
+    "eng": "Are you in the room? Are you alone?"
+  },
+  {
+    "id": 90,
+    "ru": "Ты со своими друзьями сейчас?",
+    "eng": "Are you with your friends now?"
+  },
+  {
+    "id": 91,
+    "ru": "Когда ты свободен?",
+    "eng": "When are you free?"
+  },
+  {
+    "id": 92,
+    "ru": "Как у него дела? Как дела?",
+    "eng": "How is he? How are you?"
+  },
+  {
+    "id": 93,
+    "ru": "Где она? Где ты сейчас?",
+    "eng": "Where is she? Where are you now?"
+  },
+  {
+    "id": 94,
+    "ru": "Где (находится) банк?",
+    "eng": "Where is the bank?"
+  },
+  {
+    "id": 95,
+    "ru": "Где находится ближайший отель?",
+    "eng": "Where is the nearest hotel?"
+  },
+  {
+    "id": 96,
+    "ru": "Как её зовут? Кем ты работаешь?",
+    "eng": "What's her name? What's your job?"
+  },
+  {
+    "id": 97,
+    "ru": "Кем он работает? Откуда она?",
+    "eng": "What's his job? Where is she from?"
+  },
+  {
+    "id": 98,
+    "ru": "Сколько ей лет? Кто он? Сколько тебе лет?",
+    "eng": "How old is she? Who is he? How old are you?"
+  },
+  {
+    "id": 99,
+    "ru": "Кто прав? Что здесь?",
+    "eng": "Who is right? What's here?"
+  },
+  {
+    "id": 100,
+    "ru": "Что (находится) в коробке?",
+    "eng": "What's in the box?"
+  },
+  {
+    "id": 101,
+    "ru": "Что находится на полу?",
+    "eng": "What's on the floor?"
+  },
+  {
+    "id": 102,
+    "ru": "Сколько это стоит? Что там?",
+    "eng": "How much is it? What's there?"
+  },
+  {
+    "id": 103,
+    "ru": "Сколько стоит платье?",
+    "eng": "How much is the dress?"
+  },
+  {
+    "id": 104,
+    "ru": "Где ты сейчас?",
+    "eng": "Where are you now?"
+  },
+  {
+    "id": 105,
+    "ru": "Когда ты на работе?",
+    "eng": "When are you at work?"
+  },
+  {
+    "id": 106,
+    "ru": "Где это место?",
+    "eng": "Where is this place?"
+  },
+  {
+    "id": 107,
+    "ru": "Почему это так дорого?",
+    "eng": "Why is it so expensive?"
+  },
+  {
+    "id": 108,
+    "ru": "Я поеду туда завтра.",
+    "eng": "I'll go there tomorrow."
+  },
+  {
+    "id": 109,
+    "ru": "Я скоро сделаю это. Они сделают это.",
+    "eng": "I'll do it soon. They'll do it."
+  },
+  {
+    "id": 110,
+    "ru": "Тебе понравится это место.",
+    "eng": "You'll like this place."
+  },
+  {
+    "id": 111,
+    "ru": "Это будет очень интересно.",
+    "eng": "It'll be very interesting."
+  },
+  {
+    "id": 112,
+    "ru": "Это будет лучше. Он будет дома.",
+    "eng": "It'll be better. He'll be at home."
+  },
+  {
+    "id": 113,
+    "ru": "Она будет в отъезде. Это скоро случится.",
+    "eng": "She'll be away. It'll happen soon."
+  },
+  {
+    "id": 114,
+    "ru": "Я буду покупать это онлайн.",
+    "eng": "I'll buy it online."
+  },
+  {
+    "id": 115,
+    "ru": "Я подожду это. Я подожду тебя.",
+    "eng": "I'll wait for it. I'll wait for you."
+  },
+  {
+    "id": 116,
+    "ru": "Я буду в другом городе завтра.",
+    "eng": "I'll be in another city tomorrow."
+  },
+  {
+    "id": 117,
+    "ru": "Я отправлю ему письмо.",
+    "eng": "I'll send him a letter."
+  },
+  {
+    "id": 118,
+    "ru": "Я думаю, они проиграют. Я думаю, он победит.",
+    "eng": "I think they'll lose. I think he'll win."
+  },
+  {
+    "id": 119,
+    "ru": "Я думаю, это скоро будет стоить дороже.",
+    "eng": "I think it'll cost more soon."
+  },
+  {
+    "id": 120,
+    "ru": "Я не думаю, что это будет стоить дешевле.",
+    "eng": "I don't think that it'll cost less."
   }
 ]
