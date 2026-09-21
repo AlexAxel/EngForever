@@ -1,7 +1,7 @@
 name: Validate Eng Forever
 on:
   push:
-    branches: [main]
+    branches: [main, design/open-design-mobile]
   pull_request:
   workflow_dispatch:
 jobs:
