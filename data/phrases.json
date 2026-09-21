@@ -198,5 +198,205 @@
     "id": 40,
     "ru": "Это не стоит этих денег.",
     "eng": "It doesn't cost this money."
+  },
+  {
+    "id": 41,
+    "ru": "Она не хочет делать это.",
+    "eng": "She doesn't want to do it."
+  },
+  {
+    "id": 42,
+    "ru": "Я не думаю об этом.",
+    "eng": "I don't think about it."
+  },
+  {
+    "id": 43,
+    "ru": "Я так не думаю.",
+    "eng": "I don't think so."
+  },
+  {
+    "id": 44,
+    "ru": "Я не согласен с этим.",
+    "eng": "I don't agree with it."
+  },
+  {
+    "id": 45,
+    "ru": "Он не говорит это.",
+    "eng": "He doesn't say it."
+  },
+  {
+    "id": 46,
+    "ru": "Сегодня показывают несколько фильмов.",
+    "eng": "Today they show several films."
+  },
+  {
+    "id": 47,
+    "ru": "Ты какой жанр предпочитаешь?",
+    "eng": "What kind of genre do you prefer?"
+  },
+  {
+    "id": 48,
+    "ru": "Слышал? (о чём-то сказанном ранее)",
+    "eng": "Have you heard about it?"
+  },
+  {
+    "id": 49,
+    "ru": "Он не думает, что это действительно работает.",
+    "eng": "He doesn't think that it really works."
+  },
+  {
+    "id": 50,
+    "ru": "Ты хочешь снять дом?",
+    "eng": "Do you want to rent a house?"
+  },
+  {
+    "id": 51,
+    "ru": "Ты часто играешь в футбол?",
+    "eng": "Do you often play football?"
+  },
+  {
+    "id": 52,
+    "ru": "У вас есть вопросы?",
+    "eng": "Do you have any questions?"
+  },
+  {
+    "id": 53,
+    "ru": "Ты читаешь книги на английском?",
+    "eng": "Do you read books in English?"
+  },
+  {
+    "id": 54,
+    "ru": "Он занимается бизнесом?",
+    "eng": "Does he do business?"
+  },
+  {
+    "id": 55,
+    "ru": "Она живёт с родителями?",
+    "eng": "Does she live with her parents?"
+  },
+  {
+    "id": 56,
+    "ru": "Он учится в другой стране?",
+    "eng": "Does he study in another country?"
+  },
+  {
+    "id": 57,
+    "ru": "Она учится за границей?",
+    "eng": "Does she study abroad?"
+  },
+  {
+    "id": 58,
+    "ru": "Он преподаёт английский?",
+    "eng": "Does he teach English?"
+  },
+  {
+    "id": 59,
+    "ru": "Почему ты так думаешь?",
+    "eng": "Why do you think so?"
+  },
+  {
+    "id": 60,
+    "ru": "Как ты предпочитаешь учить английский?",
+    "eng": "How do you prefer to learn English?"
+  },
+  {
+    "id": 61,
+    "ru": "Когда ты находишь время на это?",
+    "eng": "When do you find time for it? (for all this)"
+  },
+  {
+    "id": 62,
+    "ru": "Что ты знаешь обо всём этом?",
+    "eng": "What do you know about all this?"
+  },
+  {
+    "id": 63,
+    "ru": "Сколько это стоит?",
+    "eng": "How much does it cost?"
+  },
+  {
+    "id": 64,
+    "ru": "Сколько ты платишь за это?",
+    "eng": "How much do you pay for it?"
+  },
+  {
+    "id": 65,
+    "ru": "Сколько ты платишь за своё образование?",
+    "eng": "How much do you pay for your education?"
+  },
+  {
+    "id": 66,
+    "ru": "Почему ты так много работаешь?",
+    "eng": "Why do you work so much?"
+  },
+  {
+    "id": 67,
+    "ru": "Во сколько ты обычно встаёшь?",
+    "eng": "What time do you usually get up?"
+  },
+  {
+    "id": 68,
+    "ru": "Во сколько ты обычно приходишь на работу?",
+    "eng": "What time do you usually come to work?"
+  },
+  {
+    "id": 69,
+    "ru": "Во сколько ты обычно ложишься спать?",
+    "eng": "What time do you usually go to bed?"
+  },
+  {
+    "id": 70,
+    "ru": "Как часто ты это делаешь?",
+    "eng": "How often do you do it?"
+  },
+  {
+    "id": 71,
+    "ru": "Как часто ты проводишь время с семьёй?",
+    "eng": "How often do you spend time with your family?"
+  },
+  {
+    "id": 72,
+    "ru": "Какие фильмы ты предпочитаешь смотреть?",
+    "eng": "What movies do you prefer to watch?"
+  },
+  {
+    "id": 73,
+    "ru": "В какие игры ты играешь?",
+    "eng": "What games do you play?"
+  },
+  {
+    "id": 74,
+    "ru": "Когда у тебя есть свободное время?",
+    "eng": "When do you have free time?"
+  },
+  {
+    "id": 75,
+    "ru": "Как он предпочитает изучать английский?",
+    "eng": "How does he prefer to learn English?"
+  },
+  {
+    "id": 76,
+    "ru": "Я сейчас в этом городе.",
+    "eng": "I'm in this city now."
+  },
+  {
+    "id": 77,
+    "ru": "Я вижу, что ты не уверен по поводу этого.",
+    "eng": "I see that you aren't sure about it."
+  },
+  {
+    "id": 78,
+    "ru": "Он не женат. Он холост.",
+    "eng": "He isn't married. He's single."
+  },
+  {
+    "id": 79,
+    "ru": "Это очень скучно. Это видео не смешное.",
+    "eng": "It's very boring. This video isn't funny."
+  },
+  {
+    "id": 80,
+    "ru": "Этот билет не дорогой. Он очень дешёвый.",
+    "eng": "This ticket isn't expensive. It's very cheap."
   }
 ]
