@@ -20,13 +20,13 @@ jobs:
           import fs from 'node:fs';
           import assert from 'node:assert/strict';
           const cards=JSON.parse(fs.readFileSync('data/phrases.json','utf8'));
-          assert.ok(cards.length>=80,'Expected notebook pairs 1–80');
+          assert.ok(cards.length>=120,'Expected notebook pairs 1–120');
           assert.equal(new Set(cards.map(p=>p.id)).size,cards.length);
-          for(let id=1;id<=80;id++){
+          for(let id=1;id<=cards.length;id++){
             const p=cards.find(p=>p.id===id);
             assert.ok(p&&typeof p.ru==='string'&&p.ru.trim()&&typeof p.eng==='string'&&p.eng.trim(),'Invalid phrase #'+id);
           }
-          console.log('Validated '+cards.length+' unique, complete pairs; all original IDs 1–80 present');
+          console.log('Validated '+cards.length+' unique, complete pairs; all source IDs 1 through catalogue length present');
           NODE
   mobile-smoke:
     runs-on: ubuntu-latest
@@ -45,3 +45,4 @@ jobs:
           node tests/smoke.mjs
           node tests/catalog-growth.mjs
           node tests/rounds.mjs
+          node tests/catalog-120.mjs
