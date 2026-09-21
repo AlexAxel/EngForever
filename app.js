@@ -97,7 +97,9 @@ const allActive=()=>phrases.filter(p=>cardState(p.id).enabled);
 function freshQueue(){queue=shuffle(allActive().filter(p=>p.id!==current?.id).map(p=>p.id));}
 function toast(message){const el=$("toast");el.textContent=message;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2600);}
 function showEmpty(title,copy,button){$("card").classList.add("hidden");$("empty").classList.remove("hidden");$("empty-title").textContent=title;$("empty-copy").textContent=copy;$("start").textContent=button;$("actions").classList.add("hidden");}
-function showCard(){if(!current)return;revealed=false;busy=false;const card=$("card");card.className=state.currentBonus?"card bonus-review":"card";card.style.transform="";card.style.opacity="";$("empty").classList.add("hidden");card.classList.remove("hidden");$("actions").classList.remove("hidden");$("card-id").textContent="№ "+current.id;$("card-type").textContent=state.currentBonus?"↻ ОШИБКА · ВНЕ СЧЁТА":round===1?"ПЕРЕВОД":"ПОВТОРЕНИЕ";$("question-label").textContent=state.language==="ru"?"ПЕРЕВЕДИ НА АНГЛИЙСКИЙ":"ПЕРЕВЕДИ НА РУССКИЙ";$("question-text").textContent=current[state.language];$("answer-text").textContent=current[state.language==="ru"?"eng":"ru"];$("answer-label").textContent=state.language==="ru"?"АНГЛИЙСКИЙ":"РУССКИЙ";$("answer-sheet").classList.remove("open");$("answer-sheet").setAttribute("aria-expanded","false");$("sheet-hint").textContent="Потяни вниз или нажми, чтобы увидеть перевод";$("sheet-chevron").textContent="⌄";$("wrong").disabled=true;$("right").disabled=true;$("action-hint").textContent="Сначала открой правильный перевод";}
+function showCard(){if(!current)return;revealed=false;busy=false;const card=$("card");card.className=state.currentBonus?"card bonus-review":"card";card.style.transform="";card.style.opacity="";$("empty").classList.add("hidden");card.classList.remove("hidden");$("actions").classList.remove("hidden");$("card-id").textContent="№ "+current.id;$("card-type").textContent=state.currentBonus?"↻ ОШИБКА · ВНЕ СЧЁТА":round===1?"ПЕРЕВОД":"ПОВТОРЕНИЕ";$("question-label").textContent=state.language==="ru"?"ПЕРЕВЕДИ НА АНГЛИЙСКИЙ":"ПЕРЕВЕДИ НА РУССКИЙ";$("question-text").textContent=current[state.language];$("answer-text").textContent=current[state.language==="ru"?"eng":"ru"];$("answer-label").textContent=state.language==="ru"?"АНГЛИЙСКИЙ":"РУССКИЙ";$("answer-sheet").classList.remove("open","drag-preview","is-pulling");
+$("answer-sheet").style.setProperty("--pull","0px");$("answer-sheet").style.setProperty("--pull-ratio","0");
+$("answer-sheet").setAttribute("aria-expanded","false");$("sheet-hint").textContent="Потяни шторку вниз или нажми";$("sheet-chevron").textContent="⌄";$("wrong").disabled=true;$("right").disabled=true;$("action-hint").textContent="Сначала открой правильный перевод";}
 function updateStatus(){
   const active=allActive();
   const ids=started?state.roundIds:active.map(p=>p.id);
@@ -158,7 +160,7 @@ function next(){
 function start(){if(!allActive().length){$("settings-dialog").showModal();return;}started=true;round=1;state.sessionIds=allActive().map(p=>p.id);
 state.roundIds=[...state.sessionIds];state.roundSeen=[];state.roundErrors=[];state.bonusDue=[];state.currentBonus=false;
 current=null;queue=shuffle(state.roundIds);updateStatus();next();}
-function reveal(){if(!current||revealed)return;revealed=true;$("card").classList.add("revealed");$("answer-sheet").classList.add("open");$("answer-sheet").setAttribute("aria-expanded","true");$("sheet-hint").textContent="Проверь себя";$("sheet-chevron").textContent="✓";$("wrong").disabled=false;$("right").disabled=false;$("action-hint").textContent="Свайп влево — ошибка, вправо — вспомнил";}
+function reveal(){if(!current||revealed)return;revealed=true;$("card").classList.add("revealed");$("answer-sheet").classList.remove("is-pulling","drag-preview");$("answer-sheet").style.setProperty("--pull","0px");$("answer-sheet").style.setProperty("--pull-ratio","0");$("answer-sheet").classList.add("open");$("answer-sheet").setAttribute("aria-expanded","true");$("sheet-hint").textContent="Проверь себя";$("sheet-chevron").textContent="✓";$("wrong").disabled=false;$("right").disabled=false;$("action-hint").textContent="Свайп влево — ошибка, вправо — вспомнил";}
 function answer(success){
   if(!current||!revealed||busy)return;
   busy=true;
@@ -222,10 +224,11 @@ function showStats(){const attempt=phrases.reduce((sum,p)=>sum+cardState(p.id).a
 // Isolate the vertical reveal gesture on a dedicated handle. The rest of the
 // revealed card only handles horizontal swipes; native vertical page scroll is preserved.
 function installGestures(){
-  const card=$("card"),handle=$("sheet-handle");
-  let drag=null,curtain=null;
+  const card=$("card"),handle=$("sheet-handle"),sheet=$("answer-sheet");
+  let drag=null,curtain=null,suppressHandleClick=false;
+  // Full-card left/right swipe is only active AFTER translation is visible.
   card.addEventListener("pointerdown",e=>{
-    if(e.target.closest("#sheet-handle")||!current||!revealed||busy||e.button!==0)return;
+    if(e.target.closest("#sheet-handle")||!current||!revealed||busy||e.button!==0||!e.isPrimary)return;
     drag={id:e.pointerId,x:e.clientX,y:e.clientY,dx:0,dy:0};
     card.setPointerCapture(e.pointerId);
     card.classList.add("dragging");
@@ -251,24 +254,54 @@ function installGestures(){
   card.addEventListener("pointerup",finishSwipe);
   card.addEventListener("pointercancel",finishSwipe);
   card.addEventListener("lostpointercapture",e=>{
-    if(drag&&drag.id===e.pointerId){drag=null;card.classList.remove("dragging","swipe-left","swipe-right");card.style.transform="";}
+    if(drag&&drag.id===e.pointerId){
+      drag=null;card.classList.remove("dragging","swipe-left","swipe-right");card.style.transform="";
+    }
   });
-  // Tapping the handle is an intentional accessibility fallback. A downward
-  // drag is still the primary gesture; neither gesture can register an answer.
+  // Unlike the previous click-only sheet, the drawer grows with the finger
+  // while it is being pulled downward. A short tap remains an accessible
+  // fallback on devices that make the vertical gesture difficult.
+  const clearPreview=()=>{
+    sheet.classList.remove("is-pulling","drag-preview");
+    sheet.style.setProperty("--pull","0px");
+    sheet.style.setProperty("--pull-ratio","0");
+  };
   handle.addEventListener("pointerdown",e=>{
-    if(!current||revealed||busy||e.button!==0)return;
+    if(!current||revealed||busy||e.button!==0||!e.isPrimary)return;
     e.stopPropagation();
-    curtain={id:e.pointerId,y:e.clientY,x:e.clientX};
+    suppressHandleClick=false;
+    curtain={id:e.pointerId,y:e.clientY,x:e.clientX,dy:0,dx:0};
     handle.setPointerCapture(e.pointerId);
+    sheet.classList.add("is-pulling");
+  });
+  handle.addEventListener("pointermove",e=>{
+    if(!curtain||curtain.id!==e.pointerId)return;
+    curtain.dy=e.clientY-curtain.y;curtain.dx=e.clientX-curtain.x;
+    const pull=Math.max(0,Math.min(145,curtain.dy));
+    sheet.style.setProperty("--pull",pull+"px");
+    sheet.style.setProperty("--pull-ratio",String(Math.min(.95,Math.max(0,(pull-20)/100))));
+    sheet.classList.toggle("drag-preview",pull>28);
   });
   handle.addEventListener("pointerup",e=>{
     if(!curtain||curtain.id!==e.pointerId)return;
     const dy=e.clientY-curtain.y,dx=e.clientX-curtain.x;
     curtain=null;e.stopPropagation();
-    if(dy>22||(Math.abs(dy)<12&&Math.abs(dx)<12))reveal();
+    const tapped=Math.abs(dy)<12&&Math.abs(dx)<12;
+    const draggedDown=dy>=32&&dy>Math.abs(dx)*1.15;
+    suppressHandleClick=!tapped&&!draggedDown;
+    clearPreview();
+    if(tapped||draggedDown)reveal();
   });
-  handle.addEventListener("pointercancel",()=>{curtain=null;});
-  handle.addEventListener("click",()=>reveal());
+  handle.addEventListener("pointercancel",()=>{
+    curtain=null;suppressHandleClick=true;clearPreview();
+  });
+  handle.addEventListener("lostpointercapture",e=>{
+    if(curtain&&curtain.id===e.pointerId){curtain=null;clearPreview();}
+  });
+  handle.addEventListener("click",()=>{
+    if(suppressHandleClick){suppressHandleClick=false;return;}
+    reveal();
+  });
   handle.addEventListener("keydown",e=>{
     if(e.key==="Enter"||e.key===" "){e.preventDefault();reveal();}
   });
