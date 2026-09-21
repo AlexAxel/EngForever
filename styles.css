@@ -65,3 +65,23 @@
 .phrase-list{max-height:none;overflow:visible;min-height:0}
 .phrase-option{min-height:52px;align-items:center}
 .phrase-option input{flex-shrink:0}
+
+
+/* A quick review is visibly different from a numbered round card.
+   It never advances the unique-card progress counter. */
+.card.bonus-review{border:2px solid #d69328;box-shadow:0 16px 40px rgba(180,112,13,.13)}
+.card.bonus-review .pill{background:#fff0ce;color:#805000;letter-spacing:.35px;font-size:10px}
+.card.bonus-review .card-index{color:#996118}
+.card.bonus-review .answer-sheet{background:#fff2d8}
+.card.bonus-review .sheet-handle span,
+.card.bonus-review .answer-content .eyebrow{color:#805000}
+.card.bonus-review .grip{background:#b77b19}
+@media(prefers-color-scheme:dark){
+ .card.bonus-review{border-color:#dca84e;box-shadow:0 16px 40px rgba(0,0,0,.22)}
+ .card.bonus-review .pill{background:#564020;color:#ffdd90}
+ .card.bonus-review .card-index{color:#efc77f}
+ .card.bonus-review .answer-sheet{background:#3d3327}
+ .card.bonus-review .sheet-handle span,
+ .card.bonus-review .answer-content .eyebrow{color:#f3cc86}
+ .card.bonus-review .grip{background:#e5b86d}
+}
