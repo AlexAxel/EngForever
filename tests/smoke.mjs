@@ -26,7 +26,7 @@ try{
   await page.locator("#right").click();
   await page.waitForFunction(old=>document.querySelector("#card-id").textContent!==old,first,{timeout:6000}).catch(async error=>{console.log("AFTER RIGHT",await page.evaluate(()=>({progress:document.querySelector("#progress-label").textContent,card:document.querySelector("#card").className,stored:JSON.parse(localStorage.getItem("eng-forever-v1"))?.current,queue:JSON.parse(localStorage.getItem("eng-forever-v1"))?.queue?.length})),errors);throw error;});
   assert.notEqual(await page.locator("#card-id").textContent(),first,"Next phrase must appear after marking correct");
-  assert.match(await page.locator("#progress-label").textContent(),/^1 \/ 80 изучено$/);
+  assert.match(await page.locator("#progress-label").textContent(),/^1 \/ 80 пройдено$/);
   const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem("eng-forever-v1")));
   assert.ok(saved.cards[first.replace("№ ","")].learned,"Progress must persist to storage");
   // Verify downward dragging the handle, rather than accidental card swipe.
@@ -47,7 +47,9 @@ try{
   const afterWrong=await page.evaluate(()=>JSON.parse(localStorage.getItem("eng-forever-v1")));
   assert.equal(afterWrong.cards[second.replace("№ ","")].attempts,1,"Swipe left must count as one attempt");
   assert.equal(afterWrong.cards[second.replace("№ ","")].correct,0,"Swipe left must count as error");
-  assert.ok(afterWrong.queue.includes(Number(second.replace("№ ",""))),"Wrong phrase must return to queue");
+  assert.ok(afterWrong.roundSeen.includes(Number(second.replace("№ ",""))),"Wrong phrase counts as seen once");
+  assert.ok(!afterWrong.queue.includes(Number(second.replace("№ ",""))),"Wrong phrase must wait for the next round");
+  assert.match(await page.locator("#progress-label").textContent(),/^2 \/ 80 пройдено$/);
   await page.reload();
   await page.locator("#card:not(.hidden)").waitFor();
   assert.equal(await page.locator("#right").isDisabled(),true,"Revealed answer must not survive reload");
