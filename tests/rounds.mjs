@@ -33,6 +33,19 @@ try{
       assert.equal(await page.locator("#card").evaluate(el=>el.classList.contains("bonus-review")),true,"Bonus must be visually highlighted");
       assert.match(await page.locator("#card-type").textContent(),/ВНЕ СЧЁТА/);
       assert.match(await page.locator("#progress-label").textContent(),new RegExp("Перепроверка.*"+previous+" / 80"));
+      if(bonusIds.length===1){
+        const queued=before.queue.slice(),pending=before.bonusDue.slice(),roundErrors=before.roundErrors.slice();
+        await page.reload();
+        await page.locator("#card:not(.hidden)").waitFor();
+        const restoredBonus=await state();
+        assert.equal(restoredBonus.current,id,"Interrupted quick review must retain the same card");
+        assert.equal(restoredBonus.currentBonus,true,"Reload must retain the off-counter mode");
+        assert.equal(restoredBonus.roundSeen.length,previous,"Reload must not count a quick review");
+        assert.deepEqual(restoredBonus.queue,queued,"Reload must not alter the numbered deck");
+        assert.deepEqual(restoredBonus.bonusDue,pending);
+        assert.deepEqual(restoredBonus.roundErrors,roundErrors);
+        assert.equal(await page.locator("#card").evaluate(el=>el.classList.contains("bonus-review")),true);
+      }
     }else{
       assert.ok(id>=1&&id<=80);
       assert.ok(!primaryIds.includes(id),"Primary card repeated: ID "+id);
@@ -60,7 +73,7 @@ try{
   assert.ok(bonusIds.length>0,"Same-round error reviews must actually appear");
   assert.ok(bonusBeforeHalfway,"Early errors must be reviewed before reaching card 40 of 80");
   assert.ok(bonusIds.includes(primaryIds[0]),"An early mistake must be reviewed in the first round");
-  assert.ok(bonusIds.includes(bonusIds[0]),"An unsuccessful bonus must be eligible for another same-round review");
+  assert.ok(bonusIds.filter(id=>id===bonusIds[0]).length>=2,"An unsuccessful bonus must recur again later in the same round");
   assert.equal(await page.locator("#round-label").textContent(),"Круг 2");
   assert.equal(await page.locator("#progress-label").textContent(),"0 / 10 пройдено","Second round must start at zero with ten missed IDs");
   const second=await state();
