@@ -7,6 +7,11 @@ const errors=[];
 page.on("pageerror",e=>errors.push(String(e)));
 const state=()=>page.evaluate(()=>JSON.parse(localStorage.getItem("eng-forever-v1")));
 try{
+  // Keep this established 80-card interaction regression independent of future catalogue growth.
+  await page.route("**/data/phrases.json*",async route=>{
+    const response=await route.fetch();
+    await route.fulfill({response,contentType:"application/json",body:JSON.stringify((await response.json()).slice(0,80))});
+  });
   await page.goto("http://127.0.0.1:8000/");
   await page.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 80"));
   await page.locator("#start").click();
