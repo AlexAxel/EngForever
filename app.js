@@ -3,7 +3,7 @@ const KEY="eng-forever-v1";
 // Keep the v1 storage key: existing browser progress survives the UI redesign.
 const TYPES=[{id:"translate",label:"Перевод"}];
 let phrases=[],state,queue=[],current=null,revealed=false,started=false,round=1,busy=false,toastTimer,transitionTimer;
-const blank=()=>({version:1,language:"ru",mode:"auto",cards:{},round:1,started:false,queue:[],current:null,catalogIds:[],sessionIds:[]});
+const blank=()=>({version:1,language:"ru",mode:"auto",cards:{},round:1,started:false,queue:[],current:null,catalogIds:[],sessionIds:[],roundIds:[],roundSeen:[]});
 const cardState=id=>{const key=String(id);return state.cards[key]??(state.cards[key]={enabled:true,manuallyDisabled:false,learned:false,attempts:0,correct:0,hardness:0,history:[]});};
 const save=()=>{state.round=round;state.started=started;state.queue=queue;state.current=current?.id??null;state.catalogIds=phrases.map(p=>p.id);try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){$("footer-status").textContent="Не удалось сохранить прогресс. Проверь настройки браузера.";}};
 function load(){
@@ -48,8 +48,38 @@ function load(){
   queue=pendingQueue.filter(id=>phrases.some(p=>p.id===id)&&cardState(id).enabled);
   current=phrases.find(p=>p.id===state.current&&cardState(p.id).enabled)||null;
   queue=queue.filter(id=>id!==current?.id);
+  // Migrate an in-progress v1 queue without discarding its remaining IDs.
+  // The old queue could already contain erroneous repeats, so treat every
+  // queued ID as NOT YET safely counted, rather than risking skipped phrases.
+  const allIds=new Set(phrases.map(p=>p.id));
+  if(!started){
+    state.roundIds=[];state.roundSeen=[];
+  }else{
+    const hadRound=Array.isArray(state.roundIds)&&state.roundIds.length>0;
+    if(!hadRound){
+      const ids=round===1
+        ? (state.sessionIds.length?state.sessionIds:phrases.filter(p=>known.has(p.id)&&!cardState(p.id).manuallyDisabled).map(p=>p.id))
+        : [...new Set([state.current,...pendingQueue,...state.sessionIds.filter(id=>{
+            const c=cardState(id);return c.enabled||c.learned&&c.hardness>=15&&!c.manuallyDisabled;
+          })].filter(id=>Number.isSafeInteger(id)))];
+      state.roundIds=ids.filter(id=>allIds.has(id)&&!cardState(id).manuallyDisabled);
+      const pending=new Set([...queue,current?.id]);
+      state.roundSeen=state.roundIds.filter(id=>!pending.has(id));
+    }else{
+      state.roundIds=[...new Set(state.roundIds)].filter(id=>allIds.has(id)&&!cardState(id).manuallyDisabled);
+      const allowed=new Set(state.roundIds);
+      state.roundSeen=[...new Set(Array.isArray(state.roundSeen)?state.roundSeen:[])].filter(id=>allowed.has(id));
+    }
+    const seen=new Set(state.roundSeen);
+    const allowed=new Set(state.roundIds);
+    if(current&&(!allowed.has(current.id)||seen.has(current.id)))current=null;
+    queue=[...new Set(queue)].filter(id=>allowed.has(id)&&!seen.has(id)&&id!==current?.id);
+    const queued=new Set(queue);
+    // A saved/migrated deck must always retain every unvisited ID.
+    queue.push(...shuffle(state.roundIds.filter(id=>!seen.has(id)&&id!==current?.id&&!queued.has(id))));
+  }
   // Persist the new catalogue snapshot and disabled flags immediately.
-  // This prevents newly added cards from becoming selected on next reload.
+  // Newly added cards remain unchecked across subsequent page reloads.
   save();
 }
 const shuffle=arr=>{const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
@@ -57,15 +87,64 @@ const allActive=()=>phrases.filter(p=>cardState(p.id).enabled);
 function freshQueue(){queue=shuffle(allActive().filter(p=>p.id!==current?.id).map(p=>p.id));}
 function toast(message){const el=$("toast");el.textContent=message;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2600);}
 function showEmpty(title,copy,button){$("card").classList.add("hidden");$("empty").classList.remove("hidden");$("empty-title").textContent=title;$("empty-copy").textContent=copy;$("start").textContent=button;$("actions").classList.add("hidden");}
-function showCard(){if(!current)return;revealed=false;busy=false;const card=$("card");card.className="card";card.style.transform="";card.style.opacity="";$("empty").classList.add("hidden");card.classList.remove("hidden");$("actions").classList.remove("hidden");$("card-id").textContent="№ "+current.id;$("card-type").textContent="ПЕРЕВОД";$("question-label").textContent=state.language==="ru"?"ПЕРЕВЕДИ НА АНГЛИЙСКИЙ":"ПЕРЕВЕДИ НА РУССКИЙ";$("question-text").textContent=current[state.language];$("answer-text").textContent=current[state.language==="ru"?"eng":"ru"];$("answer-label").textContent=state.language==="ru"?"АНГЛИЙСКИЙ":"РУССКИЙ";$("answer-sheet").classList.remove("open");$("answer-sheet").setAttribute("aria-expanded","false");$("sheet-hint").textContent="Потяни вниз или нажми, чтобы увидеть перевод";$("sheet-chevron").textContent="⌄";$("wrong").disabled=true;$("right").disabled=true;$("action-hint").textContent="Сначала открой правильный перевод";}
-function updateStatus(){const active=allActive();const ids=started&&state.sessionIds.length?state.sessionIds:active.map(p=>p.id);const learned=started?ids.filter(id=>cardState(id).learned).length:0;const hard=phrases.filter(p=>cardState(p.id).hardness>=15).length;$("round-label").textContent="Круг "+round;$("progress-label").textContent=learned+" / "+ids.length+" изучено";$("progress-bar").style.width=(ids.length?learned/ids.length*100:0)+"%";$("active-count").textContent="Активных: "+active.length;$("difficult-count").textContent="Сложных: "+hard;}
-function next(){if(busy)return;const valid=new Set(allActive().map(p=>p.id));queue=queue.filter(id=>valid.has(id)&&id!==current?.id);if(queue.length){const selectedId=queue.shift();current=phrases.find(p=>p.id===selectedId);showCard();updateStatus();save();return;}
-current=null;const active=allActive();if(active.length){freshQueue();if(queue.length){const selectedId=queue.shift();current=phrases.find(p=>p.id===selectedId);showCard();updateStatus();save();return;}}
-const difficult=phrases.filter(p=>{const c=cardState(p.id);return c.learned&&!c.manuallyDisabled&&c.hardness>=15;});if(difficult.length&&started){round++;for(const p of difficult){const c=cardState(p.id);c.enabled=true;c.learned=false;}queue=shuffle(difficult.map(p=>p.id));const selectedId=queue.shift();current=phrases.find(p=>p.id===selectedId);showCard();toast("Новый круг: "+difficult.length+" сложных фраз");updateStatus();save();return;}
-updateStatus();save();if(!started)showEmpty("Готов к тренировке?","Открой карточку, вспомни перевод и проверь себя перед свайпом.","Начать тренировку →");else if(!active.length)showEmpty("Всё изучено!","Сложных фраз для повторения пока нет. В настройках можно снова включить нужные карточки.","Открыть настройки");else showEmpty("Пока нет карточек","Включи хотя бы одну фразу в настройках.","Открыть настройки");}
-function start(){if(!allActive().length){$("settings-dialog").showModal();return;}started=true;round=Math.max(1,round);state.sessionIds=allActive().map(p=>p.id);freshQueue();next();}
+function showCard(){if(!current)return;revealed=false;busy=false;const card=$("card");card.className="card";card.style.transform="";card.style.opacity="";$("empty").classList.add("hidden");card.classList.remove("hidden");$("actions").classList.remove("hidden");$("card-id").textContent="№ "+current.id;$("card-type").textContent=round===1?"ПЕРЕВОД":"ПОВТОРЕНИЕ";$("question-label").textContent=state.language==="ru"?"ПЕРЕВЕДИ НА АНГЛИЙСКИЙ":"ПЕРЕВЕДИ НА РУССКИЙ";$("question-text").textContent=current[state.language];$("answer-text").textContent=current[state.language==="ru"?"eng":"ru"];$("answer-label").textContent=state.language==="ru"?"АНГЛИЙСКИЙ":"РУССКИЙ";$("answer-sheet").classList.remove("open");$("answer-sheet").setAttribute("aria-expanded","false");$("sheet-hint").textContent="Потяни вниз или нажми, чтобы увидеть перевод";$("sheet-chevron").textContent="⌄";$("wrong").disabled=true;$("right").disabled=true;$("action-hint").textContent="Сначала открой правильный перевод";}
+function updateStatus(){
+  const active=allActive();
+  const ids=started?state.roundIds:active.map(p=>p.id);
+  const done=started?state.roundSeen.length:0;
+  const hard=phrases.filter(p=>cardState(p.id).hardness>=15).length;
+  $("round-label").textContent="Круг "+round;
+  $("progress-label").textContent=done+" / "+ids.length+" пройдено";
+  $("progress-bar").style.width=(ids.length?done/ids.length*100:0)+"%";
+  $("active-count").textContent="Активных: "+active.length;
+  $("difficult-count").textContent="Сложных: "+hard;
+}
+function next(){
+  if(busy||!started)return;
+  const allowed=new Set(state.roundIds);
+  const seen=new Set(state.roundSeen);
+  queue=[...new Set(queue)].filter(id=>allowed.has(id)&&!seen.has(id)&&id!==current?.id);
+  if(queue.length){
+    const id=queue.shift();
+    current=phrases.find(p=>p.id===id);
+    showCard();updateStatus();save();return;
+  }
+  // In the active round, every ID appears exactly once. Mistakes stay enabled
+  // but are NOT returned to the current deck or counted as another step.
+  current=null;
+  const remaining=state.roundIds.filter(id=>!seen.has(id));
+  if(remaining.length){
+    queue=shuffle(remaining);
+    const id=queue.shift();
+    current=phrases.find(p=>p.id===id);
+    showCard();updateStatus();save();return;
+  }
+  // The next round consists only of last round's errors and still-difficult
+  // phrases. A correct answer does not erase historical difficulty.
+  const review=state.roundIds.filter(id=>{
+    const c=cardState(id);
+    return !c.manuallyDisabled&&(c.enabled||c.hardness>=15);
+  });
+  if(review.length){
+    round++;
+    for(const id of review){const c=cardState(id);c.enabled=true;c.learned=false;}
+    state.roundIds=[...review];state.roundSeen=[];
+    queue=shuffle(review);
+    const id=queue.shift();
+    current=phrases.find(p=>p.id===id);
+    showCard();toast("Круг "+round+": "+review.length+" фраз для повторения");
+    updateStatus();save();return;
+  }
+  updateStatus();save();
+  showEmpty("Всё изучено!","Текущая тренировка завершена. В настройках можно включить новые фразы.","Открыть настройки");
+}
+function start(){if(!allActive().length){$("settings-dialog").showModal();return;}started=true;round=1;state.sessionIds=allActive().map(p=>p.id);
+state.roundIds=[...state.sessionIds];state.roundSeen=[];
+current=null;queue=shuffle(state.roundIds);updateStatus();next();}
 function reveal(){if(!current||revealed)return;revealed=true;$("card").classList.add("revealed");$("answer-sheet").classList.add("open");$("answer-sheet").setAttribute("aria-expanded","true");$("sheet-hint").textContent="Проверь себя";$("sheet-chevron").textContent="✓";$("wrong").disabled=false;$("right").disabled=false;$("action-hint").textContent="Свайп влево — ошибка, вправо — вспомнил";}
-function answer(success){if(!current||!revealed||busy)return;busy=true;const p=current,c=cardState(p.id);c.attempts++;if(success)c.correct++;c.hardness=success?Math.max(0,c.hardness*.75-12):Math.min(100,c.hardness*.85+45);c.history=[...(c.history||[]),{ok:success,at:new Date().toISOString()}].slice(-50);c.learned=success;c.enabled=!success;c.manuallyDisabled=false;current=null;if(!success)queue.push(p.id);const card=$("card");card.classList.add("fly");card.style.transform="translateX("+(success?Math.max(innerWidth,420):-Math.max(innerWidth,420))+"px) rotate("+(success?15:-15)+"deg)";updateStatus();save();transitionTimer=setTimeout(()=>{busy=false;next();},230);}
+function answer(success){if(!current||!revealed||busy)return;busy=true;const p=current,c=cardState(p.id);c.attempts++;if(success)c.correct++;c.hardness=success?Math.max(0,c.hardness*.75-12):Math.min(100,c.hardness*.85+45);c.history=[...(c.history||[]),{ok:success,at:new Date().toISOString()}].slice(-50);c.learned=success;c.enabled=!success;c.manuallyDisabled=false;
+if(!state.roundSeen.includes(p.id))state.roundSeen.push(p.id);
+current=null;const card=$("card");card.classList.add("fly");card.style.transform="translateX("+(success?Math.max(innerWidth,420):-Math.max(innerWidth,420))+"px) rotate("+(success?15:-15)+"deg)";updateStatus();save();transitionTimer=setTimeout(()=>{busy=false;next();},230);}
 function handleLanguage(){state.language=document.querySelector('input[name="language"]:checked')?.value==="eng"?"eng":"ru";if(current)showCard();save();}
 function syncSettings(){document.querySelectorAll('input[name="language"]').forEach(el=>el.checked=el.value===state.language);$("mode").value=state.mode;$("phrase-list").replaceChildren();for(const p of phrases){const label=document.createElement("label");label.className="phrase-option";const check=document.createElement("input");check.type="checkbox";check.checked=cardState(p.id).enabled;check.addEventListener("change",()=>togglePhrase(p.id,check.checked));const span=document.createElement("span");span.textContent="#"+p.id+" · "+p.ru;const sm=document.createElement("small");sm.textContent=p.eng;span.append(sm);label.append(check,span);$("phrase-list").append(label);}updateSelected();}
 function updateSelected(){$("selected-count").textContent=allActive().length+"/"+phrases.length;}
@@ -75,7 +154,7 @@ function restartAfterSelectionChange(){
   clearTimeout(transitionTimer);
   busy=false;revealed=false;started=false;round=1;queue=[];current=null;
   for(const p of phrases)cardState(p.id).learned=false; // session completion only
-  state.sessionIds=[];
+  state.sessionIds=[];state.roundIds=[];state.roundSeen=[];
   const card=$("card");
   card.classList.remove("fly","dragging","swipe-left","swipe-right");
   card.style.transform="";card.style.opacity="";
