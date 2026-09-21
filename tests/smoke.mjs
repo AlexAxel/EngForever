@@ -9,7 +9,7 @@ page.on("pageerror",e=>errors.push(String(e)));
 const url="http://127.0.0.1:8000/";
 try{
   await page.goto(url);
-  await page.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 40"));
+  await page.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 80"));
   await page.locator("#start").click();
   await page.locator("#card:not(.hidden)").waitFor({timeout:6000}).catch(async e=>{console.log("INITIAL CARD",await page.evaluate(()=>({card:document.querySelector("#card").outerHTML.slice(0,300),empty:document.querySelector("#empty").textContent,start:document.querySelector("#start").outerHTML,progress:document.querySelector("#progress-label").textContent,storage:JSON.parse(localStorage.getItem("eng-forever-v1"))})),errors);throw e;});
   const first=await page.locator("#card-id").textContent();
@@ -26,7 +26,7 @@ try{
   await page.locator("#right").click();
   await page.waitForFunction(old=>document.querySelector("#card-id").textContent!==old,first,{timeout:6000}).catch(async error=>{console.log("AFTER RIGHT",await page.evaluate(()=>({progress:document.querySelector("#progress-label").textContent,card:document.querySelector("#card").className,stored:JSON.parse(localStorage.getItem("eng-forever-v1"))?.current,queue:JSON.parse(localStorage.getItem("eng-forever-v1"))?.queue?.length})),errors);throw error;});
   assert.notEqual(await page.locator("#card-id").textContent(),first,"Next phrase must appear after marking correct");
-  assert.match(await page.locator("#progress-label").textContent(),/^1 \/ 40 изучено$/);
+  assert.match(await page.locator("#progress-label").textContent(),/^1 \/ 80 изучено$/);
   const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem("eng-forever-v1")));
   assert.ok(saved.cards[first.replace("№ ","")].learned,"Progress must persist to storage");
   // Verify downward dragging the handle, rather than accidental card swipe.
@@ -55,11 +55,11 @@ try{
   assert.ok(overflow<=1,"Mobile layout must not overflow horizontally: "+overflow);
   await page.locator("#settings-open").click();
   assert.equal(await page.locator("#settings-dialog").evaluate(el=>el.open),true,"Settings must open");
-  assert.equal(await page.locator("#phrase-list .phrase-option").count(),40,"All 40 numbered phrases must appear in settings");
-  assert.deepEqual(await page.locator("#phrase-list .phrase-option").evaluateAll(items=>items.map(x=>parseInt(x.textContent.slice(1),10))),Array.from({length:40},(_,i)=>i+1),"Settings IDs must match original notebook numbers 1–40");
+  assert.equal(await page.locator("#phrase-list .phrase-option").count(),80,"All 80 numbered phrases must appear in settings");
+  assert.deepEqual(await page.locator("#phrase-list .phrase-option").evaluateAll(items=>items.map(x=>parseInt(x.textContent.slice(1),10))),Array.from({length:80},(_,i)=>i+1),"Settings IDs must match original notebook numbers 1–80");
   assert.equal(await page.locator("#phrase-list").evaluate(el=>getComputedStyle(el).overflowY),"visible","Phrase list should not have a hidden nested scrollbar");
   await page.locator("#phrase-list .phrase-option").last().scrollIntoViewIfNeeded();
-  assert.equal(await page.locator("#phrase-list .phrase-option").last().isVisible(),true,"ID 40 must be reachable at bottom of settings");
+  assert.equal(await page.locator("#phrase-list .phrase-option").last().isVisible(),true,"ID 80 must be reachable at bottom of settings");
   await page.locator("#settings-done").click();
   assert.equal(await page.locator("#settings-dialog").evaluate(el=>el.open),false,"Settings must close");
   assert.deepEqual(errors,[],"No uncaught runtime exceptions");
