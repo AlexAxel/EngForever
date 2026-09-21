@@ -3,25 +3,67 @@ const KEY="eng-forever-v1";
 // Keep the v1 storage key: existing browser progress survives the UI redesign.
 const TYPES=[{id:"translate",label:"Перевод"}];
 let phrases=[],state,queue=[],current=null,revealed=false,started=false,round=1,busy=false,toastTimer,transitionTimer;
-const blank=()=>({version:1,language:"ru",mode:"auto",cards:{},round:1,started:false,queue:[],current:null});
+const blank=()=>({version:1,language:"ru",mode:"auto",cards:{},round:1,started:false,queue:[],current:null,catalogIds:[],sessionIds:[]});
 const cardState=id=>{const key=String(id);return state.cards[key]??(state.cards[key]={enabled:true,manuallyDisabled:false,learned:false,attempts:0,correct:0,hardness:0,history:[]});};
-const save=()=>{state.round=round;state.started=started;state.queue=queue;state.current=current?.id??null;try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){$("footer-status").textContent="Не удалось сохранить прогресс. Проверь настройки браузера.";}};
-function load(){try{const raw=JSON.parse(localStorage.getItem(KEY)||"null");state=raw&&raw.version===1&&raw.cards&&typeof raw.cards==="object"?raw:blank();}catch{state=blank();}
-state.language=state.language==="eng"?"eng":"ru";state.mode=state.mode==="manual"?"manual":"auto";
-for(const p of phrases){const c=cardState(p.id);c.enabled=c.enabled!==false;c.manuallyDisabled=!!c.manuallyDisabled;c.learned=!!c.learned;c.attempts=Math.max(0,Number(c.attempts)||0);c.correct=Math.min(c.attempts,Math.max(0,Number(c.correct)||0));c.hardness=Math.min(100,Math.max(0,Number(c.hardness)||0));if(!Array.isArray(c.history))c.history=[];}
-round=Math.max(1,Number(state.round)||1);started=!!state.started;queue=Array.isArray(state.queue)?state.queue.filter(id=>phrases.some(p=>p.id===id)&&cardState(id).enabled):[];current=phrases.find(p=>p.id===state.current&&cardState(p.id).enabled)||null;queue=queue.filter(id=>id!==current?.id);}
+const save=()=>{state.round=round;state.started=started;state.queue=queue;state.current=current?.id??null;state.catalogIds=phrases.map(p=>p.id);try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){$("footer-status").textContent="Не удалось сохранить прогресс. Проверь настройки браузера.";}};
+function load(){
+  let raw=null;
+  try{raw=JSON.parse(localStorage.getItem(KEY)||"null");}catch{}
+  state=raw&&raw.version===1&&raw.cards&&typeof raw.cards==="object"?raw:blank();
+  state.language=state.language==="eng"?"eng":"ru";
+  state.mode=state.mode==="manual"?"manual":"auto";
+  round=Math.max(1,Number(state.round)||1);
+  started=!!state.started;
+
+  // Legacy saves have no catalogIds: the existing card keys are the last
+  // known catalogue, BEFORE we create any new entries from the new JSON.
+  const known=new Set((Array.isArray(state.catalogIds)&&state.catalogIds.length
+    ?state.catalogIds:Object.keys(state.cards)).map(Number));
+  const oldCards=Object.values(state.cards);
+  const pendingQueue=Array.isArray(state.queue)?state.queue:[];
+  const unfinished=started&&(
+    state.current!=null || pendingQueue.length>0 ||
+    oldCards.some(c=>c?.enabled) ||
+    oldCards.some(c=>c?.learned&&!c?.manuallyDisabled&&Number(c.hardness)>=15)
+  );
+  if(!Array.isArray(state.sessionIds)){
+    // A saved session predating this change keeps its original membership.
+    state.sessionIds=started?phrases.filter(p=>known.has(p.id)&&
+      !state.cards[p.id]?.manuallyDisabled).map(p=>p.id):[];
+  }
+  for(const p of phrases){
+    const isNew=!known.has(p.id);
+    const c=cardState(p.id);
+    // Adding JSON alone MUST NOT opt a card into an unfinished session.
+    if(isNew&&unfinished){c.enabled=false;c.manuallyDisabled=true;c.learned=false;}
+    c.enabled=c.enabled!==false;
+    c.manuallyDisabled=!!c.manuallyDisabled;
+    c.learned=!!c.learned;
+    c.attempts=Math.max(0,Number(c.attempts)||0);
+    c.correct=Math.min(c.attempts,Math.max(0,Number(c.correct)||0));
+    c.hardness=Math.min(100,Math.max(0,Number(c.hardness)||0));
+    if(!Array.isArray(c.history))c.history=[];
+  }
+  state.sessionIds=state.sessionIds.filter(id=>known.has(id)&&phrases.some(p=>p.id===id));
+  queue=pendingQueue.filter(id=>phrases.some(p=>p.id===id)&&cardState(id).enabled);
+  current=phrases.find(p=>p.id===state.current&&cardState(p.id).enabled)||null;
+  queue=queue.filter(id=>id!==current?.id);
+  // Persist the new catalogue snapshot and disabled flags immediately.
+  // This prevents newly added cards from becoming selected on next reload.
+  save();
+}
 const shuffle=arr=>{const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 const allActive=()=>phrases.filter(p=>cardState(p.id).enabled);
 function freshQueue(){queue=shuffle(allActive().filter(p=>p.id!==current?.id).map(p=>p.id));}
 function toast(message){const el=$("toast");el.textContent=message;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2600);}
 function showEmpty(title,copy,button){$("card").classList.add("hidden");$("empty").classList.remove("hidden");$("empty-title").textContent=title;$("empty-copy").textContent=copy;$("start").textContent=button;$("actions").classList.add("hidden");}
 function showCard(){if(!current)return;revealed=false;busy=false;const card=$("card");card.className="card";card.style.transform="";card.style.opacity="";$("empty").classList.add("hidden");card.classList.remove("hidden");$("actions").classList.remove("hidden");$("card-id").textContent="№ "+current.id;$("card-type").textContent="ПЕРЕВОД";$("question-label").textContent=state.language==="ru"?"ПЕРЕВЕДИ НА АНГЛИЙСКИЙ":"ПЕРЕВЕДИ НА РУССКИЙ";$("question-text").textContent=current[state.language];$("answer-text").textContent=current[state.language==="ru"?"eng":"ru"];$("answer-label").textContent=state.language==="ru"?"АНГЛИЙСКИЙ":"РУССКИЙ";$("answer-sheet").classList.remove("open");$("answer-sheet").setAttribute("aria-expanded","false");$("sheet-hint").textContent="Потяни вниз или нажми, чтобы увидеть перевод";$("sheet-chevron").textContent="⌄";$("wrong").disabled=true;$("right").disabled=true;$("action-hint").textContent="Сначала открой правильный перевод";}
-function updateStatus(){const active=allActive();const learned=phrases.filter(p=>cardState(p.id).learned).length;const hard=phrases.filter(p=>cardState(p.id).hardness>=15).length;$("round-label").textContent="Круг "+round;$("progress-label").textContent=learned+" / "+phrases.length+" изучено";$("progress-bar").style.width=(phrases.length?learned/phrases.length*100:0)+"%";$("active-count").textContent="Активных: "+active.length;$("difficult-count").textContent="Сложных: "+hard;}
+function updateStatus(){const active=allActive();const ids=started&&state.sessionIds.length?state.sessionIds:active.map(p=>p.id);const learned=started?ids.filter(id=>cardState(id).learned).length:0;const hard=phrases.filter(p=>cardState(p.id).hardness>=15).length;$("round-label").textContent="Круг "+round;$("progress-label").textContent=learned+" / "+ids.length+" изучено";$("progress-bar").style.width=(ids.length?learned/ids.length*100:0)+"%";$("active-count").textContent="Активных: "+active.length;$("difficult-count").textContent="Сложных: "+hard;}
 function next(){if(busy)return;const valid=new Set(allActive().map(p=>p.id));queue=queue.filter(id=>valid.has(id)&&id!==current?.id);if(queue.length){const selectedId=queue.shift();current=phrases.find(p=>p.id===selectedId);showCard();updateStatus();save();return;}
 current=null;const active=allActive();if(active.length){freshQueue();if(queue.length){const selectedId=queue.shift();current=phrases.find(p=>p.id===selectedId);showCard();updateStatus();save();return;}}
 const difficult=phrases.filter(p=>{const c=cardState(p.id);return c.learned&&!c.manuallyDisabled&&c.hardness>=15;});if(difficult.length&&started){round++;for(const p of difficult){const c=cardState(p.id);c.enabled=true;c.learned=false;}queue=shuffle(difficult.map(p=>p.id));const selectedId=queue.shift();current=phrases.find(p=>p.id===selectedId);showCard();toast("Новый круг: "+difficult.length+" сложных фраз");updateStatus();save();return;}
 updateStatus();save();if(!started)showEmpty("Готов к тренировке?","Открой карточку, вспомни перевод и проверь себя перед свайпом.","Начать тренировку →");else if(!active.length)showEmpty("Всё изучено!","Сложных фраз для повторения пока нет. В настройках можно снова включить нужные карточки.","Открыть настройки");else showEmpty("Пока нет карточек","Включи хотя бы одну фразу в настройках.","Открыть настройки");}
-function start(){if(!allActive().length){$("settings-dialog").showModal();return;}started=true;round=Math.max(1,round);freshQueue();next();}
+function start(){if(!allActive().length){$("settings-dialog").showModal();return;}started=true;round=Math.max(1,round);state.sessionIds=allActive().map(p=>p.id);freshQueue();next();}
 function reveal(){if(!current||revealed)return;revealed=true;$("card").classList.add("revealed");$("answer-sheet").classList.add("open");$("answer-sheet").setAttribute("aria-expanded","true");$("sheet-hint").textContent="Проверь себя";$("sheet-chevron").textContent="✓";$("wrong").disabled=false;$("right").disabled=false;$("action-hint").textContent="Свайп влево — ошибка, вправо — вспомнил";}
 function answer(success){if(!current||!revealed||busy)return;busy=true;const p=current,c=cardState(p.id);c.attempts++;if(success)c.correct++;c.hardness=success?Math.max(0,c.hardness*.75-12):Math.min(100,c.hardness*.85+45);c.history=[...(c.history||[]),{ok:success,at:new Date().toISOString()}].slice(-50);c.learned=success;c.enabled=!success;c.manuallyDisabled=false;current=null;if(!success)queue.push(p.id);const card=$("card");card.classList.add("fly");card.style.transform="translateX("+(success?Math.max(innerWidth,420):-Math.max(innerWidth,420))+"px) rotate("+(success?15:-15)+"deg)";updateStatus();save();transitionTimer=setTimeout(()=>{busy=false;next();},230);}
 function handleLanguage(){state.language=document.querySelector('input[name="language"]:checked')?.value==="eng"?"eng":"ru";if(current)showCard();save();}
@@ -33,6 +75,7 @@ function restartAfterSelectionChange(){
   clearTimeout(transitionTimer);
   busy=false;revealed=false;started=false;round=1;queue=[];current=null;
   for(const p of phrases)cardState(p.id).learned=false; // session completion only
+  state.sessionIds=[];
   const card=$("card");
   card.classList.remove("fly","dragging","swipe-left","swipe-right");
   card.style.transform="";card.style.opacity="";
