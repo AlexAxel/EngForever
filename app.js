@@ -3,9 +3,9 @@ const KEY="eng-forever-v1";
 // Keep the v1 storage key: existing browser progress survives the UI redesign.
 const TYPES=[{id:"translate",label:"Перевод"}];
 let phrases=[],state,queue=[],current=null,revealed=false,started=false,round=1,busy=false,toastTimer,transitionTimer;
-const blank=()=>({version:1,language:"ru",mode:"auto",cards:{},round:1,started:false,queue:[],current:null,catalogIds:[],sessionIds:[],roundIds:[],roundSeen:[]});
+const blank=()=>({version:1,language:"ru",mode:"auto",cards:{},round:1,started:false,queue:[],current:null,catalogIds:[],sessionIds:[],roundIds:[],roundSeen:[],roundErrors:[],bonusDue:[],currentBonus:false});
 const cardState=id=>{const key=String(id);return state.cards[key]??(state.cards[key]={enabled:true,manuallyDisabled:false,learned:false,attempts:0,correct:0,hardness:0,history:[]});};
-const save=()=>{state.round=round;state.started=started;state.queue=queue;state.current=current?.id??null;state.catalogIds=phrases.map(p=>p.id);try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){$("footer-status").textContent="Не удалось сохранить прогресс. Проверь настройки браузера.";}};
+const save=()=>{state.round=round;state.started=started;state.queue=queue;state.current=current?.id??null;state.currentBonus=!!state.currentBonus&&!!current;state.catalogIds=phrases.map(p=>p.id);try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){$("footer-status").textContent="Не удалось сохранить прогресс. Проверь настройки браузера.";}};
 function load(){
   let raw=null;
   try{raw=JSON.parse(localStorage.getItem(KEY)||"null");}catch{}
@@ -72,11 +72,21 @@ function load(){
     }
     const seen=new Set(state.roundSeen);
     const allowed=new Set(state.roundIds);
-    if(current&&(!allowed.has(current.id)||seen.has(current.id)))current=null;
+    if(current&&(!allowed.has(current.id)||(seen.has(current.id)&&!state.currentBonus)))current=null;
     queue=[...new Set(queue)].filter(id=>allowed.has(id)&&!seen.has(id)&&id!==current?.id);
     const queued=new Set(queue);
     // A saved/migrated deck must always retain every unvisited ID.
     queue.push(...shuffle(state.roundIds.filter(id=>!seen.has(id)&&id!==current?.id&&!queued.has(id))));
+  }
+  // Migrate pre-bonus rounds: historical misses remain eligible for next round.
+  const roundSet=new Set(state.roundIds);
+  state.roundErrors=[...new Set(Array.isArray(state.roundErrors)?state.roundErrors:[])].filter(id=>roundSet.has(id));
+  if(!Array.isArray(state.bonusDue))state.bonusDue=[];
+  state.bonusDue=state.bonusDue.filter(x=>x&&roundSet.has(x.id)&&state.roundSeen.includes(x.id)&&Number.isFinite(x.due));
+  state.currentBonus=!!state.currentBonus&&!!current&&state.roundSeen.includes(current.id);
+  if(!state.currentBonus&&current&&state.roundSeen.includes(current.id))current=null;
+  if(!state.roundErrors.length&&started){
+    state.roundErrors=state.roundSeen.filter(id=>cardState(id).enabled&&!cardState(id).manuallyDisabled);
   }
   // Persist the new catalogue snapshot and disabled flags immediately.
   // Newly added cards remain unchecked across subsequent page reloads.
@@ -87,48 +97,55 @@ const allActive=()=>phrases.filter(p=>cardState(p.id).enabled);
 function freshQueue(){queue=shuffle(allActive().filter(p=>p.id!==current?.id).map(p=>p.id));}
 function toast(message){const el=$("toast");el.textContent=message;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2600);}
 function showEmpty(title,copy,button){$("card").classList.add("hidden");$("empty").classList.remove("hidden");$("empty-title").textContent=title;$("empty-copy").textContent=copy;$("start").textContent=button;$("actions").classList.add("hidden");}
-function showCard(){if(!current)return;revealed=false;busy=false;const card=$("card");card.className="card";card.style.transform="";card.style.opacity="";$("empty").classList.add("hidden");card.classList.remove("hidden");$("actions").classList.remove("hidden");$("card-id").textContent="№ "+current.id;$("card-type").textContent=round===1?"ПЕРЕВОД":"ПОВТОРЕНИЕ";$("question-label").textContent=state.language==="ru"?"ПЕРЕВЕДИ НА АНГЛИЙСКИЙ":"ПЕРЕВЕДИ НА РУССКИЙ";$("question-text").textContent=current[state.language];$("answer-text").textContent=current[state.language==="ru"?"eng":"ru"];$("answer-label").textContent=state.language==="ru"?"АНГЛИЙСКИЙ":"РУССКИЙ";$("answer-sheet").classList.remove("open");$("answer-sheet").setAttribute("aria-expanded","false");$("sheet-hint").textContent="Потяни вниз или нажми, чтобы увидеть перевод";$("sheet-chevron").textContent="⌄";$("wrong").disabled=true;$("right").disabled=true;$("action-hint").textContent="Сначала открой правильный перевод";}
+function showCard(){if(!current)return;revealed=false;busy=false;const card=$("card");card.className=state.currentBonus?"card bonus-review":"card";card.style.transform="";card.style.opacity="";$("empty").classList.add("hidden");card.classList.remove("hidden");$("actions").classList.remove("hidden");$("card-id").textContent="№ "+current.id;$("card-type").textContent=state.currentBonus?"↻ ОШИБКА · ВНЕ СЧЁТА":round===1?"ПЕРЕВОД":"ПОВТОРЕНИЕ";$("question-label").textContent=state.language==="ru"?"ПЕРЕВЕДИ НА АНГЛИЙСКИЙ":"ПЕРЕВЕДИ НА РУССКИЙ";$("question-text").textContent=current[state.language];$("answer-text").textContent=current[state.language==="ru"?"eng":"ru"];$("answer-label").textContent=state.language==="ru"?"АНГЛИЙСКИЙ":"РУССКИЙ";$("answer-sheet").classList.remove("open");$("answer-sheet").setAttribute("aria-expanded","false");$("sheet-hint").textContent="Потяни вниз или нажми, чтобы увидеть перевод";$("sheet-chevron").textContent="⌄";$("wrong").disabled=true;$("right").disabled=true;$("action-hint").textContent="Сначала открой правильный перевод";}
 function updateStatus(){
   const active=allActive();
   const ids=started?state.roundIds:active.map(p=>p.id);
   const done=started?state.roundSeen.length:0;
   const hard=phrases.filter(p=>cardState(p.id).hardness>=15).length;
-  $("round-label").textContent="Круг "+round;
-  $("progress-label").textContent=done+" / "+ids.length+" пройдено";
+  $("round-label").textContent="Круг "+round+(state.currentBonus?" · повтор вне счёта":"");
+  $("progress-label").textContent=(state.currentBonus?"Перепроверка · ":"")+done+" / "+ids.length+" пройдено";
   $("progress-bar").style.width=(ids.length?done/ids.length*100:0)+"%";
   $("active-count").textContent="Активных: "+active.length;
   $("difficult-count").textContent="Сложных: "+hard;
 }
+// A mistaken card can appear again in the SAME round after 3–5 other
+// primary cards. Only original roundIds advance the official counter.
 function next(){
   if(busy||!started)return;
   const allowed=new Set(state.roundIds);
   const seen=new Set(state.roundSeen);
   queue=[...new Set(queue)].filter(id=>allowed.has(id)&&!seen.has(id)&&id!==current?.id);
-  if(queue.length){
+  const remain=state.roundIds.filter(id=>!seen.has(id));
+  if(remain.length){
+    const due=state.bonusDue
+      .filter(x=>allowed.has(x.id)&&seen.has(x.id)&&!cardState(x.id).manuallyDisabled&&x.due<=seen.size)
+      .sort((a,b)=>a.due-b.due);
+    if(due.length&&seen.size>=3){
+      const chosen=due[0];
+      state.bonusDue=state.bonusDue.filter(x=>x.id!==chosen.id);
+      current=phrases.find(p=>p.id===chosen.id);
+      state.currentBonus=true;
+      showCard();updateStatus();save();return;
+    }
+    if(!queue.length)queue=shuffle(remain);
     const id=queue.shift();
     current=phrases.find(p=>p.id===id);
+    state.currentBonus=false;
     showCard();updateStatus();save();return;
   }
-  // In the active round, every ID appears exactly once. Mistakes stay enabled
-  // but are NOT returned to the current deck or counted as another step.
-  current=null;
-  const remaining=state.roundIds.filter(id=>!seen.has(id));
-  if(remaining.length){
-    queue=shuffle(remaining);
-    const id=queue.shift();
-    current=phrases.find(p=>p.id===id);
-    showCard();updateStatus();save();return;
-  }
-  // The next round consists only of last round's errors and still-difficult
-  // phrases. A correct answer does not erase historical difficulty.
+  // All unique cards were shown, regardless of any extra review attempts.
+  // Every ID failed in this round enters the next one even if its bonus
+  // attempt was correct. Retained difficulty is also respected.
+  current=null;state.currentBonus=false;state.bonusDue=[];
   const review=state.roundIds.filter(id=>{
     const c=cardState(id);
-    return !c.manuallyDisabled&&(c.enabled||c.hardness>=15);
+    return !c.manuallyDisabled&&(state.roundErrors.includes(id)||c.enabled||c.hardness>=15);
   });
   if(review.length){
     round++;
     for(const id of review){const c=cardState(id);c.enabled=true;c.learned=false;}
-    state.roundIds=[...review];state.roundSeen=[];
+    state.roundIds=[...review];state.roundSeen=[];state.roundErrors=[];
     queue=shuffle(review);
     const id=queue.shift();
     current=phrases.find(p=>p.id===id);
@@ -139,12 +156,39 @@ function next(){
   showEmpty("Всё изучено!","Текущая тренировка завершена. В настройках можно включить новые фразы.","Открыть настройки");
 }
 function start(){if(!allActive().length){$("settings-dialog").showModal();return;}started=true;round=1;state.sessionIds=allActive().map(p=>p.id);
-state.roundIds=[...state.sessionIds];state.roundSeen=[];
+state.roundIds=[...state.sessionIds];state.roundSeen=[];state.roundErrors=[];state.bonusDue=[];state.currentBonus=false;
 current=null;queue=shuffle(state.roundIds);updateStatus();next();}
 function reveal(){if(!current||revealed)return;revealed=true;$("card").classList.add("revealed");$("answer-sheet").classList.add("open");$("answer-sheet").setAttribute("aria-expanded","true");$("sheet-hint").textContent="Проверь себя";$("sheet-chevron").textContent="✓";$("wrong").disabled=false;$("right").disabled=false;$("action-hint").textContent="Свайп влево — ошибка, вправо — вспомнил";}
-function answer(success){if(!current||!revealed||busy)return;busy=true;const p=current,c=cardState(p.id);c.attempts++;if(success)c.correct++;c.hardness=success?Math.max(0,c.hardness*.75-12):Math.min(100,c.hardness*.85+45);c.history=[...(c.history||[]),{ok:success,at:new Date().toISOString()}].slice(-50);c.learned=success;c.enabled=!success;c.manuallyDisabled=false;
-if(!state.roundSeen.includes(p.id))state.roundSeen.push(p.id);
-current=null;const card=$("card");card.classList.add("fly");card.style.transform="translateX("+(success?Math.max(innerWidth,420):-Math.max(innerWidth,420))+"px) rotate("+(success?15:-15)+"deg)";updateStatus();save();transitionTimer=setTimeout(()=>{busy=false;next();},230);}
+function answer(success){
+  if(!current||!revealed||busy)return;
+  busy=true;
+  const p=current,c=cardState(p.id),extra=state.currentBonus;
+  c.attempts++;if(success)c.correct++;
+  c.hardness=success?Math.max(0,c.hardness*.75-12):Math.min(100,c.hardness*.85+45);
+  c.history=[...(c.history||[]),{ok:success,at:new Date().toISOString(),bonus:extra,round}].slice(-50);
+  c.learned=success;c.enabled=!success;c.manuallyDisabled=false;
+  if(!success&&!state.roundErrors.includes(p.id))state.roundErrors.push(p.id);
+  if(extra){
+    // A successful quick review does not erase the initial mistake.
+    // Another failed quick review can be shown again after more primary cards.
+    if(!success){
+      const remaining=state.roundIds.length-state.roundSeen.length;
+      if(remaining>3)state.bonusDue.push({id:p.id,due:state.roundSeen.length+3+Math.floor(Math.random()*3)});
+    }
+  }else{
+    if(!state.roundSeen.includes(p.id))state.roundSeen.push(p.id);
+    if(!success){
+      const remaining=state.roundIds.length-state.roundSeen.length;
+      if(remaining>3)state.bonusDue.push({id:p.id,due:state.roundSeen.length+3+Math.floor(Math.random()*3)});
+    }
+  }
+  current=null;state.currentBonus=false;
+  const card=$("card");
+  card.classList.add("fly");
+  card.style.transform="translateX("+(success?Math.max(innerWidth,420):-Math.max(innerWidth,420))+"px) rotate("+(success?15:-15)+"deg)";
+  updateStatus();save();
+  transitionTimer=setTimeout(()=>{busy=false;next();},230);
+}
 function handleLanguage(){state.language=document.querySelector('input[name="language"]:checked')?.value==="eng"?"eng":"ru";if(current)showCard();save();}
 function syncSettings(){document.querySelectorAll('input[name="language"]').forEach(el=>el.checked=el.value===state.language);$("mode").value=state.mode;$("phrase-list").replaceChildren();for(const p of phrases){const label=document.createElement("label");label.className="phrase-option";const check=document.createElement("input");check.type="checkbox";check.checked=cardState(p.id).enabled;check.addEventListener("change",()=>togglePhrase(p.id,check.checked));const span=document.createElement("span");span.textContent="#"+p.id+" · "+p.ru;const sm=document.createElement("small");sm.textContent=p.eng;span.append(sm);label.append(check,span);$("phrase-list").append(label);}updateSelected();}
 function updateSelected(){$("selected-count").textContent=allActive().length+"/"+phrases.length;}
@@ -154,7 +198,7 @@ function restartAfterSelectionChange(){
   clearTimeout(transitionTimer);
   busy=false;revealed=false;started=false;round=1;queue=[];current=null;
   for(const p of phrases)cardState(p.id).learned=false; // session completion only
-  state.sessionIds=[];state.roundIds=[];state.roundSeen=[];
+  state.sessionIds=[];state.roundIds=[];state.roundSeen=[];state.roundErrors=[];state.bonusDue=[];state.currentBonus=false;
   const card=$("card");
   card.classList.remove("fly","dragging","swipe-left","swipe-right");
   card.style.transform="";card.style.opacity="";
