@@ -2,7 +2,7 @@ const $=id=>document.getElementById(id);
 const KEY="eng-forever-v1";
 // Keep the v1 storage key: existing browser progress survives the UI redesign.
 const TYPES=[{id:"translate",label:"Перевод"}];
-let phrases=[],state,queue=[],current=null,revealed=false,started=false,round=1,busy=false,toastTimer;
+let phrases=[],state,queue=[],current=null,revealed=false,started=false,round=1,busy=false,toastTimer,transitionTimer;
 const blank=()=>({version:1,language:"ru",mode:"auto",cards:{},round:1,started:false,queue:[],current:null});
 const cardState=id=>{const key=String(id);return state.cards[key]??(state.cards[key]={enabled:true,manuallyDisabled:false,learned:false,attempts:0,correct:0,hardness:0,history:[]});};
 const save=()=>{state.round=round;state.started=started;state.queue=queue;state.current=current?.id??null;try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){$("footer-status").textContent="Не удалось сохранить прогресс. Проверь настройки браузера.";}};
@@ -23,12 +23,34 @@ const difficult=phrases.filter(p=>{const c=cardState(p.id);return c.learned&&!c.
 updateStatus();save();if(!started)showEmpty("Готов к тренировке?","Открой карточку, вспомни перевод и проверь себя перед свайпом.","Начать тренировку →");else if(!active.length)showEmpty("Всё изучено!","Сложных фраз для повторения пока нет. В настройках можно снова включить нужные карточки.","Открыть настройки");else showEmpty("Пока нет карточек","Включи хотя бы одну фразу в настройках.","Открыть настройки");}
 function start(){if(!allActive().length){$("settings-dialog").showModal();return;}started=true;round=Math.max(1,round);freshQueue();next();}
 function reveal(){if(!current||revealed)return;revealed=true;$("card").classList.add("revealed");$("answer-sheet").classList.add("open");$("answer-sheet").setAttribute("aria-expanded","true");$("sheet-hint").textContent="Проверь себя";$("sheet-chevron").textContent="✓";$("wrong").disabled=false;$("right").disabled=false;$("action-hint").textContent="Свайп влево — ошибка, вправо — вспомнил";}
-function answer(success){if(!current||!revealed||busy)return;busy=true;const p=current,c=cardState(p.id);c.attempts++;if(success)c.correct++;c.hardness=success?Math.max(0,c.hardness*.75-12):Math.min(100,c.hardness*.85+45);c.history=[...(c.history||[]),{ok:success,at:new Date().toISOString()}].slice(-50);c.learned=success;c.enabled=!success;c.manuallyDisabled=false;current=null;if(!success)queue.push(p.id);const card=$("card");card.classList.add("fly");card.style.transform="translateX("+(success?Math.max(innerWidth,420):-Math.max(innerWidth,420))+"px) rotate("+(success?15:-15)+"deg)";updateStatus();save();setTimeout(()=>{busy=false;next();},230);}
+function answer(success){if(!current||!revealed||busy)return;busy=true;const p=current,c=cardState(p.id);c.attempts++;if(success)c.correct++;c.hardness=success?Math.max(0,c.hardness*.75-12):Math.min(100,c.hardness*.85+45);c.history=[...(c.history||[]),{ok:success,at:new Date().toISOString()}].slice(-50);c.learned=success;c.enabled=!success;c.manuallyDisabled=false;current=null;if(!success)queue.push(p.id);const card=$("card");card.classList.add("fly");card.style.transform="translateX("+(success?Math.max(innerWidth,420):-Math.max(innerWidth,420))+"px) rotate("+(success?15:-15)+"deg)";updateStatus();save();transitionTimer=setTimeout(()=>{busy=false;next();},230);}
 function handleLanguage(){state.language=document.querySelector('input[name="language"]:checked')?.value==="eng"?"eng":"ru";if(current)showCard();save();}
 function syncSettings(){document.querySelectorAll('input[name="language"]').forEach(el=>el.checked=el.value===state.language);$("mode").value=state.mode;$("phrase-list").replaceChildren();for(const p of phrases){const label=document.createElement("label");label.className="phrase-option";const check=document.createElement("input");check.type="checkbox";check.checked=cardState(p.id).enabled;check.addEventListener("change",()=>togglePhrase(p.id,check.checked));const span=document.createElement("span");span.textContent="#"+p.id+" · "+p.ru;const sm=document.createElement("small");sm.textContent=p.eng;span.append(sm);label.append(check,span);$("phrase-list").append(label);}updateSelected();}
 function updateSelected(){$("selected-count").textContent=allActive().length+"/"+phrases.length;}
-function togglePhrase(id,on){const c=cardState(id);c.enabled=on;c.manuallyDisabled=!on;c.learned=on?false:c.learned;if(!on){queue=queue.filter(q=>q!==id);if(current?.id===id)current=null;}else if(started&&current?.id!==id&&!queue.includes(id))queue.push(id);updateSelected();updateStatus();if(started&&!current)next();else if(current)showCard();save();}
-function toggleAll(on){for(const p of phrases){const c=cardState(p.id);c.enabled=on;c.manuallyDisabled=!on;if(on)c.learned=false;}queue=[];current=null;if(started&&on)freshQueue();syncSettings();updateStatus();if(started)next();else showEmpty("Готов к тренировке?","Включи карточки и начни тренировку.","Начать тренировку →");save();}
+// A user-initiated selection change starts a fresh training session, never
+// clears historical stats (attempts, correct, hardness, history).
+function restartAfterSelectionChange(){
+  clearTimeout(transitionTimer);
+  busy=false;revealed=false;started=false;round=1;queue=[];current=null;
+  for(const p of phrases)cardState(p.id).learned=false; // session completion only
+  const card=$("card");
+  card.classList.remove("fly","dragging","swipe-left","swipe-right");
+  card.style.transform="";card.style.opacity="";
+  updateStatus();save();
+  showEmpty("Новая тренировка","Состав карточек обновлён. Статистика и сложность сохранены.","Начать тренировку →");
+}
+function togglePhrase(id,on){
+  const c=cardState(id);
+  if(c.enabled===on)return;
+  c.enabled=on;c.manuallyDisabled=!on;
+  restartAfterSelectionChange();
+  updateSelected();
+}
+function toggleAll(on){
+  for(const p of phrases){const c=cardState(p.id);c.enabled=on;c.manuallyDisabled=!on;}
+  restartAfterSelectionChange();
+  syncSettings();
+}
 function openSettings(){syncSettings();$("settings-dialog").showModal();}
 function showStats(){const attempt=phrases.reduce((sum,p)=>sum+cardState(p.id).attempts,0),correct=phrases.reduce((sum,p)=>sum+cardState(p.id).correct,0),hard=phrases.filter(p=>cardState(p.id).hardness>=15).length;$("stats-summary").replaceChildren();for(const [num,title] of [[String(attempt),"Ответов"],[attempt?Math.round(100*correct/attempt)+"%":"—","Узнаваемость"],[String(hard),"Сложных"]]){const el=document.createElement("div");el.className="stat";const n=document.createElement("strong");n.textContent=num;const t=document.createElement("span");t.textContent=title;el.append(n,t);$("stats-summary").append(el);}$("stats-list").replaceChildren();for(const p of phrases){const c=cardState(p.id),row=document.createElement("div");row.className="stat-row";const top=document.createElement("div");top.className="stat-row-top";const title=document.createElement("span");title.textContent="#"+p.id+" · "+p.ru;const count=document.createElement("span");count.textContent=c.attempts?Math.round(100*c.correct/c.attempts)+"%":"—";top.append(title,count);const sub=document.createElement("small");sub.textContent=c.attempts+" ответов · "+(c.attempts-c.correct)+" ошибок · сложность "+Math.round(c.hardness)+"/100"+(c.enabled?" · активна":"");const bar=document.createElement("div");bar.className="mini-track";const fill=document.createElement("div");fill.style.width=c.hardness+"%";bar.append(fill);row.append(top,sub,bar);$("stats-list").append(row);}$("stats-dialog").showModal();}
 // Isolate the vertical reveal gesture on a dedicated handle. The rest of the
