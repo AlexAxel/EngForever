@@ -11,7 +11,7 @@ try{
     const page=await context.newPage();
     page.on("pageerror",err=>failures.push(String(err)));
     await page.goto("http://127.0.0.1:8000/");
-    await page.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 120"));
+    await page.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 200"));
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,"No horizontal overflow before training at "+width);
     await page.screenshot({path:"test-output/design-"+width+"-"+scheme+"-start.png",fullPage:true});
     await page.locator("#start").click();
@@ -53,7 +53,7 @@ try{
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,"No horizontal overflow in training at "+width);
     await page.locator("#settings-open").click();
     assert.equal(await page.locator("#settings-dialog").evaluate(el=>el.open),true);
-    assert.equal(await page.locator("#phrase-list .phrase-option").count(),120);
+    assert.equal(await page.locator("#phrase-list .phrase-option").count(),200);
     await page.locator("#phrase-list .phrase-option").last().scrollIntoViewIfNeeded();
     assert.equal(await page.locator("#phrase-list .phrase-option").last().isVisible(),true);
     await page.screenshot({path:"test-output/design-"+width+"-"+scheme+"-settings.png"});
