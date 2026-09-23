@@ -1,7 +1,7 @@
 name: Validate Eng Forever
 on:
   push:
-    branches: [main]
+    branches: [main, design/open-design-mobile]
   pull_request:
   workflow_dispatch:
 jobs:
@@ -46,3 +46,11 @@ jobs:
           node tests/catalog-growth.mjs
           node tests/rounds.mjs
           node tests/catalog-120.mjs
+          node tests/design-mobile.mjs
+      - name: Save visual review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eng-forever-design-screenshots
+          path: test-output/*.png
+          if-no-files-found: ignore
