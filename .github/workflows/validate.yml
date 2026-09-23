@@ -20,7 +20,7 @@ jobs:
           import fs from 'node:fs';
           import assert from 'node:assert/strict';
           const cards=JSON.parse(fs.readFileSync('data/phrases.json','utf8'));
-          assert.ok(cards.length>=120,'Expected notebook pairs 1–120');
+          assert.ok(cards.length>=200,'Expected notebook pairs 1–200');
           assert.equal(new Set(cards.map(p=>p.id)).size,cards.length);
           for(let id=1;id<=cards.length;id++){
             const p=cards.find(p=>p.id===id);
@@ -46,6 +46,7 @@ jobs:
           node tests/catalog-growth.mjs
           node tests/rounds.mjs
           node tests/catalog-120.mjs
+          node tests/catalog-200.mjs
           node tests/design-mobile.mjs
       - name: Save visual review screenshots
         if: always()
