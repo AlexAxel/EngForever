@@ -6,11 +6,16 @@ const base="http://127.0.0.1:8000/";
 const key="eng-forever-v1";
 const state=()=>JSON.parse(localStorage.getItem("eng-forever-v1"));
 const errors=[];
+const keep120=async route=>{
+  const response=await route.fetch();
+  await route.fulfill({response,contentType:"application/json",body:JSON.stringify((await response.json()).slice(0,120))});
+};
 try{
-  // On a new device, all 120 original notebook IDs appear in the catalogue.
+  // Pin this historical regression to the 120-card catalogue, even after the real JSON grows.
   const fresh=await browser.newContext({viewport:{width:390,height:760},isMobile:true,hasTouch:true});
   const freshPage=await fresh.newPage();
   freshPage.on("pageerror",e=>errors.push(String(e)));
+  await freshPage.route("**/data/phrases.json*",keep120);
   await freshPage.goto(base);
   await freshPage.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 120"));
   const initial=await freshPage.evaluate(state);
@@ -27,6 +32,7 @@ try{
   const continuing=await browser.newContext({viewport:{width:390,height:760},isMobile:true,hasTouch:true});
   const page=await continuing.newPage();
   page.on("pageerror",e=>errors.push(String(e)));
+  await page.route("**/data/phrases.json*",keep120);
   await page.addInitScript(storageKey=>{
     if(sessionStorage.getItem("120-growth-seeded"))return;
     const cards={};
