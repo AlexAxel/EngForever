@@ -598,5 +598,405 @@
     "id": 120,
     "ru": "Я не думаю, что это будет стоить дешевле.",
     "eng": "I don't think that it'll cost less."
+  },
+  {
+    "id": 121,
+    "ru": "Я думаю, это скоро будет дороже.",
+    "eng": "I think it'll be more expensive soon."
+  },
+  {
+    "id": 122,
+    "ru": "Я не думаю, что это будет дешевле.",
+    "eng": "I don't think that it'll be cheaper."
+  },
+  {
+    "id": 123,
+    "ru": "Мы будем говорить по-английски там.",
+    "eng": "We'll speak English there."
+  },
+  {
+    "id": 124,
+    "ru": "Она расскажет мне об этом.",
+    "eng": "She'll tell me about it."
+  },
+  {
+    "id": 125,
+    "ru": "Она будет очень занята завтра.",
+    "eng": "She'll be very busy tomorrow."
+  },
+  {
+    "id": 126,
+    "ru": "Я не буду тратить своё время на это.",
+    "eng": "I won't spend my time on it."
+  },
+  {
+    "id": 127,
+    "ru": "Я думаю, тебе не понравится это предложение.",
+    "eng": "I think you won't like this offer."
+  },
+  {
+    "id": 128,
+    "ru": "Они не будут слушать это.",
+    "eng": "They won't listen to it."
+  },
+  {
+    "id": 129,
+    "ru": "Мы не будем встречаться завтра.",
+    "eng": "We won't meet tomorrow."
+  },
+  {
+    "id": 130,
+    "ru": "Я не буду ждать этого. Мы не будем его ждать.",
+    "eng": "I won't wait for it. We won't wait for him."
+  },
+  {
+    "id": 131,
+    "ru": "Он не придёт сюда завтра.",
+    "eng": "He won't come here tomorrow."
+  },
+  {
+    "id": 132,
+    "ru": "Это будет правильно? Ты будешь там?",
+    "eng": "Will it be right? Will you be there?"
+  },
+  {
+    "id": 133,
+    "ru": "Это будет лучшее решение в этой ситуации?",
+    "eng": "Will it be the best decision in this situation?"
+  },
+  {
+    "id": 134,
+    "ru": "Он будет с тобой? Это будет дороже?",
+    "eng": "Will he be with you? Will it be more expensive?"
+  },
+  {
+    "id": 135,
+    "ru": "Мы узнаем это? Они будут там?",
+    "eng": "Will we know it? Will they be there?"
+  },
+  {
+    "id": 136,
+    "ru": "Ты проверишь эту информацию?",
+    "eng": "Will you check this information?"
+  },
+  {
+    "id": 137,
+    "ru": "Они присоединятся к нам?",
+    "eng": "Will they join us?"
+  },
+  {
+    "id": 138,
+    "ru": "Она скоро придёт домой?",
+    "eng": "Will she come home soon?"
+  },
+  {
+    "id": 139,
+    "ru": "Это будет возможно? Это будет скоро возможно.",
+    "eng": "Will it be possible? It'll be possible soon."
+  },
+  {
+    "id": 140,
+    "ru": "Ты скажешь ей эту вещь?",
+    "eng": "Will you tell her this thing?"
+  },
+  {
+    "id": 141,
+    "ru": "Она позвонит ему? Это будет дешевле?",
+    "eng": "Will she call him? Will it be cheaper?"
+  },
+  {
+    "id": 142,
+    "ru": "Когда ты пойдёшь туда? Когда это будет возможно?",
+    "eng": "When will you go there? When will it be possible?"
+  },
+  {
+    "id": 143,
+    "ru": "Когда ты будешь там в следующий раз?",
+    "eng": "When will you be there next time?"
+  },
+  {
+    "id": 144,
+    "ru": "Куда ты пойдёшь сейчас? Как это будет?",
+    "eng": "Where will you go now? How will it be?"
+  },
+  {
+    "id": 145,
+    "ru": "Что ты будешь там делать? Как это поможет мне?",
+    "eng": "What will you do there? How will it help me?"
+  },
+  {
+    "id": 146,
+    "ru": "Как он будет жить на эти деньги?",
+    "eng": "How will he live on this money?"
+  },
+  {
+    "id": 147,
+    "ru": "Что ты скажешь? Что он скажет ей?",
+    "eng": "What will you say? What will he tell her?"
+  },
+  {
+    "id": 148,
+    "ru": "Когда вы прибудете в аэропорт?",
+    "eng": "When will you arrive at the airport?"
+  },
+  {
+    "id": 149,
+    "ru": "Когда мы будем есть? Когда мы будем обедать?",
+    "eng": "When will we eat? When will we have lunch?"
+  },
+  {
+    "id": 150,
+    "ru": "Когда ты будешь отдыхать?",
+    "eng": "When will you have a rest?"
+  },
+  {
+    "id": 151,
+    "ru": "Когда у нас будет перерыв?",
+    "eng": "When will we have a break?"
+  },
+  {
+    "id": 152,
+    "ru": "Когда мы пойдём плавать?",
+    "eng": "When will we go swimming?"
+  },
+  {
+    "id": 153,
+    "ru": "Когда мы пойдём в бассейн?",
+    "eng": "When will we go to the swimming pool?"
+  },
+  {
+    "id": 154,
+    "ru": "Как это поможет нам? Где ты будешь завтра?",
+    "eng": "How will it help us? Where will you be tomorrow?"
+  },
+  {
+    "id": 155,
+    "ru": "Кто будет с тобой? Когда ты будешь готов?",
+    "eng": "Who will be with you? When will you be ready?"
+  },
+  {
+    "id": 156,
+    "ru": "Как долго это будет продолжаться?",
+    "eng": "How long will it last?"
+  },
+  {
+    "id": 157,
+    "ru": "Как долго будет длиться один урок?",
+    "eng": "How long will one lesson last?"
+  },
+  {
+    "id": 158,
+    "ru": "Мы говорили о разных вещах.",
+    "eng": "We talked about different things."
+  },
+  {
+    "id": 159,
+    "ru": "Я хотел улучшить свой английский.",
+    "eng": "I wanted to improve my English."
+  },
+  {
+    "id": 160,
+    "ru": "Я хотел общаться с людьми из других стран.",
+    "eng": "I wanted to communicate with people from other countries."
+  },
+  {
+    "id": 161,
+    "ru": "Я посмотрел на неё, и она посмотрела на меня.",
+    "eng": "I looked at her and she looked at me."
+  },
+  {
+    "id": 162,
+    "ru": "Мы играли в футбол вместе.",
+    "eng": "We played football together."
+  },
+  {
+    "id": 163,
+    "ru": "Мне нужны были эти деньги.",
+    "eng": "I needed this money."
+  },
+  {
+    "id": 164,
+    "ru": "Я задал ей некоторые вопросы.",
+    "eng": "I asked her some questions."
+  },
+  {
+    "id": 165,
+    "ru": "Он ответил на этот вопрос.",
+    "eng": "He answered this question."
+  },
+  {
+    "id": 166,
+    "ru": "Я жил в этом районе. Они прибыли час назад.",
+    "eng": "I lived in this area. They arrived an hour ago."
+  },
+  {
+    "id": 167,
+    "ru": "Он навестил нас позавчера.",
+    "eng": "He visited us the day before yesterday."
+  },
+  {
+    "id": 168,
+    "ru": "Это казалось таким трудным, особенно в начале.",
+    "eng": "It seemed so difficult especially in the beginning."
+  },
+  {
+    "id": 169,
+    "ru": "Мы повернули назад. Кто-то открыл дверь.",
+    "eng": "We turned back. Someone opened the door."
+  },
+  {
+    "id": 170,
+    "ru": "Я остановился рядом с этим магазином.",
+    "eng": "I stopped near this shop."
+  },
+  {
+    "id": 171,
+    "ru": "Мы остановились в этом отеле.",
+    "eng": "We stayed at this hotel."
+  },
+  {
+    "id": 172,
+    "ru": "Мы часто разговаривали по телефону.",
+    "eng": "We often talked on the phone."
+  },
+  {
+    "id": 173,
+    "ru": "Они подождали меня немного.",
+    "eng": "They waited for me a little."
+  },
+  {
+    "id": 174,
+    "ru": "Я согласился в конце. Я послушал ту песню.",
+    "eng": "I agreed in the end. I listened to that song."
+  },
+  {
+    "id": 175,
+    "ru": "Мне нужно было больше времени.",
+    "eng": "I needed more time."
+  },
+  {
+    "id": 176,
+    "ru": "Это действительно интересовало меня.",
+    "eng": "It really interested me."
+  },
+  {
+    "id": 177,
+    "ru": "Мы продолжили наш разговор. Ты взял это с собой.",
+    "eng": "We continued our conversation. You took it with you."
+  },
+  {
+    "id": 178,
+    "ru": "Мы поддерживали друг друга.",
+    "eng": "We supported each other."
+  },
+  {
+    "id": 179,
+    "ru": "Всё изменилось внезапно. Они часто смеялись.",
+    "eng": "Everything changed suddenly. They often laughed."
+  },
+  {
+    "id": 180,
+    "ru": "Это предложение казалось очень интересным.",
+    "eng": "This offer seemed very interesting."
+  },
+  {
+    "id": 181,
+    "ru": "Она сказала это очень громко.",
+    "eng": "She said it very loudly."
+  },
+  {
+    "id": 182,
+    "ru": "Он сказал это слишком тихо.",
+    "eng": "He said it too quietly."
+  },
+  {
+    "id": 183,
+    "ru": "Я получил письмо от него. Я пошёл домой.",
+    "eng": "I got a letter from him. I went home."
+  },
+  {
+    "id": 184,
+    "ru": "Я вернулся час назад. Я купил подарок для тебя.",
+    "eng": "I came back an hour ago. I bought a present for you."
+  },
+  {
+    "id": 185,
+    "ru": "Я видел его позавчера. Он взял эти деньги.",
+    "eng": "I saw him the day before yesterday. He took this money."
+  },
+  {
+    "id": 186,
+    "ru": "Я принял это предложение. Я понял это наконец.",
+    "eng": "I took this offer. I understood it at last."
+  },
+  {
+    "id": 187,
+    "ru": "Он понял это сразу. Я сделал это немедленно.",
+    "eng": "He understood it immediately. I did it immediately."
+  },
+  {
+    "id": 188,
+    "ru": "Я понял эту речь. Я понял это только позже.",
+    "eng": "I understood this speech. I understood it only later."
+  },
+  {
+    "id": 189,
+    "ru": "Она выбрала первый ответ. Я выиграл наконец.",
+    "eng": "She chose the first answer. I won at last."
+  },
+  {
+    "id": 190,
+    "ru": "Я выпил чашку чая. Он выпил стакан сока.",
+    "eng": "I drank a cup of tea. He drank a glass of juice."
+  },
+  {
+    "id": 191,
+    "ru": "Я читал это только вчера. Они потеряли сумку.",
+    "eng": "I read it only yesterday. They lost the bag."
+  },
+  {
+    "id": 192,
+    "ru": "Я потерял свои ключи, но затем я нашёл их.",
+    "eng": "I lost my keys but then I found them."
+  },
+  {
+    "id": 193,
+    "ru": "Они продавали это очень дёшево.",
+    "eng": "They sold it very cheaply."
+  },
+  {
+    "id": 194,
+    "ru": "Их команда проиграла в финале.",
+    "eng": "Their team lost in the final."
+  },
+  {
+    "id": 195,
+    "ru": "Он преподавал нам английский.",
+    "eng": "He taught us English."
+  },
+  {
+    "id": 196,
+    "ru": "Он плавал в реке. Мы купались в озере.",
+    "eng": "He swam in the river. We swam in the lake."
+  },
+  {
+    "id": 197,
+    "ru": "Я услышал это от него. Он полетел в этот город.",
+    "eng": "I heard it from him. He flew to the city."
+  },
+  {
+    "id": 198,
+    "ru": "Он дал ей эти деньги. Она стала известной.",
+    "eng": "He gave her this money. She became famous."
+  },
+  {
+    "id": 199,
+    "ru": "Он чувствовал себя лучше вчера.",
+    "eng": "He felt better yesterday."
+  },
+  {
+    "id": 200,
+    "ru": "Я положил это на письменный стол.",
+    "eng": "I put it on the desk."
   }
 ]
