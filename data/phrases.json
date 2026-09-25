@@ -998,5 +998,405 @@
     "id": 200,
     "ru": "Я положил это на письменный стол.",
     "eng": "I put it on the desk."
+  },
+  {
+    "id": 201,
+    "ru": "Эта встреча началась десять минут назад.",
+    "eng": "This meeting began ten minutes ago."
+  },
+  {
+    "id": 202,
+    "ru": "Она присела и затем встала.",
+    "eng": "She sat down and then stood up."
+  },
+  {
+    "id": 203,
+    "ru": "Я сел на тот стул. Он заплатил за эту услугу.",
+    "eng": "I sat on that chair. He paid for this service."
+  },
+  {
+    "id": 204,
+    "ru": "Я отправил ему имейл. Они сбежали от полиции.",
+    "eng": "I sent him an email. They ran away from the police."
+  },
+  {
+    "id": 205,
+    "ru": "Их машина внезапно сломалась.",
+    "eng": "Their car broke down suddenly."
+  },
+  {
+    "id": 206,
+    "ru": "У меня было мало свободного времени.",
+    "eng": "I had little free time."
+  },
+  {
+    "id": 207,
+    "ru": "Я потратил так много денег на прошлой неделе.",
+    "eng": "I spent so much money last week."
+  },
+  {
+    "id": 208,
+    "ru": "Мы говорили только по-английски.",
+    "eng": "We spoke only English."
+  },
+  {
+    "id": 209,
+    "ru": "Мне не понравилась эта идея сначала. Это не произошло.",
+    "eng": "I didn't like this idea at first. It didn't happen."
+  },
+  {
+    "id": 210,
+    "ru": "Я не хотел туда идти в начале.",
+    "eng": "I didn't want to go there in the beginning."
+  },
+  {
+    "id": 211,
+    "ru": "Он не хотел там работать.",
+    "eng": "He didn't want to work there."
+  },
+  {
+    "id": 212,
+    "ru": "Она не хотела тратить время на это.",
+    "eng": "She didn't want to spend time on it."
+  },
+  {
+    "id": 213,
+    "ru": "Я не сделал какие-либо ошибки.",
+    "eng": "I didn't make any mistakes."
+  },
+  {
+    "id": 214,
+    "ru": "Я не ходил по магазинам. Я пошёл в другое место.",
+    "eng": "I didn't go shopping. I went to another place."
+  },
+  {
+    "id": 215,
+    "ru": "Она не выглядела счастливой.",
+    "eng": "She didn't look happy."
+  },
+  {
+    "id": 216,
+    "ru": "Это не принесло ему больших денег.",
+    "eng": "It didn't bring him big money."
+  },
+  {
+    "id": 217,
+    "ru": "Я не думал об этом всерьёз.",
+    "eng": "I didn't think about it seriously."
+  },
+  {
+    "id": 218,
+    "ru": "У меня не было достаточно времени.",
+    "eng": "I didn't have enough time."
+  },
+  {
+    "id": 219,
+    "ru": "Он не спрашивал меня об этом.",
+    "eng": "He didn't ask me about it."
+  },
+  {
+    "id": 220,
+    "ru": "Я не поверил ему сначала. Я не хотел опаздывать.",
+    "eng": "I didn't believe him at first. I didn't want to be late."
+  },
+  {
+    "id": 221,
+    "ru": "Я не хотел опаздывать на встречу.",
+    "eng": "I didn't want to be late for the meeting."
+  },
+  {
+    "id": 222,
+    "ru": "Она не чувствовала себя счастливой.",
+    "eng": "She didn't feel happy."
+  },
+  {
+    "id": 223,
+    "ru": "Мы ответили на это правильно? Они приехали туда?",
+    "eng": "Did we answer it correctly? Did they come there?"
+  },
+  {
+    "id": 224,
+    "ru": "Он сделал ошибку? Это случилось вчера?",
+    "eng": "Did he make a mistake? Did it happen yesterday?"
+  },
+  {
+    "id": 225,
+    "ru": "Я сделал какие-либо ошибки? Я сдал экзамен?",
+    "eng": "Did I make any mistakes? Did I pass the exam?"
+  },
+  {
+    "id": 226,
+    "ru": "Ты решил эту проблему? Он решил те проблемы?",
+    "eng": "Did you solve this problem? Did he solve those problems?"
+  },
+  {
+    "id": 227,
+    "ru": "Ты сделал своё домашнее задание? Где ты жил?",
+    "eng": "Did you do your homework? Where did you live?"
+  },
+  {
+    "id": 228,
+    "ru": "Тебе действительно понравилась та поездка?",
+    "eng": "Did you really like that trip?"
+  },
+  {
+    "id": 229,
+    "ru": "Как ты это сделал? Что ты там увидел?",
+    "eng": "How did you do it? What did you see there?"
+  },
+  {
+    "id": 230,
+    "ru": "Как часто ты туда ходил? Сколько это стоило?",
+    "eng": "How often did you go there? How much did it cost?"
+  },
+  {
+    "id": 231,
+    "ru": "Когда ты видел его в последний раз?",
+    "eng": "When did you see him last time?"
+  },
+  {
+    "id": 232,
+    "ru": "Во сколько она пришла домой?",
+    "eng": "What time did she come home?"
+  },
+  {
+    "id": 233,
+    "ru": "Сколько ты заплатил за это?",
+    "eng": "How much did you pay for it?"
+  },
+  {
+    "id": 234,
+    "ru": "Что ты делал позавчера?",
+    "eng": "What did you do the day before yesterday?"
+  },
+  {
+    "id": 235,
+    "ru": "Как это помогло тебе? Когда они приехали?",
+    "eng": "How did it help you? When did they come?"
+  },
+  {
+    "id": 236,
+    "ru": "Когда он прибыл в аэропорт?",
+    "eng": "When did he arrive at the airport?"
+  },
+  {
+    "id": 237,
+    "ru": "Что ты ел на завтрак?",
+    "eng": "What did you eat for breakfast?"
+  },
+  {
+    "id": 238,
+    "ru": "Как я отмечал этот праздник?",
+    "eng": "How did I celebrate this holiday?"
+  },
+  {
+    "id": 239,
+    "ru": "Где вы встречались в прошлый раз?",
+    "eng": "Where did you meet last time?"
+  },
+  {
+    "id": 240,
+    "ru": "Сколько времени ты потратил на это?",
+    "eng": "How much time did you spend on it?"
+  },
+  {
+    "id": 241,
+    "ru": "Как ты отпраздновал свой день рождения?",
+    "eng": "How did you celebrate your birthday?"
+  },
+  {
+    "id": 242,
+    "ru": "Сколько денег ты потратил на эту поездку?",
+    "eng": "How much money did you spend on this trip?"
+  },
+  {
+    "id": 243,
+    "ru": "Какие места ты посетил?",
+    "eng": "What places did you visit?"
+  },
+  {
+    "id": 244,
+    "ru": "Какие билеты вы купили?",
+    "eng": "What tickets did you buy?"
+  },
+  {
+    "id": 245,
+    "ru": "Какие ошибки он сделал?",
+    "eng": "What mistakes did he make?"
+  },
+  {
+    "id": 246,
+    "ru": "Которое платье ты выбрала?",
+    "eng": "Which dress did you choose?"
+  },
+  {
+    "id": 247,
+    "ru": "Как ты решил эту проблему?",
+    "eng": "How did you solve this problem?"
+  },
+  {
+    "id": 248,
+    "ru": "Какие результаты у неё были?",
+    "eng": "What results did she have?"
+  },
+  {
+    "id": 249,
+    "ru": "Что она тебе сказала?",
+    "eng": "What did she tell you?"
+  },
+  {
+    "id": 250,
+    "ru": "Когда они пришли? Они были в другом городе.",
+    "eng": "When did they come? They were in another city."
+  },
+  {
+    "id": 251,
+    "ru": "Какие результаты у тебя были?",
+    "eng": "What results did you have?"
+  },
+  {
+    "id": 252,
+    "ru": "Ты был совершенно прав. Она была грустная.",
+    "eng": "You were absolutely right. She was sad."
+  },
+  {
+    "id": 253,
+    "ru": "Это был лучший выбор. Она была очень удивлена.",
+    "eng": "It was the best choice. She was very surprised."
+  },
+  {
+    "id": 254,
+    "ru": "Она болела на прошлой неделе.",
+    "eng": "She was ill last week."
+  },
+  {
+    "id": 255,
+    "ru": "Эти уроки были очень необычные.",
+    "eng": "These lessons were very unusual."
+  },
+  {
+    "id": 256,
+    "ru": "Я думаю, ты не был прав.",
+    "eng": "I think you weren't right."
+  },
+  {
+    "id": 257,
+    "ru": "Это было не сложно в начале.",
+    "eng": "It wasn't difficult in the beginning."
+  },
+  {
+    "id": 258,
+    "ru": "Та шутка не была смешной.",
+    "eng": "That joke wasn't funny."
+  },
+  {
+    "id": 259,
+    "ru": "Это не было проблемой. Это было не интересно им.",
+    "eng": "It wasn't a problem. It wasn't interesting for them."
+  },
+  {
+    "id": 260,
+    "ru": "Я не был за границей в прошлом году.",
+    "eng": "I wasn't abroad last year."
+  },
+  {
+    "id": 261,
+    "ru": "Они не были рядом. Они были очень далеко.",
+    "eng": "They weren't near. They were very far."
+  },
+  {
+    "id": 262,
+    "ru": "Я не был там утром. Мы были в другом месте.",
+    "eng": "I wasn't there in the morning. We were in another place."
+  },
+  {
+    "id": 263,
+    "ru": "Она не была богатой. Она была очень бедной.",
+    "eng": "She wasn't rich. She was very poor."
+  },
+  {
+    "id": 264,
+    "ru": "Это была не лучшая идея в той ситуации.",
+    "eng": "It wasn't the best idea in that situation."
+  },
+  {
+    "id": 265,
+    "ru": "Я думаю, что эта цена была не такая хорошая.",
+    "eng": "I think that this price wasn't so good."
+  },
+  {
+    "id": 266,
+    "ru": "Ты был не прав. Они не были готовы к этому.",
+    "eng": "You weren't right. They weren't ready for it."
+  },
+  {
+    "id": 267,
+    "ru": "Я не был готов. Я очень устал вчера.",
+    "eng": "I wasn't ready. I was very tired yesterday."
+  },
+  {
+    "id": 268,
+    "ru": "Ты действительно был уверен? Это было действительно важно?",
+    "eng": "Were you really sure? Was it really important?"
+  },
+  {
+    "id": 269,
+    "ru": "Когда она была там последний раз?",
+    "eng": "When was she there last time?"
+  },
+  {
+    "id": 270,
+    "ru": "Почему это было так дёшево? Где ты был?",
+    "eng": "Why was it so cheap? Where were you?"
+  },
+  {
+    "id": 271,
+    "ru": "Что было на полу? Что было в той коробке?",
+    "eng": "What was on the floor? What was in that box?"
+  },
+  {
+    "id": 272,
+    "ru": "Что было такого странного? Кто там был?",
+    "eng": "What was so strange? Who was there?"
+  },
+  {
+    "id": 273,
+    "ru": "Сколько это стоило? Где ты был утром?",
+    "eng": "How much was it? Where were you in the morning?"
+  },
+  {
+    "id": 274,
+    "ru": "Это было действительно так сложно?",
+    "eng": "Was it really so difficult?"
+  },
+  {
+    "id": 275,
+    "ru": "Он был действительно прав?",
+    "eng": "Was he really right?"
+  },
+  {
+    "id": 276,
+    "ru": "Она была рассержена? Ты был занят?",
+    "eng": "Was she angry? Were you busy?"
+  },
+  {
+    "id": 277,
+    "ru": "Ты был на концерте? Он был на той вечеринке?",
+    "eng": "Were you at the concert? Was he at that party?"
+  },
+  {
+    "id": 278,
+    "ru": "Почему это было так медленно?",
+    "eng": "Why was it so slow?"
+  },
+  {
+    "id": 279,
+    "ru": "Вы были вместе? Это было реально скучно?",
+    "eng": "Were you together? Was it really so boring?"
+  },
+  {
+    "id": 280,
+    "ru": "Они были на пляже? Как ты скачал это?",
+    "eng": "Were they at the beach? How did you download it?"
   }
 ]
