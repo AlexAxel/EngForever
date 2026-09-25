@@ -43,11 +43,11 @@ try{
     const ids=Array.from({length:200},(_,i)=>i+1);
     const cards={};
     for(const id of ids)cards[id]={enabled:true,manuallyDisabled:false,learned:false,attempts:0,correct:0,hardness:0,history:[]};
-    cards[7]={enabled:true,manuallyDisabled:false,learned:false,attempts:4,correct:2,hardness:63,history:[{ok:false},{ok:true,bonus:true}]};
+    cards[1]={enabled:true,manuallyDisabled:false,learned:false,attempts:4,correct:2,hardness:63,history:[{ok:false},{ok:true,bonus:true}]};
     localStorage.setItem(key,JSON.stringify({
       version:1,language:"ru",mode:"auto",cards,catalogIds:ids,sessionIds:ids,
       round:1,started:true,roundIds:ids,roundSeen:[1,2,3,4,5,6],
-      roundErrors:[7],bonusDue:[{id:7,due:12}],currentBonus:false,
+      roundErrors:[1],bonusDue:[{id:1,due:12}],currentBonus:false,
       queue:ids.slice(7),current:7
     }));
     sessionStorage.setItem("grow-280-seeded","1");
@@ -59,8 +59,8 @@ try{
   assert.equal(saved.current,7);
   assert.equal(saved.roundIds.length,200);
   assert.deepEqual(saved.roundSeen,[1,2,3,4,5,6]);
-  assert.deepEqual(saved.roundErrors,[7]);
-  assert.deepEqual(saved.bonusDue,[{id:7,due:12}]);
+  assert.deepEqual(saved.roundErrors,[1]);
+  assert.deepEqual(saved.bonusDue,[{id:1,due:12}]);
   assert.deepEqual(saved.catalogIds,ids);
   for(let id=201;id<=280;id++){
     assert.equal(saved.cards[id].enabled,false,"New #"+id+" must be disabled in existing session");
@@ -68,8 +68,8 @@ try{
     assert.ok(!saved.roundIds.includes(id));
     assert.ok(!saved.queue.includes(id));
   }
-  assert.equal(saved.cards[7].hardness,63);
-  assert.equal(saved.cards[7].history.length,2);
+  assert.equal(saved.cards[1].hardness,63);
+  assert.equal(saved.cards[1].history.length,2);
   await page.locator("#settings-open").click();
   assert.equal(await page.locator("#phrase-list .phrase-option").count(),280);
   for(let id=201;id<=280;id++)assert.equal(await page.locator("#phrase-list .phrase-option").nth(id-1).locator("input").isChecked(),false);
@@ -78,7 +78,7 @@ try{
   saved=await page.evaluate(snapshot);
   assert.equal(saved.current,7);
   assert.equal(saved.cards[280].enabled,false);
-  assert.equal(saved.cards[7].hardness,63);
+  assert.equal(saved.cards[1].hardness,63);
   await page.locator("#settings-open").click();
   await page.locator("#phrase-list .phrase-option").nth(200).locator("input").check();
   saved=await page.evaluate(snapshot);
@@ -88,12 +88,12 @@ try{
   assert.deepEqual(saved.queue,[]);
   assert.equal(saved.cards[201].enabled,true);
   assert.equal(saved.cards[202].enabled,false);
-  assert.equal(saved.cards[7].hardness,63);
-  assert.equal(saved.cards[7].history.length,2);
+  assert.equal(saved.cards[1].hardness,63);
+  assert.equal(saved.cards[1].history.length,2);
   await page.locator("#select-all").click();
   saved=await page.evaluate(snapshot);
   assert.equal(Object.values(saved.cards).filter(c=>c.enabled).length,280);
-  assert.equal(saved.cards[7].hardness,63);
+  assert.equal(saved.cards[1].hardness,63);
   await page.locator("#settings-done").click();
   assert.equal(await page.locator("#start").isVisible(),true);
   await continuing.close();
