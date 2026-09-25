@@ -6,10 +6,15 @@ const base="http://127.0.0.1:8000/";
 const storageKey="eng-forever-v1";
 const snapshot=()=>JSON.parse(localStorage.getItem("eng-forever-v1"));
 const errors=[];
+const keep200=async route=>{
+  const response=await route.fetch();
+  await route.fulfill({response,contentType:"application/json",body:JSON.stringify((await response.json()).slice(0,200))});
+};
 try{
   const fresh=await browser.newContext({viewport:{width:390,height:760},isMobile:true,hasTouch:true});
   const p=await fresh.newPage();
   p.on("pageerror",e=>errors.push(String(e)));
+  await p.route("**/data/phrases.json*",keep200);
   await p.goto(base);
   await p.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 200"));
   let saved=await p.evaluate(snapshot);
@@ -39,6 +44,7 @@ try{
   const continuing=await browser.newContext({viewport:{width:390,height:760},isMobile:true,hasTouch:true});
   const page=await continuing.newPage();
   page.on("pageerror",e=>errors.push(String(e)));
+  await page.route("**/data/phrases.json*",keep200);
   await page.addInitScript(key=>{
     if(sessionStorage.getItem("grow-200-seeded"))return;
     const ids=Array.from({length:120},(_,i)=>i+1);
