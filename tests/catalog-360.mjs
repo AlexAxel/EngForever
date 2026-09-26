@@ -21,6 +21,7 @@ try{
   const ctx=await browser.newContext({viewport:{width:390,height:760},isMobile:true,hasTouch:true});
   const page=await ctx.newPage();
   await page.addInitScript(storageKey=>{
+    if(sessionStorage.getItem("grow-360-seeded"))return;
     const ids=Array.from({length:280},(_,i)=>i+1),cards={};
     for(const id of ids)cards[id]={enabled:true,manuallyDisabled:false,learned:false,attempts:0,correct:0,hardness:0,history:[]};
     cards[11]={enabled:true,manuallyDisabled:false,learned:false,attempts:7,correct:2,hardness:71,history:[{ok:false},{ok:true}]};
@@ -29,6 +30,7 @@ try{
       round:1,started:true,roundIds:ids,roundSeen:[1,2,3,4,5,6,7,8,9,10],
       roundErrors:[11],bonusDue:[],currentBonus:false,queue:ids.slice(11),current:11
     }));
+    sessionStorage.setItem("grow-360-seeded","1");
   },key);
   await page.goto(base);
   await page.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 280"));
