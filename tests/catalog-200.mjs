@@ -24,7 +24,7 @@ try{
   assert.equal(saved.cards[200].enabled,true,"New installation includes all 200 phrases");
   await p.locator("#settings-open").click();
   assert.equal(await p.locator("#phrase-list .phrase-option").count(),200);
-  assert.deepEqual(await p.locator("#phrase-list .phrase-option").evaluateAll(rows=>rows.map(row=>parseInt(row.textContent.slice(1),10))),ids);
+  assert.deepEqual((await p.locator("#phrase-list .phrase-option").evaluateAll(rows=>rows.map(row=>Number(row.dataset.id)))).sort((a,b)=>a-b),ids);
   const catalog=await p.evaluate(async()=>await (await fetch("./data/phrases.json")).json());
   const sourceChecks={
     121:["Я думаю, это скоро будет дороже.","I think it'll be more expensive soon."],
@@ -81,7 +81,7 @@ try{
   assert.equal(saved.cards[1].history.length,2);
   await page.locator("#settings-open").click();
   assert.equal(await page.locator("#phrase-list .phrase-option").count(),200);
-  for(let id=121;id<=200;id++)assert.equal(await page.locator("#phrase-list .phrase-option").nth(id-1).locator("input").isChecked(),false);
+  for(let id=121;id<=200;id++)assert.equal(await page.locator('#phrase-list .phrase-option[data-id="'+id+'"] input').isChecked(),false);
   await page.locator("#settings-done").click();
   await page.reload();
   saved=await page.evaluate(snapshot);
@@ -89,7 +89,7 @@ try{
   assert.equal(saved.cards[200].enabled,false,"New phrases remain excluded after reload");
   assert.equal(saved.cards[1].hardness,74,"Historical difficulty persists");
   await page.locator("#settings-open").click();
-  await page.locator("#phrase-list .phrase-option").nth(120).locator("input").check();
+  await page.locator('#phrase-list .phrase-option[data-id="121"] input').check();
   saved=await page.evaluate(snapshot);
   assert.equal(saved.started,false,"Manual selection alone should restart the session");
   assert.equal(saved.round,1);
