@@ -10,12 +10,12 @@ try{
   const fresh=await browser.newContext({viewport:{width:390,height:760},isMobile:true,hasTouch:true});
   const freshPage=await fresh.newPage();
   await freshPage.goto(base);
-  await freshPage.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 280"));
+  await freshPage.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 360"));
   const catalog=await freshPage.evaluate(async()=>await (await fetch("./data/phrases.json")).json());
-  assert.equal(catalog.length,280);
+  assert.equal(catalog.length,360);
   assert.ok(catalog.every(p=>p.level==="A1"),"All current notebook phrases must be A1");
   await freshPage.locator("#settings-open").click();
-  assert.equal(await freshPage.locator("#level-count-A1").textContent(),"280");
+  assert.equal(await freshPage.locator("#level-count-A1").textContent(),"360");
   for(const level of ["A2","B1","B2","C1"]){
     assert.equal(await freshPage.locator("#level-count-"+level).textContent(),"0");
     assert.equal(await freshPage.locator('[data-select-level="'+level+'"]').isDisabled(),true);
