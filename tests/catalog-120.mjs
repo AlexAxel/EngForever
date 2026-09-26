@@ -25,7 +25,7 @@ try{
   assert.ok(initial.cards[120].enabled,"New installation can train with the current full catalogue");
   await freshPage.locator("#settings-open").click();
   assert.equal(await freshPage.locator("#phrase-list .phrase-option").count(),120);
-  assert.deepEqual(await freshPage.locator("#phrase-list .phrase-option").evaluateAll(items=>items.map(el=>parseInt(el.textContent.slice(1),10))),Array.from({length:120},(_,i)=>i+1));
+  assert.deepEqual((await freshPage.locator("#phrase-list .phrase-option").evaluateAll(items=>items.map(el=>Number(el.dataset.id)))).sort((a,b)=>a-b),Array.from({length:120},(_,i)=>i+1));
   await fresh.close();
 
   // Model a real 80-card session that is mid-round when the new JSON arrives.
@@ -72,8 +72,8 @@ try{
   assert.equal(saved.cards[1].history.length,2,"History is unchanged");
   await page.locator("#settings-open").click();
   assert.equal(await page.locator("#phrase-list .phrase-option").count(),120);
-  assert.equal(await page.locator("#phrase-list .phrase-option").nth(79).locator("input").isChecked(),true);
-  for(let id=81;id<=120;id++)assert.equal(await page.locator("#phrase-list .phrase-option").nth(id-1).locator("input").isChecked(),false);
+  assert.equal(await page.locator('#phrase-list .phrase-option[data-id="80"] input').isChecked(),true);
+  for(let id=81;id<=120;id++)assert.equal(await page.locator('#phrase-list .phrase-option[data-id="'+id+'"] input').isChecked(),false);
   await page.locator("#settings-done").click();
   await page.reload();
   await page.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 80"));
@@ -82,7 +82,7 @@ try{
   assert.deepEqual(saved.roundSeen,[1,2,3,4]);
   assert.equal(saved.cards[120].enabled,false,"New phrases must remain excluded on subsequent reloads");
   await page.locator("#settings-open").click();
-  await page.locator("#phrase-list .phrase-option").nth(80).locator("input").check();
+  await page.locator('#phrase-list .phrase-option[data-id="81"] input').check();
   saved=await page.evaluate(state);
   assert.equal(saved.started,false,"Manually selecting a new phrase resets the training");
   assert.equal(saved.round,1);
