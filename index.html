@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#F5F5F0">
   <meta name="description" content="Eng Forever — тренируй перевод фраз в своём темпе">
   <title>Eng Forever · Тренировка перевода</title>
-  <link rel="stylesheet" href="./styles.css?v=design-1">
-  <script type="module" src="./app.js?v=design-1"></script>
+  <link rel="stylesheet" href="./styles.css?v=design-2">
+  <script type="module" src="./app.js?v=design-2"></script>
 </head>
 <body>
 <div class="app">
@@ -37,7 +37,7 @@
       <article id="card" class="card hidden" aria-live="polite">
         <span class="swipe-stamp stamp-wrong" aria-hidden="true">Не вспомнил</span>
         <span class="swipe-stamp stamp-right" aria-hidden="true">Вспомнил</span>
-        <div class="card-top"><span class="pill" id="card-type">ПЕРЕВОД</span><span id="card-id" class="card-index">№ 1</span></div>
+        <div class="card-top"><div class="card-meta"><span class="pill" id="card-type">ПЕРЕВОД</span><span id="card-level" class="level-badge level-A1" aria-label="Уровень английского A1">A1</span></div><span id="card-id" class="card-index">№ 1</span></div>
         <div id="answer-sheet" class="answer-sheet" aria-expanded="false">
           <div id="sheet-handle" class="sheet-handle" role="button" tabindex="0" aria-label="Потяни шторку вниз или нажми, чтобы открыть перевод">
             <span class="drawer-icon" aria-hidden="true">↓</span>
@@ -61,7 +61,21 @@
   </main>
   <footer class="footer"><span id="footer-status">Прогресс хранится на этом устройстве</span><button id="stats-open" class="text-btn" type="button">Статистика ↗</button></footer>
 </div>
-<dialog id="settings-dialog" class="modal"><div class="modal-head"><div><div class="eyebrow">ТВОЙ РЕЖИМ</div><h2>Настройки</h2></div><button class="icon-btn close" data-close="settings-dialog" aria-label="Закрыть">✕</button></div><div class="modal-body"><fieldset><legend>Язык на лицевой стороне</legend><label class="option"><input type="radio" name="language" value="ru"><span>Русский <small>Перевести на английский</small></span></label><label class="option"><input type="radio" name="language" value="eng"><span>English <small>Перевести на русский</small></span></label></fieldset><fieldset><legend>Типы карточек</legend><div class="setting-note">В версии 1 доступен только тип «Перевод». Позже появятся другие типы и распределение вероятностей.</div><label class="option"><span>Перевод <small>Доля в случайной выборке</small></span><strong>100%</strong></label><label class="option"><span>Распределение <small>Автоматически / вручную</small></span><select id="mode"><option value="auto">Автоматически</option><option value="manual">Вручную</option></select></label></fieldset>
-<fieldset><legend>Активные фразы <span id="selected-count"></span></legend><div class="bulk"><button id="select-all" class="secondary">Выбрать все</button><button id="select-none" class="secondary">Снять все</button></div><div id="phrase-list" class="phrase-list"></div></fieldset><fieldset><legend>Данные на этом устройстве</legend><div class="setting-note">Статистика привязана к ID, общая для русского и английского. Очистка данных необратима в текущем браузере.</div><button id="reset-progress" class="secondary danger">Сбросить результаты и настройки</button></fieldset></div><div class="modal-foot"><button id="settings-done" class="primary">Готово</button></div></dialog>
+<dialog id="settings-dialog" class="modal"><div class="modal-head"><div><div class="eyebrow">ТВОЙ РЕЖИМ</div><h2>Настройки</h2></div><button class="icon-btn close" data-close="settings-dialog" aria-label="Закрыть">✕</button></div><div class="modal-body"><fieldset><legend>Язык на лицевой стороне</legend><label class="option"><input type="radio" name="language" value="ru"><span>Русский <small>Перевести на английский</small></span></label><label class="option"><input type="radio" name="language" value="eng"><span>English <small>Перевести на русский</small></span></label></fieldset><fieldset><legend>Типы карточек</legend><div class="setting-note">Сейчас доступен тип «Перевод». Уровень CEFR хранится у каждой фразы отдельно: A1, A2, B1, B2 или C1.</div><label class="option"><span>Перевод <small>Доля в случайной выборке</small></span><strong>100%</strong></label><label class="option"><span>Распределение <small>Автоматически / вручную</small></span><select id="mode"><option value="auto">Автоматически</option><option value="manual">Вручную</option></select></label></fieldset>
+<fieldset><legend>Активные фразы <span id="selected-count"></span></legend>
+  <div class="setting-note">Сначала показываются выбранные фразы. Внутри каждой группы выше идут фразы с меньшей узнаваемостью.</div>
+  <div class="bulk bulk-primary"><button id="select-all" class="secondary">Выбрать все</button><button id="select-none" class="secondary">Снять все</button></div>
+  <div class="level-picker" aria-label="Быстрый выбор уровня английского">
+    <span class="level-picker-label">Выбрать уровень</span>
+    <div class="level-chips">
+      <button class="level-chip level-A1" data-select-level="A1" type="button">A1 <small id="level-count-A1">0</small></button>
+      <button class="level-chip level-A2" data-select-level="A2" type="button">A2 <small id="level-count-A2">0</small></button>
+      <button class="level-chip level-B1" data-select-level="B1" type="button">B1 <small id="level-count-B1">0</small></button>
+      <button class="level-chip level-B2" data-select-level="B2" type="button">B2 <small id="level-count-B2">0</small></button>
+      <button class="level-chip level-C1" data-select-level="C1" type="button">C1 <small id="level-count-C1">0</small></button>
+    </div>
+  </div>
+  <div id="phrase-list" class="phrase-list"></div>
+</fieldset><fieldset><legend>Данные на этом устройстве</legend><div class="setting-note">Статистика привязана к ID, общая для русского и английского. Очистка данных необратима в текущем браузере.</div><button id="reset-progress" class="secondary danger">Сбросить результаты и настройки</button></fieldset></div><div class="modal-foot"><button id="settings-done" class="primary">Готово</button></div></dialog>
 <dialog id="stats-dialog" class="modal"><div class="modal-head"><div><div class="eyebrow">ТВОИ РЕЗУЛЬТАТЫ</div><h2>Статистика</h2></div><button class="icon-btn close" data-close="stats-dialog" aria-label="Закрыть">✕</button></div><div class="modal-body"><div id="stats-summary" class="stats-summary"></div><p class="setting-note">Узнаваемость = правильные ответы / все ответы; сложность учитывает последние ответы и уменьшается после успешных повторений. Сложность общая для обоих языков.</p><div id="stats-list" class="stats-list"></div></div><div class="modal-foot"><button class="primary" data-close="stats-dialog">Закрыть</button></div></dialog>
 <div id="toast" class="toast" role="status" aria-live="polite"></div></body></html>
