@@ -63,17 +63,17 @@ try{
   await page.locator("#settings-open").click();
   assert.equal(await page.locator("#settings-dialog").evaluate(el=>el.open),true,"Settings must open");
   assert.equal(await page.locator("#phrase-list .phrase-option").count(),80,"All 80 numbered phrases must appear in settings");
-  assert.deepEqual(await page.locator("#phrase-list .phrase-option").evaluateAll(items=>items.map(x=>parseInt(x.textContent.slice(1),10))),Array.from({length:80},(_,i)=>i+1),"Settings IDs must match original notebook numbers 1–80");
+  assert.deepEqual((await page.locator("#phrase-list .phrase-option").evaluateAll(items=>items.map(x=>Number(x.dataset.id)))).sort((a,b)=>a-b),Array.from({length:80},(_,i)=>i+1),"Settings must contain original notebook numbers 1–80 regardless of recognition sorting");
   assert.equal(await page.locator("#phrase-list").evaluate(el=>getComputedStyle(el).overflowY),"visible","Phrase list should not have a hidden nested scrollbar");
-  await page.locator("#phrase-list .phrase-option").last().scrollIntoViewIfNeeded();
-  assert.equal(await page.locator("#phrase-list .phrase-option").last().isVisible(),true,"ID 80 must be reachable at bottom of settings");
+  await page.locator('#phrase-list .phrase-option[data-id="80"]').scrollIntoViewIfNeeded();
+  assert.equal(await page.locator('#phrase-list .phrase-option[data-id="80"]').isVisible(),true,"ID 80 must be reachable in settings");
   // Existing history must survive manually re-enabling a learned phrase.
   const oldId=Number(first.replace("№ ",""));
   const before=await page.evaluate(id=>{
     const c=JSON.parse(localStorage.getItem("eng-forever-v1")).cards[id];
     return {attempts:c.attempts,correct:c.correct,hardness:c.hardness,history:c.history};
   },oldId);
-  const oldCheckbox=page.locator("#phrase-list .phrase-option").nth(oldId-1).locator("input");
+  const oldCheckbox=page.locator('#phrase-list .phrase-option[data-id="'+oldId+'"] input');
   assert.equal(await oldCheckbox.isChecked(),false,"Learned card is inactive before manual selection");
   await oldCheckbox.check();
   let state=await page.evaluate(()=>JSON.parse(localStorage.getItem("eng-forever-v1")));
@@ -112,7 +112,7 @@ try{
   assert.equal(await page.locator("#round-label").textContent(),"Круг 1");
   await page.locator("#settings-open").click();
   const currentId=Number((await page.locator("#card-id").textContent()).replace("№ ",""));
-  await page.locator("#phrase-list .phrase-option").nth(currentId-1).locator("input").uncheck();
+  await page.locator('#phrase-list .phrase-option[data-id="'+currentId+'"] input').uncheck();
   state=await page.evaluate(()=>JSON.parse(localStorage.getItem("eng-forever-v1")));
   assert.equal(state.started,false,"Deselecting a single phrase also resets the current session");
   await page.locator("#settings-done").click();
