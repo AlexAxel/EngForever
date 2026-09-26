@@ -72,7 +72,7 @@ try{
   assert.equal(saved.cards[1].history.length,2);
   await page.locator("#settings-open").click();
   assert.equal(await page.locator("#phrase-list .phrase-option").count(),280);
-  for(let id=201;id<=280;id++)assert.equal(await page.locator("#phrase-list .phrase-option").nth(id-1).locator("input").isChecked(),false);
+  for(let id=201;id<=280;id++)assert.equal(await page.locator('#phrase-list .phrase-option[data-id="'+id+'"] input').isChecked(),false);
   await page.locator("#settings-done").click();
   await page.reload();
   saved=await page.evaluate(snapshot);
@@ -80,7 +80,7 @@ try{
   assert.equal(saved.cards[280].enabled,false);
   assert.equal(saved.cards[1].hardness,63);
   await page.locator("#settings-open").click();
-  await page.locator("#phrase-list .phrase-option").nth(200).locator("input").check();
+  await page.locator('#phrase-list .phrase-option[data-id="201"] input').check();
   saved=await page.evaluate(snapshot);
   assert.equal(saved.started,false);
   assert.equal(saved.round,1);
