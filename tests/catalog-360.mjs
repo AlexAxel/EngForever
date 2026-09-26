@@ -4,7 +4,7 @@ import {chromium} from "playwright";
 const browser=await chromium.launch({headless:true});
 const base="http://127.0.0.1:8000/";
 const key="eng-forever-v1";
-const snap=()=>JSON.parse(localStorage.getItem(key));
+const snap=()=>JSON.parse(localStorage.getItem("eng-forever-v1"));
 try{
   const fresh=await browser.newContext({viewport:{width:390,height:760},isMobile:true,hasTouch:true});
   const p=await fresh.newPage();
