@@ -198,29 +198,40 @@ legend #selected-count{color:var(--accent);font-variant-numeric:tabular-nums}
 .card-meta{display:flex;align-items:center;gap:7px;min-width:0}
 .level-badge{display:inline-grid;place-items:center;min-width:32px;height:25px;padding:0 8px;border-radius:9px;font:850 10px/1 var(--display);letter-spacing:.65px;border:1px solid var(--line);background:var(--bg);color:var(--muted)}
 .level-badge.level-A1,.phrase-level.level-A1,.level-chip.level-A1{
-  color:#4E5E63;
-  border-color:#C5D0D4;
-  background:linear-gradient(135deg,#FFFFFF 0%,#E7ECEE 46%,#C9D2D5 100%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 0 12px rgba(189,204,210,.42);
+  color:#31454B;
+  border-color:#B7C8CD;
+  background:linear-gradient(135deg,#FFFFFF 0%,#EEF4F6 26%,#C6D3D7 56%,#FAFFFF 76%,#B9C8CD 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,1),inset 0 -1px 0 rgba(119,147,156,.2),0 0 8px rgba(221,245,252,.9),0 0 18px rgba(168,219,231,.55);
 }
 .card.level-A1:not(.bonus-review){
-  background:linear-gradient(145deg,#FFFFFF 0%,#F8FAFA 48%,#EDF1F2 100%);
-  border-color:#C6D2D5;
-  box-shadow:0 0 0 1px rgba(255,255,255,.7),0 0 26px rgba(180,198,204,.34),var(--shadow);
+  background:
+    radial-gradient(circle at 18% 8%,rgba(255,255,255,.98) 0 8%,rgba(255,255,255,0) 28%),
+    linear-gradient(122deg,#FDFEFE 0%,#D9E3E6 18%,#FFFFFF 36%,#BFCED3 52%,#F7FBFC 68%,#D2DEE2 84%,#FFFFFF 100%);
+  border-color:#AFC4CA;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,1),
+    inset 0 -1px 0 rgba(116,145,154,.18),
+    0 0 0 1px rgba(226,248,255,.78),
+    0 0 18px rgba(180,232,245,.55),
+    0 0 38px rgba(161,213,227,.38),
+    var(--shadow);
 }
 .card.level-A1:not(.bonus-review)::before{
-  content:"";position:absolute;z-index:0;left:13%;right:13%;top:-1px;height:2px;border-radius:99px;
-  background:linear-gradient(90deg,transparent,#D7E1E4 25%,#FFFFFF 50%,#C5D2D6 75%,transparent);
-  box-shadow:0 0 12px rgba(209,224,229,.8);pointer-events:none
+  content:"";position:absolute;z-index:0;left:8%;right:8%;top:-1px;height:3px;border-radius:99px;
+  background:linear-gradient(90deg,transparent,#BFDCE3 18%,#FFFFFF 43%,#D9FBFF 50%,#FFFFFF 57%,#B7D4DB 82%,transparent);
+  box-shadow:0 0 10px rgba(222,251,255,.95),0 0 24px rgba(149,225,241,.75);pointer-events:none
 }
 .card.level-A1:not(.bonus-review) .card-top,
 .card.level-A1:not(.bonus-review) .answer-sheet,
 .card.level-A1:not(.bonus-review) .question{position:relative;z-index:1}
 .card.level-A1:not(.bonus-review) .answer-sheet{
-  background:linear-gradient(145deg,#F5F8F9,#E5ECEE);
+  background:linear-gradient(135deg,rgba(255,255,255,.92),#DDE8EB 48%,#F9FFFF 100%);
+  border:1px solid rgba(170,198,206,.72);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 0 16px rgba(180,227,238,.28);
 }
 .card.level-A1:not(.bonus-review) .pill{
-  color:#53666A;background:rgba(255,255,255,.7);border:1px solid #D2DCDF
+  color:#3E5960;background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(218,232,236,.88));
+  border:1px solid #BFCFD4;box-shadow:0 0 10px rgba(205,241,249,.5)
 }
 .card.bonus-review .level-badge.level-A1{box-shadow:inset 0 1px 0 rgba(255,255,255,.88),0 0 10px rgba(210,220,224,.28)}
 
@@ -258,19 +269,21 @@ legend #selected-count{color:var(--accent);font-variant-numeric:tabular-nums}
 }
 @media(prefers-color-scheme:dark){
  .level-badge.level-A1,.phrase-level.level-A1,.level-chip.level-A1{
-   color:#EDF3F4;border-color:#718489;
-   background:linear-gradient(135deg,#4E5F63 0%,#29393D 50%,#73858A 100%);
-   box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 0 15px rgba(206,225,232,.18)
+   color:#F4FCFF;border-color:#8099A0;
+   background:linear-gradient(135deg,#7E949A 0%,#2E4146 28%,#A4B8BD 50%,#33474C 72%,#8FA4AA 100%);
+   box-shadow:inset 0 1px 0 rgba(255,255,255,.34),0 0 10px rgba(207,244,255,.35),0 0 20px rgba(120,214,236,.22)
  }
  .card.level-A1:not(.bonus-review){
-   background:linear-gradient(145deg,#26383B 0%,#1D2D30 52%,#34464A 100%);
-   border-color:#74868B;
-   box-shadow:0 0 0 1px rgba(220,235,239,.06),0 0 28px rgba(201,219,225,.14),var(--shadow)
+   background:
+     radial-gradient(circle at 18% 8%,rgba(255,255,255,.11) 0 8%,rgba(255,255,255,0) 30%),
+     linear-gradient(122deg,#2B3B3F 0%,#50666C 18%,#223337 36%,#6E848A 52%,#263A3E 68%,#52686E 84%,#1F3135 100%);
+   border-color:#89A3AA;
+   box-shadow:0 0 0 1px rgba(220,247,255,.11),0 0 18px rgba(155,231,248,.22),0 0 36px rgba(107,200,222,.16),var(--shadow)
  }
  .card.level-A1:not(.bonus-review)::before{
-   background:linear-gradient(90deg,transparent,#86999E 28%,#E1ECEF 50%,#6D8085 72%,transparent);
-   box-shadow:0 0 13px rgba(210,228,233,.25)
+   background:linear-gradient(90deg,transparent,#8DC7D5 18%,#FFFFFF 43%,#CFF8FF 50%,#FFFFFF 57%,#83B9C6 82%,transparent);
+   box-shadow:0 0 11px rgba(213,250,255,.46),0 0 26px rgba(104,221,247,.34)
  }
- .card.level-A1:not(.bonus-review) .answer-sheet{background:linear-gradient(145deg,#33474B,#263A3E)}
+ .card.level-A1:not(.bonus-review) .answer-sheet{background:linear-gradient(135deg,#455C62,#263A3E 50%,#536A70);border-color:#769098;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 16px rgba(110,219,242,.12)}
  .card.level-A1:not(.bonus-review) .pill{color:#DDE8EA;background:rgba(255,255,255,.055);border-color:#607479}
 }
