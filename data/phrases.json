@@ -1678,5 +1678,485 @@
     "ru": "Они были на пляже? Как ты скачал это?",
     "eng": "Were they at the beach? How did you download it?",
     "level": "A1"
+  },
+  {
+    "id": 281,
+    "ru": "Я хочу сказать, что это действительно имеет значение.",
+    "eng": "I want to say that it really matters.",
+    "level": "A1"
+  },
+  {
+    "id": 282,
+    "ru": "Я вижу, такая проблема существует.",
+    "eng": "I see such a problem exists.",
+    "level": "A1"
+  },
+  {
+    "id": 283,
+    "ru": "Я понимаю, это может случиться с каждым из нас.",
+    "eng": "I understand it can happen to each of us.",
+    "level": "A1"
+  },
+  {
+    "id": 284,
+    "ru": "Я думаю, что не всё зависит от нас.",
+    "eng": "I think that not everything depends on us.",
+    "level": "A1"
+  },
+  {
+    "id": 285,
+    "ru": "Мне кажется, что это лучший выбор.",
+    "eng": "It seems to me that it's the best choice.",
+    "level": "A1"
+  },
+  {
+    "id": 286,
+    "ru": "Ты знаешь, я тоже так думаю.",
+    "eng": "You know, I also think so.",
+    "level": "A1"
+  },
+  {
+    "id": 287,
+    "ru": "У меня такое же мнение. Я чувствую, что я прав.",
+    "eng": "I have the same opinion. I feel that I'm right.",
+    "level": "A1"
+  },
+  {
+    "id": 288,
+    "ru": "Я должен сказать, что это предложение звучит привлекательно.",
+    "eng": "I have to say that this offer sounds attractive.",
+    "level": "A1"
+  },
+  {
+    "id": 289,
+    "ru": "Я хочу сказать, что я хотел бы повидать мир.",
+    "eng": "I want to say that I'd like to see the world.",
+    "level": "A1"
+  },
+  {
+    "id": 290,
+    "ru": "Я думаю, что довольно хорошо для начала.",
+    "eng": "I think that it's quite good for a start.",
+    "level": "A1"
+  },
+  {
+    "id": 291,
+    "ru": "Я знаю, что он работает менеджером.",
+    "eng": "I know that he works as a manager.",
+    "level": "A1"
+  },
+  {
+    "id": 292,
+    "ru": "Я хочу сказать тебе, что это действительно вдохновляет меня.",
+    "eng": "I want to tell you that it really inspires me.",
+    "level": "A1"
+  },
+  {
+    "id": 293,
+    "ru": "Я должен сказать, что это лучший отель в этом районе.",
+    "eng": "I have to say that it's the best hotel in this area.",
+    "level": "A1"
+  },
+  {
+    "id": 294,
+    "ru": "Я не думаю, что этот метод действительно работает.",
+    "eng": "I don't think that this method really works.",
+    "level": "A1"
+  },
+  {
+    "id": 295,
+    "ru": "Это довольно хорошо, особенно в начале.",
+    "eng": "It's quite good especially in the beginning.",
+    "level": "A1"
+  },
+  {
+    "id": 296,
+    "ru": "Я чувствую, что он очень надёжный человек.",
+    "eng": "I feel that he's a very reliable person.",
+    "level": "A1"
+  },
+  {
+    "id": 297,
+    "ru": "Это интересный вопрос. Это правдивая история.",
+    "eng": "It's an interesting question. It's a true story.",
+    "level": "A1"
+  },
+  {
+    "id": 298,
+    "ru": "У меня есть цель. У меня есть чёткая цель.",
+    "eng": "I have an aim. I have a clear aim.",
+    "level": "A1"
+  },
+  {
+    "id": 299,
+    "ru": "У меня есть некоторые планы. Это так необычно.",
+    "eng": "I have some plans. It's so unusual.",
+    "level": "A1"
+  },
+  {
+    "id": 300,
+    "ru": "Это действительно необычно. Это странный ответ.",
+    "eng": "It's really unusual. It's a strange answer.",
+    "level": "A1"
+  },
+  {
+    "id": 301,
+    "ru": "Это необычное решение. Это большая ошибка.",
+    "eng": "It's an unusual decision. It's a big mistake.",
+    "level": "A1"
+  },
+  {
+    "id": 302,
+    "ru": "У меня очень хороший результат.",
+    "eng": "I have a very good result.",
+    "level": "A1"
+  },
+  {
+    "id": 303,
+    "ru": "Я думаю, это очень маленькая ошибка.",
+    "eng": "I think it's a very small mistake.",
+    "level": "A1"
+  },
+  {
+    "id": 304,
+    "ru": "Это место такое красивое. Это очень дорогой билет.",
+    "eng": "This place is so beautiful. It's a very expensive ticket.",
+    "level": "A1"
+  },
+  {
+    "id": 305,
+    "ru": "У меня есть одна очень чёткая цель.",
+    "eng": "I have one very clear aim.",
+    "level": "A1"
+  },
+  {
+    "id": 306,
+    "ru": "Я вижу, что у меня отличные результаты.",
+    "eng": "I see that I have excellent results.",
+    "level": "A1"
+  },
+  {
+    "id": 307,
+    "ru": "Мне кажется, это блестящая идея.",
+    "eng": "It seems to me that it's a brilliant idea.",
+    "level": "A1"
+  },
+  {
+    "id": 308,
+    "ru": "Результат очень хороший. Эта книга скучная.",
+    "eng": "The result is very good. This book is boring.",
+    "level": "A1"
+  },
+  {
+    "id": 309,
+    "ru": "Эти билеты очень дешёвые. Машина новая.",
+    "eng": "These tickets are very cheap. The car is new.",
+    "level": "A1"
+  },
+  {
+    "id": 310,
+    "ru": "Это старый дом. Здание очень высокое.",
+    "eng": "It's an old house. The building is very high.",
+    "level": "A1"
+  },
+  {
+    "id": 311,
+    "ru": "Это низкий уровень. Это не интенсивный курс.",
+    "eng": "It's a low level. It's not an intensive course.",
+    "level": "A1"
+  },
+  {
+    "id": 312,
+    "ru": "Уровень очень высокий. Деньги важны.",
+    "eng": "The level is very high. Money is important.",
+    "level": "A1"
+  },
+  {
+    "id": 313,
+    "ru": "Люди часто говорят, что время - деньги.",
+    "eng": "People often say that time is money.",
+    "level": "A1"
+  },
+  {
+    "id": 314,
+    "ru": "Любовь - это прекрасное чувство.",
+    "eng": "Love is a wonderful feeling.",
+    "level": "A1"
+  },
+  {
+    "id": 315,
+    "ru": "Счастье - это больше, чем деньги.",
+    "eng": "Happiness is more than money.",
+    "level": "A1"
+  },
+  {
+    "id": 316,
+    "ru": "Счастье - это важнее, чем деньги.",
+    "eng": "Happiness is more important than money.",
+    "level": "A1"
+  },
+  {
+    "id": 317,
+    "ru": "Еда очень вкусная. Этот банк открыт.",
+    "eng": "The food is very tasty. This bank is open.",
+    "level": "A1"
+  },
+  {
+    "id": 318,
+    "ru": "Еда очень дорогая в наше время.",
+    "eng": "Food is very expensive nowadays.",
+    "level": "A1"
+  },
+  {
+    "id": 319,
+    "ru": "Этот магазин закрыт. Дети дома.",
+    "eng": "This shop is closed. The children are at home.",
+    "level": "A1"
+  },
+  {
+    "id": 320,
+    "ru": "Погода чудесная сейчас. Это новая машина.",
+    "eng": "The weather is wonderful now. It's a new car.",
+    "level": "A1"
+  },
+  {
+    "id": 321,
+    "ru": "Мальчик учится там. Девочка ходит в школу.",
+    "eng": "The boy studies there. The girl goes to school.",
+    "level": "A1"
+  },
+  {
+    "id": 322,
+    "ru": "Девочка очень талантливая. Холодно.",
+    "eng": "The girl is very talented. It's cold.",
+    "level": "A1"
+  },
+  {
+    "id": 323,
+    "ru": "Мужчина выглядит очень сильным. Студент здесь.",
+    "eng": "The man looks very strong. The student is here.",
+    "level": "A1"
+  },
+  {
+    "id": 324,
+    "ru": "Мужчина очень сильный. Студенты здесь.",
+    "eng": "The man is very strong. The students are here.",
+    "level": "A1"
+  },
+  {
+    "id": 325,
+    "ru": "Мы с другом учимся в одной группе.",
+    "eng": "My friend and I study in one group.",
+    "level": "A1"
+  },
+  {
+    "id": 326,
+    "ru": "Я со своим другом учимся в одной и той же группе.",
+    "eng": "My friend and I study in the same group.",
+    "level": "A1"
+  },
+  {
+    "id": 327,
+    "ru": "Билет кажется таким дорогим. Тепло.",
+    "eng": "The ticket seems so expensive. It's warm.",
+    "level": "A1"
+  },
+  {
+    "id": 328,
+    "ru": "Мой отец работает здесь. Моя сестра студентка.",
+    "eng": "My father works here. My sister is a student.",
+    "level": "A1"
+  },
+  {
+    "id": 329,
+    "ru": "Это новое слово для меня. Это слово новое для меня.",
+    "eng": "It's a new word for me. This word is new for me.",
+    "level": "A1"
+  },
+  {
+    "id": 330,
+    "ru": "Сегодня солнечно. Сейчас очень солнечно.",
+    "eng": "It's sunny today. It's very sunny now.",
+    "level": "A1"
+  },
+  {
+    "id": 331,
+    "ru": "Билеты действительно дорогие. Сейчас ветрено.",
+    "eng": "The tickets are really expensive. It's windy now.",
+    "level": "A1"
+  },
+  {
+    "id": 332,
+    "ru": "Мой лучший друг всегда помогает мне.",
+    "eng": "My best friend always helps me.",
+    "level": "A1"
+  },
+  {
+    "id": 333,
+    "ru": "Моему другу нравится эта идея. Мой друг не знает это.",
+    "eng": "My friend likes this idea. My friend doesn't know it.",
+    "level": "A1"
+  },
+  {
+    "id": 334,
+    "ru": "Он не готов к этому. Эта проблема не такая большая.",
+    "eng": "He isn't ready for it. This problem isn't so big.",
+    "level": "A1"
+  },
+  {
+    "id": 335,
+    "ru": "Эта проблема не кажется такой важной, но это необходимо.",
+    "eng": "This problem doesn't seem so important but it's necessary.",
+    "level": "A1"
+  },
+  {
+    "id": 336,
+    "ru": "Эта информация не новая для меня.",
+    "eng": "This information isn't new for me.",
+    "level": "A1"
+  },
+  {
+    "id": 337,
+    "ru": "Эта деталь не важна. Эта деталь не кажется важной.",
+    "eng": "This detail isn't important. This detail doesn't seem important.",
+    "level": "A1"
+  },
+  {
+    "id": 338,
+    "ru": "Этот ответ не такой подробный.",
+    "eng": "This answer isn't so detailed.",
+    "level": "A1"
+  },
+  {
+    "id": 339,
+    "ru": "Это описание не выглядит таким информативным.",
+    "eng": "This description doesn't look so informative.",
+    "level": "A1"
+  },
+  {
+    "id": 340,
+    "ru": "Моих родителей нет дома. Это не удивляет меня.",
+    "eng": "My parents aren't at home. It doesn't surprise me.",
+    "level": "A1"
+  },
+  {
+    "id": 341,
+    "ru": "Это действительно мотивирует меня. Я не удивлён.",
+    "eng": "It really motivates me. I'm not surprised.",
+    "level": "A1"
+  },
+  {
+    "id": 342,
+    "ru": "Мальчик не выглядит уставшим. Сейчас не жарко.",
+    "eng": "The boy doesn't look tired. It isn't hot now.",
+    "level": "A1"
+  },
+  {
+    "id": 343,
+    "ru": "Я думаю, это не важно. Тест не выглядит таким лёгким.",
+    "eng": "I think it isn't important. The test doesn't look so easy.",
+    "level": "A1"
+  },
+  {
+    "id": 344,
+    "ru": "Сегодня не так ветрено. Где работает твой отец?",
+    "eng": "It isn't so windy today. Where does your father work?",
+    "level": "A1"
+  },
+  {
+    "id": 345,
+    "ru": "Этот курс действительно кажется таким эффективным?",
+    "eng": "Does this course really seem so effective?",
+    "level": "A1"
+  },
+  {
+    "id": 346,
+    "ru": "Почему эти вещи такие важные? Кем ты работаешь?",
+    "eng": "Why are these things so important? What's your job?",
+    "level": "A1"
+  },
+  {
+    "id": 347,
+    "ru": "Кем работает твоя мама? Кем она работает?",
+    "eng": "What's your mother's job? What's her job?",
+    "level": "A1"
+  },
+  {
+    "id": 348,
+    "ru": "Это предложение интересует тебя? Дети дома?",
+    "eng": "Does this offer interest you? Are the children at home?",
+    "level": "A1"
+  },
+  {
+    "id": 349,
+    "ru": "Твой друг советует тебе сделать это?",
+    "eng": "Does your friend advise you to do it?",
+    "level": "A1"
+  },
+  {
+    "id": 350,
+    "ru": "Что советует твой друг? Он менеджер по продажам.",
+    "eng": "What does your friend advise? He's a sales manager.",
+    "level": "A1"
+  },
+  {
+    "id": 351,
+    "ru": "Почему этот билет стоит так дорого? (дёшево)",
+    "eng": "Why does this ticket cost so much? (cost so little)",
+    "level": "A1"
+  },
+  {
+    "id": 352,
+    "ru": "Сколько стоят эти джинсы? Все люди знают это.",
+    "eng": "How much do these jeans cost? All people know it.",
+    "level": "A1"
+  },
+  {
+    "id": 353,
+    "ru": "Сколько стоит эта пара брюк? Все знают это.",
+    "eng": "How much does this pair of trousers cost? Everyone knows it.",
+    "level": "A1"
+  },
+  {
+    "id": 354,
+    "ru": "Всё под контролем. Всё в порядке.",
+    "eng": "Everything is under control. Everything is OK.",
+    "level": "A1"
+  },
+  {
+    "id": 355,
+    "ru": "Всё очень дорого здесь. Всё кажется дорогим.",
+    "eng": "Everything is very expensive here. Everything seems expensive.",
+    "level": "A1"
+  },
+  {
+    "id": 356,
+    "ru": "Я не знаю, что делать. Я не знаю, что сказать.",
+    "eng": "I don't know what to do. I don't know what to say.",
+    "level": "A1"
+  },
+  {
+    "id": 357,
+    "ru": "Ты знаешь, как найти эту информацию?",
+    "eng": "Do you know how to find this information?",
+    "level": "A1"
+  },
+  {
+    "id": 358,
+    "ru": "Ты знаешь, что делать? Я не знаю, что сказать тебе.",
+    "eng": "Do you know what to do? I don't know what to tell you.",
+    "level": "A1"
+  },
+  {
+    "id": 359,
+    "ru": "Я не знаю, как этим пользоваться. Кого ты видишь?",
+    "eng": "I don't know how to use it. Who do you see?",
+    "level": "A1"
+  },
+  {
+    "id": 360,
+    "ru": "Ты думаешь, это хорошая цена? Что помогает тебе?",
+    "eng": "Do you think it's a good price? What helps you?",
+    "level": "A1"
   }
 ]
