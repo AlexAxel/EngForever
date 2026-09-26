@@ -36,7 +36,7 @@ try{
     const response=await route.fetch();
     const rows=(await response.json()).slice(0,5);
     const levels=["A1","A2","B1","A1","C1"];
-    await route.fulfill({response,contentType:"application/json",body:JSON.stringify(rows.map((p,i)=>({...p,level:levels[i]}))});
+    await route.fulfill({response,contentType:"application/json",body:JSON.stringify(rows.map((p,i)=>({...p,level:levels[i]})))});
   });
   await page.addInitScript(storageKey=>{
     const card=(enabled,attempts,correct)=>({enabled,manuallyDisabled:!enabled,learned:false,attempts,correct,hardness:attempts?40-correct:0,history:[]});
