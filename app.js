@@ -1,7 +1,7 @@
 const $=id=>document.getElementById(id);
 const KEY="eng-forever-v1";
 // Keep the v1 storage key: existing browser progress survives the UI redesign.
-const LEVELS=["A1","A2","B1","B2","C1"];
+const LEVELS=["A0","A1","A2","B1","B2","C1"];
 const TYPES=[{id:"translate",label:"Перевод",levels:LEVELS}];
 const phraseLevel=p=>LEVELS.includes(p?.level)?p.level:"A1";
 let phrases=[],state,queue=[],current=null,revealed=false,started=false,round=1,busy=false,toastTimer,transitionTimer;
@@ -254,7 +254,6 @@ function renderPhraseList(animate=false){
   }
 }
 function syncLevelControls(){
-  const active=allActive();
   for(const level of LEVELS){
     const levelPhrases=phrases.filter(p=>phraseLevel(p)===level);
     const selected=levelPhrases.filter(p=>cardState(p.id).enabled).length;
@@ -262,9 +261,12 @@ function syncLevelControls(){
     const count=$("level-count-"+level);
     if(count)count.textContent=String(levelPhrases.length);
     if(btn){
+      const fullySelected=levelPhrases.length>0&&selected===levelPhrases.length;
       btn.disabled=levelPhrases.length===0;
-      btn.setAttribute("aria-pressed",String(levelPhrases.length>0&&selected===levelPhrases.length&&active.length===levelPhrases.length));
-      btn.title=levelPhrases.length?("Выбрать только "+level+" · "+levelPhrases.length+" фраз"):"Фраз уровня "+level+" пока нет";
+      btn.setAttribute("aria-pressed",String(fullySelected));
+      btn.title=levelPhrases.length
+        ?((fullySelected?"Снять ":"Выбрать ")+level+" · "+levelPhrases.length+" фраз")
+        :"Фраз уровня "+level+" пока нет";
     }
   }
 }
@@ -301,13 +303,14 @@ function toggleLevel(level){
   if(!LEVELS.includes(level))return;
   const levelPhrases=phrases.filter(p=>phraseLevel(p)===level);
   if(!levelPhrases.length)return;
-  for(const p of phrases){
-    const on=phraseLevel(p)===level,c=cardState(p.id);
-    c.enabled=on;c.manuallyDisabled=!on;
+  const enable=levelPhrases.some(p=>!cardState(p.id).enabled);
+  for(const p of levelPhrases){
+    const c=cardState(p.id);
+    c.enabled=enable;c.manuallyDisabled=!enable;
   }
   restartAfterSelectionChange();
   syncSettings(true);
-  toast("Выбрано "+level+": "+levelPhrases.length+" фраз");
+  toast((enable?"Выбрано ":"Снято ")+level+": "+levelPhrases.length+" фраз");
 }
 function openSettings(){syncSettings();$("settings-dialog").showModal();}
 function showStats(){const attempt=phrases.reduce((sum,p)=>sum+cardState(p.id).attempts,0),correct=phrases.reduce((sum,p)=>sum+cardState(p.id).correct,0),hard=phrases.filter(p=>cardState(p.id).hardness>=15).length;$("stats-summary").replaceChildren();for(const [num,title] of [[String(attempt),"Ответов"],[attempt?Math.round(100*correct/attempt)+"%":"—","Узнаваемость"],[String(hard),"Сложных"]]){const el=document.createElement("div");el.className="stat";const n=document.createElement("strong");n.textContent=num;const t=document.createElement("span");t.textContent=title;el.append(n,t);$("stats-summary").append(el);}$("stats-list").replaceChildren();for(const p of phrases){const c=cardState(p.id),row=document.createElement("div");row.className="stat-row";const top=document.createElement("div");top.className="stat-row-top";const title=document.createElement("span");title.textContent="#"+p.id+" · "+p.ru;const count=document.createElement("span");count.textContent=c.attempts?Math.round(100*c.correct/c.attempts)+"%":"—";top.append(title,count);const sub=document.createElement("small");sub.textContent=c.attempts+" ответов · "+(c.attempts-c.correct)+" ошибок · сложность "+Math.round(c.hardness)+"/100"+(c.enabled?" · активна":"");const bar=document.createElement("div");bar.className="mini-track";const fill=document.createElement("div");fill.style.width=c.hardness+"%";bar.append(fill);row.append(top,sub,bar);$("stats-list").append(row);}$("stats-dialog").showModal();}
