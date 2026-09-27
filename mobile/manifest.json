@@ -1,9 +1,10 @@
 {
-  "version": "1.0.0",
-  "bundleUrl": null,
-  "checksum": null,
-  "notes": "Встроенная мобильная версия",
+  "version": "1.0.1",
+  "bundleUrl": "https://github.com/AlexAxel/EngForever/releases/download/mobile-web-v1.0.1/eng-forever-web-1.0.1.zip",
+  "checksum": "add6ba2763ad9c84d4ae44f0b3a155b64d72bd06ec0dd485d4527e58430402c7",
+  "notes": "New UPDATE! -- только тёмная тема --",
   "minNativeVersion": "1.0.0",
   "nativeDownloadUrl": null,
-  "publishedAt": "2026-09-27T00:00:00Z"
+  "sourceCommit": "ba0d83295bbc503bc5dcd74ece6b96f2bab373f2",
+  "publishedAt": "2026-09-27T18:02:30.044Z"
 }
