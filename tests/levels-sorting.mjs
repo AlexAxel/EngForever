@@ -26,8 +26,20 @@ try{
   assert.equal(await freshPage.locator('[data-select-level="A0"]').getAttribute("aria-pressed"),"true");
   assert.equal(await freshPage.locator('[data-select-level="A1"]').getAttribute("aria-pressed"),"true");
 
+  // Bulk selection must update in-place instead of rebuilding/measuring every row.
+  await freshPage.evaluate(()=>{window.__row281=document.querySelector('[data-id="281"]');});
+  const bulkMs=await freshPage.evaluate(async()=>{
+    const start=performance.now();
+    document.querySelector('[data-select-level="A1"]').click();
+    await new Promise(requestAnimationFrame);
+    return performance.now()-start;
+  });
+  assert.ok(bulkMs<500,"360-row level toggle should settle in under 500ms on CI, got "+Math.round(bulkMs)+"ms");
+  assert.equal(await freshPage.evaluate(()=>window.__row281===document.querySelector('[data-id="281"]')),true,"Bulk toggle must reuse existing phrase DOM rows");
+  assert.ok((await freshPage.locator(".phrase-option").evaluateAll(rows=>rows.reduce((n,r)=>n+r.getAnimations().length,0)))<=1,"Bulk selection must not animate hundreds of rows");
+  console.log("A1 bulk toggle: "+Math.round(bulkMs)+"ms");
+
   // Toggle only A1 off; A0 stays selected.
-  await freshPage.locator('[data-select-level="A1"]').click();
   let state=await freshPage.evaluate(snap);
   assert.equal(Object.values(state.cards).filter(c=>c.enabled).length,280);
   for(let id=1;id<=280;id++)assert.equal(state.cards[id].enabled,true);
