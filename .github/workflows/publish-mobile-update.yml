@@ -57,11 +57,9 @@ jobs:
         run: npm run build:mobile
       - name: Package OTA bundle with Capacitor Updater compatible ZIP
         run: |
-          npx @capgo/cli@8.68.0 bundle zip com.alexaxel.engforever             --path ./www             --bundle "$VERSION"             --name "eng-forever-web-$VERSION"             --no-code-check
-          ZIP_PATH="$(find . -maxdepth 3 -type f -name "eng-forever-web-$VERSION*.zip" | head -n 1)"
-          test -n "$ZIP_PATH" && test -f "$ZIP_PATH"
           TARGET="eng-forever-web-$VERSION.zip"
-          if [ "$ZIP_PATH" != "./$TARGET" ] && [ "$ZIP_PATH" != "$TARGET" ]; then mv "$ZIP_PATH" "$TARGET"; fi
+          npx @capgo/cli@8.68.0 bundle zip com.alexaxel.engforever --path ./www --bundle "$VERSION" --name "$TARGET" --no-code-check
+          test -f "$TARGET"
           CHECKSUM="$(sha256sum "$TARGET" | awk '{print $1}')"
           echo "ZIP_PATH=$TARGET" >> "$GITHUB_ENV"
           echo "CHECKSUM=$CHECKSUM" >> "$GITHUB_ENV"
@@ -77,7 +75,7 @@ jobs:
           fi
           RELEASE_NOTES="$NOTES"
           if [ -z "$RELEASE_NOTES" ]; then RELEASE_NOTES="Eng Forever mobile web update $VERSION."; fi
-          gh release create "$TAG" "$ZIP_PATH"             --title "Eng Forever mobile web $VERSION"             --notes "$RELEASE_NOTES"
+          gh release create "$TAG" "$ZIP_PATH" --title "Eng Forever mobile web $VERSION" --notes "$RELEASE_NOTES"
       - name: Point the mobile channel to the new bundle
         env:
           REPO: ${{ github.repository }}
