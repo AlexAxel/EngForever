@@ -45,12 +45,12 @@ jobs:
         run: npm run build:mobile
       - name: Verify OTA bundle packaging
         run: |
-          npx @capgo/cli@8.45.1 bundle zip com.alexaxel.engforever \
+          npx @capgo/cli@8.68.0 bundle zip com.alexaxel.engforever \
             --path ./www \
             --bundle 1.0.0 \
-            --name eng-forever-ota-verify \
+            --name eng-forever-ota-verify.zip \
             --no-code-check
-          test -n "$(find . -maxdepth 3 -type f -name 'eng-forever-ota-verify*.zip' -print -quit)"
+          test -f eng-forever-ota-verify.zip
       - name: Generate Capacitor Android project
         run: |
           npx cap add android
