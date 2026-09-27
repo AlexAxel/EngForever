@@ -1,0 +1,115 @@
+name: Publish mobile web update
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "OTA web version (semver, must increase, e.g. 1.0.1)"
+        required: true
+        type: string
+      notes:
+        description: "Text shown after update"
+        required: false
+        default: ""
+        type: string
+      min_native_version:
+        description: "Minimum native APK version compatible with this update"
+        required: true
+        default: "1.0.0"
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      VERSION: ${{ inputs.version }}
+      NOTES: ${{ inputs.notes }}
+      MIN_NATIVE_VERSION: ${{ inputs.min_native_version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate version and current mobile channel
+        run: |
+          git fetch origin mobile-updates
+          CURRENT_VERSION="$(git show origin/mobile-updates:mobile/manifest.json | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>process.stdout.write(JSON.parse(s).version))')"
+          node - "$CURRENT_VERSION" "$VERSION" "$MIN_NATIVE_VERSION" <<'NODE'
+          const [current,next,minNative]=process.argv.slice(2);
+          const valid=v=>/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(v);
+          const parts=v=>v.split(/[.+-]/).slice(0,3).map(n=>Number(n)||0);
+          const cmp=(a,b)=>{a=parts(a);b=parts(b);for(let i=0;i<3;i++){if(a[i]!==b[i])return a[i]-b[i]}return 0};
+          if(!valid(next)||!valid(minNative))throw new Error("version and min_native_version must be semver");
+          if(cmp(next,current)<=0)throw new Error(`OTA version ${next} must be greater than current ${current}`);
+          console.log(`Publishing mobile web ${next}; current is ${current}; requires native >= ${minNative}`);
+          NODE
+      - name: Install JavaScript dependencies
+        run: npm install --no-audit --no-fund
+      - name: Build the current web app for mobile
+        env:
+          MOBILE_WEB_VERSION: ${{ inputs.version }}
+        run: npm run build:mobile
+      - name: Package OTA bundle with Capacitor Updater compatible ZIP
+        run: |
+          npx @capgo/cli@8.45.1 bundle zip com.alexaxel.engforever             --path ./www             --bundle "$VERSION"             --name "eng-forever-web-$VERSION"             --no-code-check
+          ZIP_PATH="$(find . -maxdepth 3 -type f -name "eng-forever-web-$VERSION*.zip" | head -n 1)"
+          test -n "$ZIP_PATH" && test -f "$ZIP_PATH"
+          TARGET="eng-forever-web-$VERSION.zip"
+          if [ "$ZIP_PATH" != "./$TARGET" ] && [ "$ZIP_PATH" != "$TARGET" ]; then mv "$ZIP_PATH" "$TARGET"; fi
+          CHECKSUM="$(sha256sum "$TARGET" | awk '{print $1}')"
+          echo "ZIP_PATH=$TARGET" >> "$GITHUB_ENV"
+          echo "CHECKSUM=$CHECKSUM" >> "$GITHUB_ENV"
+          echo "Bundle checksum: $CHECKSUM"
+      - name: Publish immutable OTA bundle release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="mobile-web-v$VERSION"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "::error::Release $TAG already exists. OTA versions are immutable; choose a higher version."
+            exit 1
+          fi
+          RELEASE_NOTES="$NOTES"
+          if [ -z "$RELEASE_NOTES" ]; then RELEASE_NOTES="Eng Forever mobile web update $VERSION."; fi
+          gh release create "$TAG" "$ZIP_PATH"             --title "Eng Forever mobile web $VERSION"             --notes "$RELEASE_NOTES"
+      - name: Point the mobile channel to the new bundle
+        env:
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git worktree add -B mobile-updates /tmp/eng-mobile-updates origin/mobile-updates
+          BUNDLE_URL="https://github.com/$REPO/releases/download/mobile-web-v$VERSION/eng-forever-web-$VERSION.zip"
+          export BUNDLE_URL
+          mkdir -p /tmp/eng-mobile-updates/mobile
+          node <<'NODE'
+          const fs=require("fs");
+          const manifest={
+            version:process.env.VERSION,
+            bundleUrl:process.env.BUNDLE_URL,
+            checksum:process.env.CHECKSUM,
+            notes:process.env.NOTES||"",
+            minNativeVersion:process.env.MIN_NATIVE_VERSION,
+            nativeDownloadUrl:null,
+            sourceCommit:process.env.SHA,
+            publishedAt:new Date().toISOString()
+          };
+          fs.writeFileSync("/tmp/eng-mobile-updates/mobile/manifest.json",JSON.stringify(manifest,null,2)+"\n");
+          NODE
+          cd /tmp/eng-mobile-updates
+          git add mobile/manifest.json
+          git commit -m "Publish mobile web $VERSION"
+          git push origin mobile-updates
+      - name: Upload OTA bundle as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eng-forever-mobile-web-${{ inputs.version }}
+          path: ${{ env.ZIP_PATH }}
+          retention-days: 14
