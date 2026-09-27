@@ -20,7 +20,7 @@ jobs:
           import fs from 'node:fs';
           import assert from 'node:assert/strict';
           const cards=JSON.parse(fs.readFileSync('data/phrases.json','utf8'));
-          const levels=new Set(['A1','A2','B1','B2','C1']);
+          const levels=new Set(['A0','A1','A2','B1','B2','C1']);
           assert.ok(cards.length>=360,'Expected notebook pairs 1–360');
           assert.equal(new Set(cards.map(p=>p.id)).size,cards.length);
           for(let id=1;id<=cards.length;id++){
