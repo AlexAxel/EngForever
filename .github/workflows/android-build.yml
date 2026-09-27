@@ -54,13 +54,15 @@ jobs:
         with:
           distribution: temurin
           java-version: "21"
+      - name: Validate version name
+        run: |
+          node -e 'if(!/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(process.env.VERSION_NAME)){console.error("Invalid VERSION_NAME:",process.env.VERSION_NAME);process.exit(1)}'
       - name: Install Android SDK 36
         run: |
           SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort | tail -n 1)"
           test -x "$SDKMANAGER"
           yes | "$SDKMANAGER" --licenses >/dev/null 2>&1 || true
           "$SDKMANAGER" "platforms;android-36" "build-tools;36.0.0"
-          node -e 'if(!/^\\d+\\.\\d+\\.\\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(process.env.VERSION_NAME)) process.exit(1)'
       - name: Prepare monotonically increasing Android version code
         run: |
           echo "VERSION_CODE=$((100000 + GITHUB_RUN_NUMBER))" >> "$GITHUB_ENV"
