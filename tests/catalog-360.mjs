@@ -48,7 +48,8 @@ try{
   }
   await page.locator("#settings-open").click();
   assert.equal(await page.locator("#phrase-list .phrase-option").count(),360);
-  assert.equal(await page.locator("#level-count-A1").textContent(),"360");
+  assert.equal(await page.locator("#level-count-A0").textContent(),"280");
+  assert.equal(await page.locator("#level-count-A1").textContent(),"80");
   for(let id=281;id<=360;id++)assert.equal(await page.locator('#phrase-list .phrase-option[data-id="'+id+'"] input').isChecked(),false);
   await page.locator("#settings-done").click();
   await page.reload();
