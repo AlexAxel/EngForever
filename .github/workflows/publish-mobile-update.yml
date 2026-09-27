@@ -57,7 +57,7 @@ jobs:
         run: npm run build:mobile
       - name: Package OTA bundle with Capacitor Updater compatible ZIP
         run: |
-          npx @capgo/cli@8.45.1 bundle zip com.alexaxel.engforever             --path ./www             --bundle "$VERSION"             --name "eng-forever-web-$VERSION"             --no-code-check
+          npx @capgo/cli@8.68.0 bundle zip com.alexaxel.engforever             --path ./www             --bundle "$VERSION"             --name "eng-forever-web-$VERSION"             --no-code-check
           ZIP_PATH="$(find . -maxdepth 3 -type f -name "eng-forever-web-$VERSION*.zip" | head -n 1)"
           test -n "$ZIP_PATH" && test -f "$ZIP_PATH"
           TARGET="eng-forever-web-$VERSION.zip"
