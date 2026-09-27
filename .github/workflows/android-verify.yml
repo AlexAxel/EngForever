@@ -60,6 +60,17 @@ jobs:
       - name: Build debug APK
         working-directory: android
         run: ./gradlew assembleDebug --stacktrace
+      - name: Verify release APK/AAB signing pipeline with an ephemeral CI key
+        run: |
+          keytool -genkeypair -storetype PKCS12 -keystore "$RUNNER_TEMP/verify.keystore" -storepass verify-only-password -keypass verify-only-password -alias verify -keyalg RSA -keysize 2048 -validity 2 -dname "CN=CI Verify"
+          (cd android && ./gradlew assembleRelease bundleRelease --stacktrace)
+          mkdir -p "$RUNNER_TEMP/release-verify"
+          BUILD_TOOLS="$ANDROID_HOME/build-tools/36.0.0"
+          "$BUILD_TOOLS/zipalign" -f -p 4 android/app/build/outputs/apk/release/app-release-unsigned.apk "$RUNNER_TEMP/release-verify/aligned.apk"
+          "$BUILD_TOOLS/apksigner" sign --ks "$RUNNER_TEMP/verify.keystore" --ks-type PKCS12 --ks-key-alias verify --ks-pass pass:verify-only-password --key-pass pass:verify-only-password --out "$RUNNER_TEMP/release-verify/EngForever.apk" "$RUNNER_TEMP/release-verify/aligned.apk"
+          "$BUILD_TOOLS/apksigner" verify --verbose "$RUNNER_TEMP/release-verify/EngForever.apk"
+          jarsigner -keystore "$RUNNER_TEMP/verify.keystore" -storetype PKCS12 -storepass verify-only-password -keypass verify-only-password -sigalg SHA256withRSA -digestalg SHA-256 -signedjar "$RUNNER_TEMP/release-verify/EngForever.aab" android/app/build/outputs/bundle/release/app-release.aab verify
+          jarsigner -verify "$RUNNER_TEMP/release-verify/EngForever.aab" >/dev/null
       - name: Upload verification APK
         uses: actions/upload-artifact@v4
         with:
