@@ -43,8 +43,10 @@ jobs:
           java-version: "21"
       - name: Install Android SDK 36
         run: |
-          yes | sdkmanager --licenses >/dev/null 2>&1 || true
-          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort | tail -n 1)"
+          test -x "$SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses >/dev/null 2>&1 || true
+          "$SDKMANAGER" "platforms;android-36" "build-tools;36.0.0"
       - name: Validate signing configuration
         run: |
           test -n "$ANDROID_KEYSTORE_BASE64" || (echo "::error::Missing ANDROID_KEYSTORE_BASE64 repository secret" && exit 1)
