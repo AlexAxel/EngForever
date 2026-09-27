@@ -15,6 +15,15 @@
   --green:#90E0BB;--green-soft:#21483B;--red:#FFADB0;--red-soft:#513338;
   --review:#F0C47A;--review-soft:#50402A;--shadow:0 25px 70px rgba(0,0,0,.19)}
 }
+/* The Android bundle adds this class at build time so the native app keeps the
+   intended dark visual language regardless of the phone's system theme. */
+html.mobile-force-dark{
+ color-scheme:dark;
+ --bg:#121E20;--surface:#1B2B2D;--text:#EEF5F0;--muted:#B0C0B9;
+ --line:#365053;--accent:#80CFB7;--accent-soft:#294B45;
+ --green:#90E0BB;--green-soft:#21483B;--red:#FFADB0;--red-soft:#513338;
+ --review:#F0C47A;--review-soft:#50402A;--shadow:0 25px 70px rgba(0,0,0,.19)
+}
 *{box-sizing:border-box}
 html{min-height:100%;-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font:500 15px/1.48 var(--body);-webkit-tap-highlight-color:transparent}
@@ -346,3 +355,50 @@ legend #selected-count{color:var(--accent);font-variant-numeric:tabular-nums}
  .card.level-A1:not(.bonus-review) .answer-sheet{background:linear-gradient(135deg,#455C62,#263A3E 50%,#536A70);border-color:#769098;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 16px rgba(110,219,242,.12)}
  .card.level-A1:not(.bonus-review) .pill{color:#DDE8EA;background:rgba(255,255,255,.055);border-color:#607479}
 }
+
+html.mobile-force-dark .level-badge.level-A0,
+html.mobile-force-dark .phrase-level.level-A0,
+html.mobile-force-dark .level-chip.level-A0{
+ color:#FFF2E5;border-color:#B77B55;
+ background:linear-gradient(135deg,#A66C44 0%,#5A331E 28%,#C48A62 50%,#633921 72%,#A96F47 100%);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 0 10px rgba(255,190,135,.34),0 0 20px rgba(245,125,50,.24)
+}
+html.mobile-force-dark .card.level-A0:not(.bonus-review){
+ background:
+  radial-gradient(circle at 18% 8%,rgba(255,235,216,.12) 0 8%,rgba(255,255,255,0) 30%),
+  linear-gradient(122deg,#4A2B1D 0%,#7C4C2D 18%,#392318 36%,#A66A43 52%,#43291B 68%,#744529 84%,#322017 100%);
+ border-color:#B9794F;
+ box-shadow:0 0 0 1px rgba(255,221,192,.12),0 0 18px rgba(255,153,84,.24),0 0 36px rgba(230,104,35,.18),var(--shadow)
+}
+html.mobile-force-dark .card.level-A0:not(.bonus-review)::before{
+ background:linear-gradient(90deg,transparent,#D28B56 18%,#FFF0DE 43%,#FFB26D 50%,#FFEEDF 57%,#C47745 82%,transparent);
+ box-shadow:0 0 11px rgba(255,218,183,.44),0 0 26px rgba(255,126,47,.36)
+}
+html.mobile-force-dark .card.level-A0:not(.bonus-review) .answer-sheet{
+ background:linear-gradient(135deg,#69432C,#43291B 50%,#795035);border-color:#A36C49;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 16px rgba(255,132,56,.14)
+}
+html.mobile-force-dark .card.level-A0:not(.bonus-review) .pill{color:#FFE8D4;background:rgba(255,255,255,.055);border-color:#A87250}
+html.mobile-force-dark .level-badge.level-A1,
+html.mobile-force-dark .phrase-level.level-A1,
+html.mobile-force-dark .level-chip.level-A1{
+ color:#F4FCFF;border-color:#8099A0;
+ background:linear-gradient(135deg,#7E949A 0%,#2E4146 28%,#A4B8BD 50%,#33474C 72%,#8FA4AA 100%);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.34),0 0 10px rgba(207,244,255,.35),0 0 20px rgba(120,214,236,.22)
+}
+html.mobile-force-dark .card.level-A1:not(.bonus-review){
+ background:
+  radial-gradient(circle at 18% 8%,rgba(255,255,255,.11) 0 8%,rgba(255,255,255,0) 30%),
+  linear-gradient(122deg,#2B3B3F 0%,#50666C 18%,#223337 36%,#6E848A 52%,#263A3E 68%,#52686E 84%,#1F3135 100%);
+ border-color:#89A3AA;
+ box-shadow:0 0 0 1px rgba(220,247,255,.11),0 0 18px rgba(155,231,248,.22),0 0 36px rgba(107,200,222,.16),var(--shadow)
+}
+html.mobile-force-dark .card.level-A1:not(.bonus-review)::before{
+ background:linear-gradient(90deg,transparent,#8DC7D5 18%,#FFFFFF 43%,#CFF8FF 50%,#FFFFFF 57%,#83B9C6 82%,transparent);
+ box-shadow:0 0 11px rgba(213,250,255,.46),0 0 26px rgba(104,221,247,.34)
+}
+html.mobile-force-dark .card.level-A1:not(.bonus-review) .answer-sheet{
+ background:linear-gradient(135deg,#455C62,#263A3E 50%,#536A70);border-color:#769098;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 0 16px rgba(110,219,242,.12)
+}
+html.mobile-force-dark .card.level-A1:not(.bonus-review) .pill{color:#DDE8EA;background:rgba(255,255,255,.055);border-color:#607479}
