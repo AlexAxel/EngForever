@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#F5F5F0">
   <meta name="description" content="Eng Forever — тренируй перевод фраз в своём темпе">
   <title>Eng Forever · Тренировка перевода</title>
-  <link rel="stylesheet" href="./styles.css?v=design-3">
-  <script type="module" src="./app.js?v=design-2"></script>
+  <link rel="stylesheet" href="./styles.css?v=design-4">
+  <script type="module" src="./app.js?v=design-3"></script>
 </head>
 <body>
 <div class="app">
@@ -61,14 +61,15 @@
   </main>
   <footer class="footer"><span id="footer-status">Прогресс хранится на этом устройстве</span><button id="stats-open" class="text-btn" type="button">Статистика ↗</button></footer>
 </div>
-<dialog id="settings-dialog" class="modal"><div class="modal-head"><div><div class="eyebrow">ТВОЙ РЕЖИМ</div><h2>Настройки</h2></div><button class="icon-btn close" data-close="settings-dialog" aria-label="Закрыть">✕</button></div><div class="modal-body"><fieldset><legend>Язык на лицевой стороне</legend><label class="option"><input type="radio" name="language" value="ru"><span>Русский <small>Перевести на английский</small></span></label><label class="option"><input type="radio" name="language" value="eng"><span>English <small>Перевести на русский</small></span></label></fieldset><fieldset><legend>Типы карточек</legend><div class="setting-note">Сейчас доступен тип «Перевод». Уровень CEFR хранится у каждой фразы отдельно: A1, A2, B1, B2 или C1.</div><label class="option"><span>Перевод <small>Доля в случайной выборке</small></span><strong>100%</strong></label><label class="option"><span>Распределение <small>Автоматически / вручную</small></span><select id="mode"><option value="auto">Автоматически</option><option value="manual">Вручную</option></select></label></fieldset>
+<dialog id="settings-dialog" class="modal"><div class="modal-head"><div><div class="eyebrow">ТВОЙ РЕЖИМ</div><h2>Настройки</h2></div><button class="icon-btn close" data-close="settings-dialog" aria-label="Закрыть">✕</button></div><div class="modal-body"><fieldset><legend>Язык на лицевой стороне</legend><label class="option"><input type="radio" name="language" value="ru"><span>Русский <small>Перевести на английский</small></span></label><label class="option"><input type="radio" name="language" value="eng"><span>English <small>Перевести на русский</small></span></label></fieldset><fieldset><legend>Типы карточек</legend><div class="setting-note">Сейчас доступен тип «Перевод». Уровень CEFR хранится у каждой фразы отдельно: A0, A1, A2, B1, B2 или C1.</div><label class="option"><span>Перевод <small>Доля в случайной выборке</small></span><strong>100%</strong></label><label class="option"><span>Распределение <small>Автоматически / вручную</small></span><select id="mode"><option value="auto">Автоматически</option><option value="manual">Вручную</option></select></label></fieldset>
 <fieldset><legend>Активные фразы <span id="selected-count"></span></legend>
   <div class="setting-note">Сначала показываются выбранные фразы. Внутри каждой группы выше идут фразы с меньшей узнаваемостью.</div>
   <div class="bulk bulk-primary"><button id="select-all" class="secondary">Выбрать все</button><button id="select-none" class="secondary">Снять все</button></div>
   <div class="level-picker" aria-label="Быстрый выбор уровня английского">
     <span class="level-picker-label">Выбрать уровень</span>
     <div class="level-chips">
-      <button class="level-chip level-A1" data-select-level="A1" type="button">A1 <small id="level-count-A1">0</small></button>
+      <button class="level-chip level-A0" data-select-level="A0" type="button" aria-pressed="false">A0 <small id="level-count-A0">0</small></button>
+      <button class="level-chip level-A1" data-select-level="A1" type="button" aria-pressed="false">A1 <small id="level-count-A1">0</small></button>
       <button class="level-chip level-A2" data-select-level="A2" type="button">A2 <small id="level-count-A2">0</small></button>
       <button class="level-chip level-B1" data-select-level="B1" type="button">B1 <small id="level-count-B1">0</small></button>
       <button class="level-chip level-B2" data-select-level="B2" type="button">B2 <small id="level-count-B2">0</small></button>
