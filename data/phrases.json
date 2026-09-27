@@ -2158,5 +2158,485 @@
     "ru": "Ты думаешь, это хорошая цена? Что помогает тебе?",
     "eng": "Do you think it's a good price? What helps you?",
     "level": "A1"
+  },
+  {
+    "id": 361,
+    "ru": "Кто знает это? Что вдохновляет тебя?",
+    "eng": "Who knows it? What inspires you?",
+    "level": "A1"
+  },
+  {
+    "id": 362,
+    "ru": "Что кажется лучше? Что интересует тебя?",
+    "eng": "What seems better? What interests you?",
+    "level": "A1"
+  },
+  {
+    "id": 363,
+    "ru": "Что звучит интереснее? Что беспокоит тебя?",
+    "eng": "What sounds more interesting? What worries you?",
+    "level": "A1"
+  },
+  {
+    "id": 364,
+    "ru": "Я обожаю изучать иностранные языки.",
+    "eng": "I enjoy learning foreign languages.",
+    "level": "A1"
+  },
+  {
+    "id": 365,
+    "ru": "Что касается меня, я действительно обожаю путешествовать.",
+    "eng": "As for me, I really enjoy travelling.",
+    "level": "A1"
+  },
+  {
+    "id": 366,
+    "ru": "Я не знаю, как ответить на этот вопрос.",
+    "eng": "I don't know how to answer this question.",
+    "level": "A1"
+  },
+  {
+    "id": 367,
+    "ru": "Почему ты так сильно об этом беспокоишься?",
+    "eng": "Why do you worry about it so much?",
+    "level": "A1"
+  },
+  {
+    "id": 368,
+    "ru": "Я ожидаю, что это произойдёт рано или поздно. (однажды)",
+    "eng": "I expect that it'll happen sooner or later. (one day)",
+    "level": "A1"
+  },
+  {
+    "id": 369,
+    "ru": "Я предполагаю, что это будет лучшее решение в этой ситуации.",
+    "eng": "I suppose that it'll be the best decision in this situation.",
+    "level": "A1"
+  },
+  {
+    "id": 370,
+    "ru": "Я предполагаю, что это будет хорошее решение этой проблемы.",
+    "eng": "I suppose that it'll be a good solution to this problem.",
+    "level": "A1"
+  },
+  {
+    "id": 371,
+    "ru": "Я уверен, что ты сможешь это сделать.",
+    "eng": "I'm sure that you'll be able to do it.",
+    "level": "A1"
+  },
+  {
+    "id": 372,
+    "ru": "Я думаю, смогу прийти. Я смогу решить эту проблему.",
+    "eng": "I think I'll be able to come. I'll be able to solve this problem.",
+    "level": "A1"
+  },
+  {
+    "id": 373,
+    "ru": "Я смогу накопить достаточно денег чтобы купить дом.",
+    "eng": "I'll be able to save up enough money to buy a house.",
+    "level": "A1"
+  },
+  {
+    "id": 374,
+    "ru": "Мне кажется, что он сможет помочь нам.",
+    "eng": "It seems to me that he'll be able to help us.",
+    "level": "A1"
+  },
+  {
+    "id": 375,
+    "ru": "Я надеюсь, что это будет так. Это будет действительно так.",
+    "eng": "I hope that it'll be so. It'll be really so.",
+    "level": "A1"
+  },
+  {
+    "id": 376,
+    "ru": "Я очень надеюсь, что это не случится. Это будет правильно.",
+    "eng": "I really hope that it won't happen. It'll be right.",
+    "level": "A1"
+  },
+  {
+    "id": 377,
+    "ru": "Ты найдёшь решение этой проблемы.",
+    "eng": "You'll find a solution to this problem.",
+    "level": "A1"
+  },
+  {
+    "id": 378,
+    "ru": "Я боюсь, что он не послушает это. Он не сможет это сделать.",
+    "eng": "I'm afraid that he won't listen to it. He won't be able to do it.",
+    "level": "A1"
+  },
+  {
+    "id": 379,
+    "ru": "Она неправильно поймёт тебя. Он переехал в другой город.",
+    "eng": "She'll misunderstand you. He moved to another city.",
+    "level": "A1"
+  },
+  {
+    "id": 380,
+    "ru": "Я постараюсь найти время на это.",
+    "eng": "I'll try to find time for it.",
+    "level": "A1"
+  },
+  {
+    "id": 381,
+    "ru": "Я постараюсь сделать всё возможное чтобы помочь тебе.",
+    "eng": "I'll try to do my best to help you.",
+    "level": "A1"
+  },
+  {
+    "id": 382,
+    "ru": "Я постараюсь найти более хорошую работу.",
+    "eng": "I'll try to find a better job.",
+    "level": "A1"
+  },
+  {
+    "id": 383,
+    "ru": "Я сделаю это лучше в следующий раз.",
+    "eng": "I'll do it better next time.",
+    "level": "A1"
+  },
+  {
+    "id": 384,
+    "ru": "Мне нужно будет подумать об этом. Было очень темно.",
+    "eng": "I'll need to think about it. It was very dark.",
+    "level": "A1"
+  },
+  {
+    "id": 385,
+    "ru": "Я хотел поехать в отпуск. Я посмотрел на это ещё раз.",
+    "eng": "I wanted to go on holiday. I looked at it one more time.",
+    "level": "A1"
+  },
+  {
+    "id": 386,
+    "ru": "Я пользовался той услугой время от времени.",
+    "eng": "I used that service from time to time.",
+    "level": "A1"
+  },
+  {
+    "id": 387,
+    "ru": "Я был на выставке и общался с иностранцами.",
+    "eng": "I was at the exhibition and communicated with foreigners.",
+    "level": "A1"
+  },
+  {
+    "id": 388,
+    "ru": "Я работал почти каждый день. Он перезвонил мне час назад.",
+    "eng": "I worked almost every day. He called me back an hour ago.",
+    "level": "A1"
+  },
+  {
+    "id": 389,
+    "ru": "Он задал мне пару вопросов. Мне нужно было что-то сказать.",
+    "eng": "He asked me a couple of questions. I needed to say something.",
+    "level": "A1"
+  },
+  {
+    "id": 390,
+    "ru": "Это казалось очень мудрым решением. Мы повернули назад.",
+    "eng": "It seemed a very wise decision. We turned back.",
+    "level": "A1"
+  },
+  {
+    "id": 391,
+    "ru": "Они часто разговаривали по телефону.",
+    "eng": "They often talked on the phone.",
+    "level": "A1"
+  },
+  {
+    "id": 392,
+    "ru": "Это случилось со мной так неожиданно.",
+    "eng": "It happened to me so unexpectedly.",
+    "level": "A1"
+  },
+  {
+    "id": 393,
+    "ru": "Они жили очень счастливо. Я думаю это изменило мою жизнь.",
+    "eng": "They lived very happily. I think that it changed my life.",
+    "level": "A1"
+  },
+  {
+    "id": 394,
+    "ru": "Я смотрел весь фильм. Я последовал её совету.",
+    "eng": "I watched all the movie. I followed her advice.",
+    "level": "A1"
+  },
+  {
+    "id": 395,
+    "ru": "Мне очень понравилось то объяснение. Я поверил ему вначале.",
+    "eng": "I really liked that explanation. I believed him in the beginning.",
+    "level": "A1"
+  },
+  {
+    "id": 396,
+    "ru": "Я старался сделать всё возможное чтобы достичь этой цели.",
+    "eng": "I tried to do my best to achieve this aim.",
+    "level": "A1"
+  },
+  {
+    "id": 397,
+    "ru": "Я перестал тратить своё время впустую.",
+    "eng": "I stopped wasting my time.",
+    "level": "A1"
+  },
+  {
+    "id": 398,
+    "ru": "Это создавало новые проблемы. (трудности)",
+    "eng": "It created new problems. (difficulties)",
+    "level": "A1"
+  },
+  {
+    "id": 399,
+    "ru": "Я открыл коробку и был очень удивлён.",
+    "eng": "I opened the box and I was very surprised.",
+    "level": "A1"
+  },
+  {
+    "id": 400,
+    "ru": "Я часто гулял в парке, когда у меня было свободное время.",
+    "eng": "I often walked in the park when I had free time.",
+    "level": "A1"
+  },
+  {
+    "id": 401,
+    "ru": "Я всё вспомнил. Я подождал его одну минуту. (немного)",
+    "eng": "I remembered everything. I waited for him a bit. (a little)",
+    "level": "A1"
+  },
+  {
+    "id": 402,
+    "ru": "Я ожидал более высокий доход. Я сдал экзамен успешно.",
+    "eng": "I expected a higher income. I passed the exam successfully.",
+    "level": "A1"
+  },
+  {
+    "id": 403,
+    "ru": "Он ожидал более высокую зарплату. Я решил не делать это.",
+    "eng": "He expected a higher salary. I decided not to do it.",
+    "level": "A1"
+  },
+  {
+    "id": 404,
+    "ru": "Я вернулся домой позже чем обычно. Я сохранил все файлы.",
+    "eng": "I returned home later than usual. I saved all the files.",
+    "level": "A1"
+  },
+  {
+    "id": 405,
+    "ru": "Учитель объяснил всё очень ясно. Это создавало новые проблемы.",
+    "eng": "The teacher explained everything very clearly. It created new problems.",
+    "level": "A1"
+  },
+  {
+    "id": 406,
+    "ru": "Это развило мои аналитические способности.",
+    "eng": "It developed my analytical abilities.",
+    "level": "A1"
+  },
+  {
+    "id": 407,
+    "ru": "Я поблагодарил их за их помощь. Они перестали разговаривать.",
+    "eng": "I thanked them for their help. They stopped talking.",
+    "level": "A1"
+  },
+  {
+    "id": 408,
+    "ru": "Они производили разные товары. Все прибыли вовремя.",
+    "eng": "They produced different goods. Everyone arrived on time.",
+    "level": "A1"
+  },
+  {
+    "id": 409,
+    "ru": "Он предложил мне свою помощь. Я подготовился к этому тесту.",
+    "eng": "He offered me his help. I prepared for this test.",
+    "level": "A1"
+  },
+  {
+    "id": 410,
+    "ru": "Он всегда поддерживал меня, когда я был в беде.",
+    "eng": "He always supported me when I was in trouble.",
+    "level": "A1"
+  },
+  {
+    "id": 411,
+    "ru": "Я очень любил проводить там время. Я пожелал ему удачи.",
+    "eng": "I really loved spending time there. I wished him good luck.",
+    "level": "A1"
+  },
+  {
+    "id": 412,
+    "ru": "Я очень устал и решил остаться дома. Она заплакала вдруг.",
+    "eng": "I was very tired and I decided to stay at home. She cried suddenly.",
+    "level": "A1"
+  },
+  {
+    "id": 413,
+    "ru": "Я присоединился к этой группе. Он заботился только о себе.",
+    "eng": "I joined this group. He only cared about himself.",
+    "level": "A1"
+  },
+  {
+    "id": 414,
+    "ru": "Мой друг поделился этой ссылкой со мной. Он провалил тест.",
+    "eng": "My friend shared this link with me. He failed the test.",
+    "level": "A1"
+  },
+  {
+    "id": 415,
+    "ru": "Я ненавидел делать это. Я в основном заказывал это онлайн.",
+    "eng": "I hated doing it. I mostly ordered it online.",
+    "level": "A1"
+  },
+  {
+    "id": 416,
+    "ru": "Я так счастлив, что достиг этой цели. Я помыл посуду.",
+    "eng": "I'm so happy that I achieved this aim. I washed the dishes.",
+    "level": "A1"
+  },
+  {
+    "id": 417,
+    "ru": "Эта теория действительно существовала. Я понял всё сразу.",
+    "eng": "This theory really existed. I understood everything immediately.",
+    "level": "A1"
+  },
+  {
+    "id": 418,
+    "ru": "Они отказались отвечать на этот вопрос.",
+    "eng": "They refused to answer this question.",
+    "level": "A1"
+  },
+  {
+    "id": 419,
+    "ru": "Я проверил все документы. Я выразил своё отношение к этому.",
+    "eng": "I checked all the documents. I expressed my attitude to it.",
+    "level": "A1"
+  },
+  {
+    "id": 420,
+    "ru": "Я выразил свою личную точку зрения. Мы всё обсудили.",
+    "eng": "I expressed my personal point of view. We discussed everything.",
+    "level": "A1"
+  },
+  {
+    "id": 421,
+    "ru": "Группа выпустила новый альбом. Он убрал свою комнату.",
+    "eng": "The band released a new album. He cleaned his room.",
+    "level": "A1"
+  },
+  {
+    "id": 422,
+    "ru": "Она танцевала профессионально. Я тренировался очень интенсивно.",
+    "eng": "She danced professionally. I trained very intensively.",
+    "level": "A1"
+  },
+  {
+    "id": 423,
+    "ru": "Они доставили посылку вовремя. Я предпочитал всё планировать.",
+    "eng": "They delivered the parcel on time. I preferred to plan everything.",
+    "level": "A1"
+  },
+  {
+    "id": 424,
+    "ru": "Он улыбнулся ей, и она улыбнулась ему. Он поцеловал её.",
+    "eng": "He smiled at her and she smiled at him. He kissed her.",
+    "level": "A1"
+  },
+  {
+    "id": 425,
+    "ru": "Я улучшил свои навыки аудирования очень сильно благодаря практике.",
+    "eng": "I improved my listening skills greatly thanks to the practice.",
+    "level": "A1"
+  },
+  {
+    "id": 426,
+    "ru": "Я повторил снова свой вопрос. Эта речь вдохновила меня.",
+    "eng": "I repeated my question again. This speech inspired me.",
+    "level": "A1"
+  },
+  {
+    "id": 427,
+    "ru": "Успех этого проекта зависел от каждого из нас.",
+    "eng": "The success of this project depended on each of us.",
+    "level": "A1"
+  },
+  {
+    "id": 428,
+    "ru": "Он пожаловался на это менеджеру. Это имело значение.",
+    "eng": "He complained about it to the manager. It mattered.",
+    "level": "A1"
+  },
+  {
+    "id": 429,
+    "ru": "Они разрушили это здание полностью. Они смеялись над этим.",
+    "eng": "They destroyed this building completely. They laughed at it.",
+    "level": "A1"
+  },
+  {
+    "id": 430,
+    "ru": "Он пригласил меня на эту вечеринку. Они всё контролировали.",
+    "eng": "He invited me to this party. They controlled everything.",
+    "level": "A1"
+  },
+  {
+    "id": 431,
+    "ru": "Этот писатель опубликовал более десяти книг.",
+    "eng": "This writer published more than ten books.",
+    "level": "A1"
+  },
+  {
+    "id": 432,
+    "ru": "Этот бизнес принадлежал ему. Я пожелал ей всего наилучшего.",
+    "eng": "This business belonged to him. I wished her all the best.",
+    "level": "A1"
+  },
+  {
+    "id": 433,
+    "ru": "Он записал новое видео. Они отправили мне это уведомление.",
+    "eng": "He recorded a new video. They sent me this notification.",
+    "level": "A1"
+  },
+  {
+    "id": 434,
+    "ru": "Я нашёл некоторые ошибки и исправил их.",
+    "eng": "I found some mistakes and corrected them.",
+    "level": "A1"
+  },
+  {
+    "id": 435,
+    "ru": "Я катался на велосипеде вчера. Они дали ему ещё один шанс.",
+    "eng": "I rode a bike yesterday. They gave him one more chance.",
+    "level": "A1"
+  },
+  {
+    "id": 436,
+    "ru": "Урок начался полчаса назад. Это задело её чувства очень сильно.",
+    "eng": "The lesson began half an hour ago. It hurt her feelings greatly.",
+    "level": "A1"
+  },
+  {
+    "id": 437,
+    "ru": "Они боролись за свои права, свободу и независимость.",
+    "eng": "They fought for their rights, freedom and independence.",
+    "level": "A1"
+  },
+  {
+    "id": 438,
+    "ru": "Кто-то украл её сумку. Я ушёл из дома очень рано.",
+    "eng": "Someone stole her bag. I left home very early.",
+    "level": "A1"
+  },
+  {
+    "id": 439,
+    "ru": "Она простила его в конце. Звонок зазвонил пять минут назад.",
+    "eng": "She forgave him in the end. The bell rang five minutes ago.",
+    "level": "A1"
+  },
+  {
+    "id": 440,
+    "ru": "Я говорил по-английски, когда у меня была возможность.",
+    "eng": "I spoke English when I had an opportunity.",
+    "level": "A1"
   }
 ]
