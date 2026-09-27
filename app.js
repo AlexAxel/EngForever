@@ -336,12 +336,12 @@ function togglePhrase(id,on){
   syncSettings(id);
 }
 function toggleAll(on){
-  let changed=false;
   for(const p of phrases){
     const c=cardState(p.id);
-    if(c.enabled!==on){c.enabled=on;c.manuallyDisabled=!on;changed=true;}
+    c.enabled=on;c.manuallyDisabled=!on;
   }
-  if(!changed)return;
+  // Preserve the existing contract: even pressing an already-satisfied
+  // "Выбрать все" / "Снять все" begins a fresh training session.
   restartAfterSelectionChange();
   // Bulk operations deliberately skip FLIP animation: thousands of measured
   // rows are much slower than one immediate reorder.
