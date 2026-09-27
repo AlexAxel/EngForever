@@ -43,6 +43,11 @@ jobs:
           MOBILE_WEB_VERSION: "1.0.0"
           NATIVE_VERSION: "1.0.0"
         run: npm run build:mobile
+      - name: Verify Android bundle forces dark theme
+        run: |
+          grep -q 'class="mobile-force-dark"' www/index.html
+          grep -q 'name="theme-color" content="#121E20"' www/index.html
+          grep -q 'name="color-scheme" content="dark"' www/index.html
       - name: Verify OTA bundle packaging
         run: |
           npx @capgo/cli@8.68.0 bundle zip com.alexaxel.engforever \
