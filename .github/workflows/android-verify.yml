@@ -1,0 +1,58 @@
+name: Verify Android shell
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "package.json"
+      - "capacitor.config.json"
+      - "mobile/**"
+      - "scripts/build-mobile.mjs"
+      - "scripts/set-android-version.mjs"
+      - ".github/workflows/android-verify.yml"
+      - ".github/workflows/android-build.yml"
+      - ".github/workflows/publish-mobile-update.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-debug:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: android-actions/setup-android@v3
+      - name: Install Android SDK 36
+        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+      - name: Install JavaScript dependencies
+        run: npm install --no-audit --no-fund
+      - name: Build mobile web bundle
+        env:
+          MOBILE_WEB_VERSION: "1.0.0"
+          NATIVE_VERSION: "1.0.0"
+        run: npm run build:mobile
+      - name: Generate Capacitor Android project
+        run: |
+          npx cap add android
+          npx cap sync android
+      - name: Set Android version
+        run: npm run android:version -- 1.0.0 "${{ github.run_number }}"
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug --stacktrace
+      - name: Upload verification APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: eng-forever-android-debug-verification
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 3
