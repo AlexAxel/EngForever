@@ -134,7 +134,7 @@ async function applyWebUpdate(manifest){
 async function startNativeGate(){
   ensureOverlay();
   updateOverlay("Проверяем обновления","Подготавливаем актуальную мобильную версию…",12);
-  try{localBuild=await readLocalBuild();}
+  try{localBuild=await readLocalBuild();const builtin=await CapacitorUpdater.getBuiltinVersion();if(typeof builtin==="string"&&builtin)localBuild.nativeVersion=builtin;}
   catch(error){
     console.error("Missing mobile-build.json",error);
     blockWithAction("Ошибка мобильной сборки","Не удалось определить версию приложения.","Перезапустить",()=>location.reload());
