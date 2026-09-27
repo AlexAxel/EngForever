@@ -1,0 +1,15 @@
+{
+  "appId": "com.alexaxel.engforever",
+  "appName": "Eng Forever",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#F5F5F0"
+  },
+  "plugins": {
+    "CapacitorUpdater": {
+      "autoUpdate": "off",
+      "appReadyTimeout": 180000,
+      "resetWhenUpdate": true
+    }
+  }
+}
