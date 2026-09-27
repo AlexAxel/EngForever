@@ -4,7 +4,7 @@ const KEY="eng-forever-v1";
 const LEVELS=["A0","A1","A2","B1","B2","C1"];
 const TYPES=[{id:"translate",label:"Перевод",levels:LEVELS}];
 const phraseLevel=p=>LEVELS.includes(p?.level)?p.level:"A1";
-let phrases=[],state,queue=[],current=null,revealed=false,started=false,round=1,busy=false,toastTimer,transitionTimer;
+let phrases=[],levelBuckets=new Map(),phraseRows=new Map(),settingsRanked=[],state,queue=[],current=null,revealed=false,started=false,round=1,busy=false,toastTimer,transitionTimer;
 const blank=()=>({version:1,language:"ru",mode:"auto",cards:{},round:1,started:false,queue:[],current:null,catalogIds:[],sessionIds:[],roundIds:[],roundSeen:[],roundErrors:[],bonusDue:[],currentBonus:false});
 const cardState=id=>{const key=String(id);return state.cards[key]??(state.cards[key]={enabled:true,manuallyDisabled:false,learned:false,attempts:0,correct:0,hardness:0,history:[]});};
 const save=()=>{state.round=round;state.started=started;state.queue=queue;state.current=current?.id??null;state.currentBonus=!!state.currentBonus&&!!current;state.catalogIds=phrases.map(p=>p.id);try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){$("footer-status").textContent="Не удалось сохранить прогресс. Проверь настройки браузера.";}};
@@ -211,52 +211,88 @@ function answer(success){
 }
 function handleLanguage(){state.language=document.querySelector('input[name="language"]:checked')?.value==="eng"?"eng":"ru";if(current)showCard();save();}
 function recognitionPercent(c){return c.attempts?Math.round(100*c.correct/c.attempts):null;}
-function sortedSettingsPhrases(){
-  return [...phrases].sort((a,b)=>{
-    const ca=cardState(a.id),cb=cardState(b.id);
-    if(ca.enabled!==cb.enabled)return ca.enabled?-1:1;
-    const ra=recognitionPercent(ca),rb=recognitionPercent(cb);
-    if(ra!==rb){
-      if(ra===null)return 1;
-      if(rb===null)return -1;
-      return ra-rb;
-    }
-    if(ca.hardness!==cb.hardness)return cb.hardness-ca.hardness;
-    return a.id-b.id;
-  });
+function rebuildPhraseIndexes(){
+  levelBuckets=new Map(LEVELS.map(level=>[level,[]]));
+  for(const p of phrases)levelBuckets.get(phraseLevel(p))?.push(p);
+  phraseRows.clear();
+  settingsRanked=[];
 }
-function renderPhraseList(animate=false){
+function refreshSettingsRank(){
+  settingsRanked=phrases.map(p=>{
+    const c=cardState(p.id);
+    return {p,recognition:recognitionPercent(c),hardness:c.hardness};
+  }).sort((a,b)=>{
+    if(a.recognition!==b.recognition){
+      if(a.recognition===null)return 1;
+      if(b.recognition===null)return -1;
+      return a.recognition-b.recognition;
+    }
+    if(a.hardness!==b.hardness)return b.hardness-a.hardness;
+    return a.p.id-b.p.id;
+  }).map(x=>x.p);
+}
+function sortedSettingsPhrases(){
+  if(settingsRanked.length!==phrases.length)refreshSettingsRank();
+  const selected=[],unselected=[];
+  for(const p of settingsRanked)(cardState(p.id).enabled?selected:unselected).push(p);
+  return selected.concat(unselected);
+}
+function ensurePhraseRow(p){
+  let row=phraseRows.get(p.id);
+  if(row)return row;
+  const level=phraseLevel(p);
+  const label=document.createElement("label");
+  label.className="phrase-option";
+  label.dataset.id=String(p.id);label.dataset.level=level;
+
+  const check=document.createElement("input");
+  check.type="checkbox";check.setAttribute("aria-label","Фраза №"+p.id);
+  check.addEventListener("change",()=>togglePhrase(p.id,check.checked));
+
+  const copy=document.createElement("span");copy.className="phrase-copy";copy.textContent="#"+p.id+" · "+p.ru;
+  const en=document.createElement("small");en.textContent=p.eng;copy.append(en);
+
+  const metrics=document.createElement("span");metrics.className="phrase-metrics";
+  const levelTag=document.createElement("span");levelTag.className="phrase-level level-"+level;levelTag.textContent=level;
+  const score=document.createElement("span");score.className="recognition";score.title="Узнаваемость";
+  metrics.append(levelTag,score);label.append(check,copy,metrics);
+  row={label,check,score};phraseRows.set(p.id,row);
+  return row;
+}
+function renderPhraseList(animateId=null){
   const list=$("phrase-list");
-  const oldPositions=new Map();
-  if(animate)for(const row of list.querySelectorAll(".phrase-option"))oldPositions.set(Number(row.dataset.id),row.getBoundingClientRect());
+  const moving=animateId==null?null:phraseRows.get(animateId)?.label;
+  const oldTop=moving?.isConnected?moving.getBoundingClientRect().top:null;
   const fragment=document.createDocumentFragment();
+
   for(const p of sortedSettingsPhrases()){
-    const c=cardState(p.id),pct=recognitionPercent(c),level=phraseLevel(p);
-    const label=document.createElement("label");
-    label.className="phrase-option"+(c.enabled?" is-selected":"");
-    label.dataset.id=String(p.id);label.dataset.level=level;
-    const check=document.createElement("input");check.type="checkbox";check.checked=c.enabled;check.setAttribute("aria-label","Фраза №"+p.id);
-    check.addEventListener("change",()=>togglePhrase(p.id,check.checked));
-    const copy=document.createElement("span");copy.className="phrase-copy";copy.textContent="#"+p.id+" · "+p.ru;
-    const en=document.createElement("small");en.textContent=p.eng;copy.append(en);
-    const metrics=document.createElement("span");metrics.className="phrase-metrics";
-    const levelTag=document.createElement("span");levelTag.className="phrase-level level-"+level;levelTag.textContent=level;
-    const score=document.createElement("span");score.className="recognition"+(pct!==null&&pct<60?" low":"");score.textContent=pct===null?"—":pct+"%";score.title="Узнаваемость";
-    metrics.append(levelTag,score);label.append(check,copy,metrics);fragment.append(label);
+    const c=cardState(p.id),pct=recognitionPercent(c),row=ensurePhraseRow(p);
+    row.check.checked=c.enabled;
+    row.label.classList.toggle("is-selected",c.enabled);
+    row.score.className="recognition"+(pct!==null&&pct<60?" low":"");
+    row.score.textContent=pct===null?"—":pct+"%";
+    fragment.append(row.label);
   }
   list.replaceChildren(fragment);
-  if(animate&&oldPositions.size&&!matchMedia("(prefers-reduced-motion: reduce)").matches){
-    for(const row of list.querySelectorAll(".phrase-option")){
-      const old=oldPositions.get(Number(row.dataset.id));if(!old)continue;
-      const now=row.getBoundingClientRect(),dy=old.top-now.top;
-      if(Math.abs(dy)>1)row.animate([{transform:"translateY("+dy+"px)",opacity:.62},{transform:"translateY(0)",opacity:1}],{duration:320,easing:"cubic-bezier(.2,.75,.2,1)"});
+
+  // Animate only the manually toggled row. Animating/measuring hundreds of
+  // rows made bulk A0/A1 selection needlessly expensive.
+  if(oldTop!==null&&!matchMedia("(prefers-reduced-motion: reduce)").matches){
+    const row=phraseRows.get(animateId)?.label;
+    if(row){
+      const dy=oldTop-row.getBoundingClientRect().top;
+      if(Math.abs(dy)>1)row.animate(
+        [{transform:"translateY("+dy+"px)",opacity:.68},{transform:"translateY(0)",opacity:1}],
+        {duration:220,easing:"cubic-bezier(.2,.75,.2,1)"}
+      );
     }
   }
 }
 function syncLevelControls(){
   for(const level of LEVELS){
-    const levelPhrases=phrases.filter(p=>phraseLevel(p)===level);
-    const selected=levelPhrases.filter(p=>cardState(p.id).enabled).length;
+    const levelPhrases=levelBuckets.get(level)||[];
+    let selected=0;
+    for(const p of levelPhrases)if(cardState(p.id).enabled)selected++;
     const btn=document.querySelector('[data-select-level="'+level+'"]');
     const count=$("level-count-"+level);
     if(count)count.textContent=String(levelPhrases.length);
@@ -270,12 +306,17 @@ function syncLevelControls(){
     }
   }
 }
-function syncSettings(animate=false){
+function syncSettings(animateId=null,rerank=false){
   document.querySelectorAll('input[name="language"]').forEach(el=>el.checked=el.value===state.language);
   $("mode").value=state.mode;
-  syncLevelControls();renderPhraseList(animate);updateSelected();
+  if(rerank)refreshSettingsRank();
+  syncLevelControls();renderPhraseList(animateId);updateSelected();
 }
-function updateSelected(){$("selected-count").textContent=allActive().length+"/"+phrases.length;}
+function updateSelected(){
+  let count=0;
+  for(const p of phrases)if(cardState(p.id).enabled)count++;
+  $("selected-count").textContent=count+"/"+phrases.length;
+}
 function restartAfterSelectionChange(){
   clearTimeout(transitionTimer);
   busy=false;revealed=false;started=false;round=1;queue=[];current=null;
@@ -292,27 +333,36 @@ function togglePhrase(id,on){
   if(c.enabled===on)return;
   c.enabled=on;c.manuallyDisabled=!on;
   restartAfterSelectionChange();
-  syncSettings(true);
+  syncSettings(id);
 }
 function toggleAll(on){
-  for(const p of phrases){const c=cardState(p.id);c.enabled=on;c.manuallyDisabled=!on;}
+  let changed=false;
+  for(const p of phrases){
+    const c=cardState(p.id);
+    if(c.enabled!==on){c.enabled=on;c.manuallyDisabled=!on;changed=true;}
+  }
+  if(!changed)return;
   restartAfterSelectionChange();
-  syncSettings(true);
+  // Bulk operations deliberately skip FLIP animation: thousands of measured
+  // rows are much slower than one immediate reorder.
+  syncSettings();
 }
 function toggleLevel(level){
   if(!LEVELS.includes(level))return;
-  const levelPhrases=phrases.filter(p=>phraseLevel(p)===level);
+  const levelPhrases=levelBuckets.get(level)||[];
   if(!levelPhrases.length)return;
   const enable=levelPhrases.some(p=>!cardState(p.id).enabled);
+  let changed=false;
   for(const p of levelPhrases){
     const c=cardState(p.id);
-    c.enabled=enable;c.manuallyDisabled=!enable;
+    if(c.enabled!==enable){c.enabled=enable;c.manuallyDisabled=!enable;changed=true;}
   }
+  if(!changed)return;
   restartAfterSelectionChange();
-  syncSettings(true);
+  syncSettings();
   toast((enable?"Выбрано ":"Снято ")+level+": "+levelPhrases.length+" фраз");
 }
-function openSettings(){syncSettings();$("settings-dialog").showModal();}
+function openSettings(){syncSettings(null,true);$("settings-dialog").showModal();}
 function showStats(){const attempt=phrases.reduce((sum,p)=>sum+cardState(p.id).attempts,0),correct=phrases.reduce((sum,p)=>sum+cardState(p.id).correct,0),hard=phrases.filter(p=>cardState(p.id).hardness>=15).length;$("stats-summary").replaceChildren();for(const [num,title] of [[String(attempt),"Ответов"],[attempt?Math.round(100*correct/attempt)+"%":"—","Узнаваемость"],[String(hard),"Сложных"]]){const el=document.createElement("div");el.className="stat";const n=document.createElement("strong");n.textContent=num;const t=document.createElement("span");t.textContent=title;el.append(n,t);$("stats-summary").append(el);}$("stats-list").replaceChildren();for(const p of phrases){const c=cardState(p.id),row=document.createElement("div");row.className="stat-row";const top=document.createElement("div");top.className="stat-row-top";const title=document.createElement("span");title.textContent="#"+p.id+" · "+p.ru;const count=document.createElement("span");count.textContent=c.attempts?Math.round(100*c.correct/c.attempts)+"%":"—";top.append(title,count);const sub=document.createElement("small");sub.textContent=c.attempts+" ответов · "+(c.attempts-c.correct)+" ошибок · сложность "+Math.round(c.hardness)+"/100"+(c.enabled?" · активна":"");const bar=document.createElement("div");bar.className="mini-track";const fill=document.createElement("div");fill.style.width=c.hardness+"%";bar.append(fill);row.append(top,sub,bar);$("stats-list").append(row);}$("stats-dialog").showModal();}
 // Isolate the vertical reveal gesture on a dedicated handle. The rest of the
 // revealed card only handles horizontal swipes; native vertical page scroll is preserved.
@@ -411,9 +461,10 @@ async function init(){try{
     ids.add(p.id);
   }
   phrases=data.map(p=>({...p,level:phraseLevel(p)}));
+  rebuildPhraseIndexes();
   load();updateStatus();
   if(started){if(current){showCard();save();}else next();}
   else showEmpty("Готов к тренировке?",phrases.length+" пар фраз из твоей тетради. Выбери язык и начни.","Начать тренировку →");
 }catch(err){console.error(err);showEmpty("Не удалось загрузить фразы","Проверь data/phrases.json и открывай сайт через GitHub Pages, а не как локальный файл.","Повторить загрузку");$("start").onclick=()=>location.reload();return;}
-$("start").addEventListener("click",()=>{if(started&&!allActive().length){openSettings();return;}start();});$("settings-open").addEventListener("click",openSettings);$("stats-open").addEventListener("click",showStats);$("settings-done").addEventListener("click",()=>$("settings-dialog").close());document.querySelectorAll("[data-close]").forEach(el=>el.addEventListener("click",() => $(el.dataset.close).close()));document.querySelectorAll('input[name="language"]').forEach(el=>el.addEventListener("change",handleLanguage));$("mode").addEventListener("change",e=>{state.mode=e.target.value;save();});$("select-all").addEventListener("click",()=>toggleAll(true));$("select-none").addEventListener("click",()=>toggleAll(false));document.querySelectorAll("[data-select-level]").forEach(btn=>btn.addEventListener("click",()=>toggleLevel(btn.dataset.selectLevel)));$("wrong").addEventListener("click",()=>answer(false));$("right").addEventListener("click",()=>answer(true));$("reset-progress").addEventListener("click",()=>{if(!confirm("Удалить всю статистику, ответы и настройки на этом устройстве?"))return;state=blank();round=1;started=false;queue=[];current=null;for(const p of phrases)cardState(p.id);save();syncSettings();updateStatus();showEmpty("Готов к тренировке?","История и настройки очищены.","Начать тренировку →");$("settings-dialog").close();toast("Данные сброшены");});installGestures();}
+$("start").addEventListener("click",()=>{if(started&&!allActive().length){openSettings();return;}start();});$("settings-open").addEventListener("click",openSettings);$("stats-open").addEventListener("click",showStats);$("settings-done").addEventListener("click",()=>$("settings-dialog").close());document.querySelectorAll("[data-close]").forEach(el=>el.addEventListener("click",() => $(el.dataset.close).close()));document.querySelectorAll('input[name="language"]').forEach(el=>el.addEventListener("change",handleLanguage));$("mode").addEventListener("change",e=>{state.mode=e.target.value;save();});$("select-all").addEventListener("click",()=>toggleAll(true));$("select-none").addEventListener("click",()=>toggleAll(false));document.querySelectorAll("[data-select-level]").forEach(btn=>btn.addEventListener("click",()=>toggleLevel(btn.dataset.selectLevel)));$("wrong").addEventListener("click",()=>answer(false));$("right").addEventListener("click",()=>answer(true));$("reset-progress").addEventListener("click",()=>{if(!confirm("Удалить всю статистику, ответы и настройки на этом устройстве?"))return;state=blank();round=1;started=false;queue=[];current=null;for(const p of phrases)cardState(p.id);save();syncSettings(null,true);updateStatus();showEmpty("Готов к тренировке?","История и настройки очищены.","Начать тренировку →");$("settings-dialog").close();toast("Данные сброшены");});installGestures();}
 init();
