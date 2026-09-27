@@ -292,6 +292,9 @@ legend #selected-count{color:var(--accent);font-variant-numeric:tabular-nums}
   position:relative;display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;column-gap:11px;
   transition:background .18s ease,border-color .18s ease
 }
+@supports(content-visibility:auto){
+ .phrase-option{content-visibility:auto;contain-intrinsic-size:auto 72px}
+}
 .phrase-option.is-selected{background:linear-gradient(90deg,var(--accent-soft),transparent 72%)}
 .phrase-option>input{grid-column:1}
 .phrase-option>.phrase-copy{grid-column:2;display:block;overflow-wrap:anywhere;min-width:0;line-height:1.45;font-weight:650}
