@@ -3,7 +3,7 @@
   "appName": "Eng Forever",
   "webDir": "www",
   "android": {
-    "backgroundColor": "#F5F5F0"
+    "backgroundColor": "#121E20"
   },
   "plugins": {
     "CapacitorUpdater": {
