@@ -197,6 +197,44 @@ legend #selected-count{color:var(--accent);font-variant-numeric:tabular-nums}
    Off-counter error reviews intentionally keep their existing amber treatment. */
 .card-meta{display:flex;align-items:center;gap:7px;min-width:0}
 .level-badge{display:inline-grid;place-items:center;min-width:32px;height:25px;padding:0 8px;border-radius:9px;font:850 10px/1 var(--display);letter-spacing:.65px;border:1px solid var(--line);background:var(--bg);color:var(--muted)}
+.level-badge.level-A0,.phrase-level.level-A0,.level-chip.level-A0{
+  color:#5B351D;
+  border-color:#C59672;
+  background:linear-gradient(135deg,#FFF7EF 0%,#EAC3A2 26%,#A9683E 56%,#FFE2C5 76%,#8F5434 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.94),inset 0 -1px 0 rgba(116,62,31,.26),0 0 8px rgba(255,220,185,.9),0 0 18px rgba(236,151,84,.58);
+}
+.card.level-A0:not(.bonus-review){
+  background:
+    radial-gradient(circle at 18% 8%,rgba(255,248,238,.98) 0 8%,rgba(255,255,255,0) 28%),
+    linear-gradient(122deg,#FFF8F1 0%,#D8A57E 18%,#FFF1E2 36%,#9E6039 52%,#F7D8BA 68%,#BC7A4D 84%,#FFF6EE 100%);
+  border-color:#B8794E;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    inset 0 -1px 0 rgba(110,58,31,.22),
+    0 0 0 1px rgba(255,225,198,.72),
+    0 0 18px rgba(255,168,92,.56),
+    0 0 38px rgba(220,110,42,.4),
+    var(--shadow);
+}
+.card.level-A0:not(.bonus-review)::before{
+  content:"";position:absolute;z-index:0;left:8%;right:8%;top:-1px;height:3px;border-radius:99px;
+  background:linear-gradient(90deg,transparent,#D98F57 18%,#FFF2DF 43%,#FFB56E 50%,#FFF4E8 57%,#C97843 82%,transparent);
+  box-shadow:0 0 10px rgba(255,222,184,.92),0 0 24px rgba(255,135,55,.76);pointer-events:none
+}
+.card.level-A0:not(.bonus-review) .card-top,
+.card.level-A0:not(.bonus-review) .answer-sheet,
+.card.level-A0:not(.bonus-review) .question{position:relative;z-index:1}
+.card.level-A0:not(.bonus-review) .answer-sheet{
+  background:linear-gradient(135deg,rgba(255,247,237,.94),#E1B38F 48%,#FFF0DF 100%);
+  border:1px solid rgba(184,121,78,.7);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 0 16px rgba(247,151,81,.3);
+}
+.card.level-A0:not(.bonus-review) .pill{
+  color:#6A3E22;background:linear-gradient(135deg,rgba(255,248,239,.96),rgba(222,172,132,.9));
+  border:1px solid #C08A64;box-shadow:0 0 10px rgba(255,191,137,.56)
+}
+.card.bonus-review .level-badge.level-A0{box-shadow:inset 0 1px 0 rgba(255,255,255,.84),0 0 10px rgba(244,151,83,.32)}
+
 .level-badge.level-A1,.phrase-level.level-A1,.level-chip.level-A1{
   color:#31454B;
   border-color:#B7C8CD;
@@ -238,7 +276,7 @@ legend #selected-count{color:var(--accent);font-variant-numeric:tabular-nums}
 /* Fast level selection in settings. */
 .level-picker{display:grid;gap:8px;margin:4px 0 13px;padding:12px;border-radius:16px;background:var(--bg);border:1px solid var(--line)}
 .level-picker-label{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-.level-chips{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.level-chips{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}
 .level-chip{
   min-height:44px;padding:7px 5px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--text);
   display:flex;align-items:center;justify-content:center;gap:4px;font-size:12px;font-weight:850;transition:transform .18s,border-color .18s,box-shadow .18s,opacity .18s
@@ -268,6 +306,24 @@ legend #selected-count{color:var(--accent);font-variant-numeric:tabular-nums}
  .phrase-metrics{min-width:40px}
 }
 @media(prefers-color-scheme:dark){
+ .level-badge.level-A0,.phrase-level.level-A0,.level-chip.level-A0{
+   color:#FFF2E5;border-color:#B77B55;
+   background:linear-gradient(135deg,#A66C44 0%,#5A331E 28%,#C48A62 50%,#633921 72%,#A96F47 100%);
+   box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 0 10px rgba(255,190,135,.34),0 0 20px rgba(245,125,50,.24)
+ }
+ .card.level-A0:not(.bonus-review){
+   background:
+     radial-gradient(circle at 18% 8%,rgba(255,235,216,.12) 0 8%,rgba(255,255,255,0) 30%),
+     linear-gradient(122deg,#4A2B1D 0%,#7C4C2D 18%,#392318 36%,#A66A43 52%,#43291B 68%,#744529 84%,#322017 100%);
+   border-color:#B9794F;
+   box-shadow:0 0 0 1px rgba(255,221,192,.12),0 0 18px rgba(255,153,84,.24),0 0 36px rgba(230,104,35,.18),var(--shadow)
+ }
+ .card.level-A0:not(.bonus-review)::before{
+   background:linear-gradient(90deg,transparent,#D28B56 18%,#FFF0DE 43%,#FFB26D 50%,#FFEEDF 57%,#C47745 82%,transparent);
+   box-shadow:0 0 11px rgba(255,218,183,.44),0 0 26px rgba(255,126,47,.36)
+ }
+ .card.level-A0:not(.bonus-review) .answer-sheet{background:linear-gradient(135deg,#69432C,#43291B 50%,#795035);border-color:#A36C49;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 16px rgba(255,132,56,.14)}
+ .card.level-A0:not(.bonus-review) .pill{color:#FFE8D4;background:rgba(255,255,255,.055);border-color:#A87250}
  .level-badge.level-A1,.phrase-level.level-A1,.level-chip.level-A1{
    color:#F4FCFF;border-color:#8099A0;
    background:linear-gradient(135deg,#7E949A 0%,#2E4146 28%,#A4B8BD 50%,#33474C 72%,#8FA4AA 100%);
