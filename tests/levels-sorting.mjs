@@ -6,19 +6,19 @@ const base="http://127.0.0.1:8000/";
 const key="eng-forever-v1";
 const snap=()=>JSON.parse(localStorage.getItem("eng-forever-v1"));
 try{
-  // Production catalogue: first 280 are A0 bronze, 281–360 are A1 silver.
+  // Production catalogue: first 280 are A0 bronze, 281–440 are A1 silver.
   const fresh=await browser.newContext({viewport:{width:390,height:760},isMobile:true,hasTouch:true});
   const freshPage=await fresh.newPage();
   await freshPage.goto(base);
-  await freshPage.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 360"));
+  await freshPage.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 440"));
   const catalog=await freshPage.evaluate(async()=>await (await fetch("./data/phrases.json")).json());
-  assert.equal(catalog.length,360);
+  assert.equal(catalog.length,440);
   assert.equal(catalog.find(p=>p.id===36).ru,"Я вижу, ты не хочешь это.");
   assert.ok(catalog.slice(0,280).every(p=>p.level==="A0"),"IDs 1–280 must be A0");
-  assert.ok(catalog.slice(280).every(p=>p.level==="A1"),"IDs 281–360 must be A1");
+  assert.ok(catalog.slice(280).every(p=>p.level==="A1"),"IDs 281–440 must be A1");
   await freshPage.locator("#settings-open").click();
   assert.equal(await freshPage.locator("#level-count-A0").textContent(),"280");
-  assert.equal(await freshPage.locator("#level-count-A1").textContent(),"80");
+  assert.equal(await freshPage.locator("#level-count-A1").textContent(),"160");
   for(const level of ["A2","B1","B2","C1"]){
     assert.equal(await freshPage.locator("#level-count-"+level).textContent(),"0");
     assert.equal(await freshPage.locator('[data-select-level="'+level+'"]').isDisabled(),true);
@@ -34,7 +34,7 @@ try{
     await new Promise(requestAnimationFrame);
     return performance.now()-start;
   });
-  assert.ok(bulkMs<500,"360-row level toggle should settle in under 500ms on CI, got "+Math.round(bulkMs)+"ms");
+  assert.ok(bulkMs<500,"440-row level toggle should settle in under 500ms on CI, got "+Math.round(bulkMs)+"ms");
   assert.equal(await freshPage.evaluate(()=>window.__row281===document.querySelector('[data-id="281"]')),true,"Bulk toggle must reuse existing phrase DOM rows");
   assert.ok((await freshPage.locator(".phrase-option").evaluateAll(rows=>rows.reduce((n,r)=>n+r.getAnimations().length,0)))<=1,"Bulk selection must not animate hundreds of rows");
   console.log("A1 bulk toggle: "+Math.round(bulkMs)+"ms");
@@ -43,7 +43,7 @@ try{
   let state=await freshPage.evaluate(snap);
   assert.equal(Object.values(state.cards).filter(c=>c.enabled).length,280);
   for(let id=1;id<=280;id++)assert.equal(state.cards[id].enabled,true);
-  for(let id=281;id<=360;id++)assert.equal(state.cards[id].enabled,false);
+  for(let id=281;id<=440;id++)assert.equal(state.cards[id].enabled,false);
   assert.equal(await freshPage.locator('[data-select-level="A0"]').getAttribute("aria-pressed"),"true");
   assert.equal(await freshPage.locator('[data-select-level="A1"]').getAttribute("aria-pressed"),"false");
   await freshPage.locator("#settings-done").click();
