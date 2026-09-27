@@ -5,9 +5,14 @@ const browser=await chromium.launch({headless:true});
 const base="http://127.0.0.1:8000/";
 const key="eng-forever-v1";
 const snap=()=>JSON.parse(localStorage.getItem("eng-forever-v1"));
+const keep360=async route=>{
+  const response=await route.fetch();
+  await route.fulfill({response,contentType:"application/json",body:JSON.stringify((await response.json()).slice(0,360))});
+};
 try{
   const fresh=await browser.newContext({viewport:{width:390,height:760},isMobile:true,hasTouch:true});
   const p=await fresh.newPage();
+  await p.route("**/data/phrases.json*",keep360);
   await p.goto(base);
   await p.waitForFunction(()=>document.querySelector("#progress-label").textContent.includes("/ 360"));
   const catalog=await p.evaluate(async()=>await (await fetch("./data/phrases.json")).json());
@@ -20,6 +25,7 @@ try{
 
   const ctx=await browser.newContext({viewport:{width:390,height:760},isMobile:true,hasTouch:true});
   const page=await ctx.newPage();
+  await page.route("**/data/phrases.json*",keep360);
   await page.addInitScript(storageKey=>{
     if(sessionStorage.getItem("grow-360-seeded"))return;
     const ids=Array.from({length:280},(_,i)=>i+1),cards={};
