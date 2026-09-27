@@ -24,6 +24,9 @@ for(const optional of ["assets","icons","manifest.webmanifest","sw.js"]){
 
 const indexPath=path.join(out,"index.html");
 let html=await readFile(indexPath,"utf8");
+if(!html.includes('<html lang="ru">'))throw new Error("Could not mark the mobile HTML shell");
+html=html.replace('<html lang="ru">','<html lang="ru" class="mobile-force-dark">');
+html=html.replace('<meta name="theme-color" content="#F5F5F0">','<meta name="theme-color" content="#121E20">\n  <meta name="color-scheme" content="dark">');
 const appScript=/<script type="module" src="\.\/app\.js[^"]*"><\/script>/;
 if(!appScript.test(html))throw new Error("Could not find the app.js module script in index.html");
 html=html.replace(appScript,match=>`<script type="module" src="./mobile-runtime.js"></script>\n  ${match}`);
